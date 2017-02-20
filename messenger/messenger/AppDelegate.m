@@ -8,15 +8,40 @@
 
 #import "AppDelegate.h"
 
+#import "Contact.h"
+#import "ContactsViewController.h"
+
 @interface AppDelegate ()
 
 @end
 
 @implementation AppDelegate
-
+{
+ NSMutableArray *_contacts;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    _contacts = [NSMutableArray arrayWithCapacity:20];
+    
+    Contact *contact = [[Contact alloc] init];
+    contact.name = @"Bill Evans";
+    contact.number = @"Tic-Tac-Toe";
+    [_contacts addObject:contact];
+    
+    contact = [[Contact alloc] init];
+    contact.name = @"Oscar Peterson";
+    contact.number = @"Spin the Bottle";
+    [_contacts addObject:contact];
+    
+    contact = [[Contact alloc] init];
+    contact.name = @"Dave Brubeck";
+    contact.number = @"Texas Hold’em Poker";
+    [_contacts addObject:contact];
+    
+    UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
+    ContactsViewController *contactsViewController = (ContactsViewController *)[navigationController viewControllers][0];;
+    contactsViewController.contacts = _contacts;
+    
     return YES;
 }
 

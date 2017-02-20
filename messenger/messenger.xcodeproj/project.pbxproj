@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		96D2372F1E5AF73000B051ED /* ContactsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D2372E1E5AF73000B051ED /* ContactsViewController.m */; };
+		96D237321E5AF8A000B051ED /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D237311E5AF8A000B051ED /* Contact.m */; };
 		96FE28921E5AE29F00317099 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FE28911E5AE29F00317099 /* main.m */; };
 		96FE28951E5AE29F00317099 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FE28941E5AE29F00317099 /* AppDelegate.m */; };
-		96FE28981E5AE29F00317099 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FE28971E5AE29F00317099 /* ViewController.m */; };
 		96FE289B1E5AE29F00317099 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 96FE28991E5AE29F00317099 /* Main.storyboard */; };
 		96FE289D1E5AE29F00317099 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 96FE289C1E5AE29F00317099 /* Assets.xcassets */; };
 		96FE28A01E5AE29F00317099 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 96FE289E1E5AE29F00317099 /* LaunchScreen.storyboard */; };
@@ -35,12 +36,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		96D2372D1E5AF73000B051ED /* ContactsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsViewController.h; sourceTree = "<group>"; };
+		96D2372E1E5AF73000B051ED /* ContactsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsViewController.m; sourceTree = "<group>"; };
+		96D237301E5AF8A000B051ED /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
+		96D237311E5AF8A000B051ED /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
 		96FE288D1E5AE29F00317099 /* messenger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = messenger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		96FE28911E5AE29F00317099 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		96FE28931E5AE29F00317099 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		96FE28941E5AE29F00317099 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		96FE28961E5AE29F00317099 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		96FE28971E5AE29F00317099 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		96FE289A1E5AE29F00317099 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		96FE289C1E5AE29F00317099 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		96FE289F1E5AE29F00317099 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -103,13 +106,15 @@
 			children = (
 				96FE28931E5AE29F00317099 /* AppDelegate.h */,
 				96FE28941E5AE29F00317099 /* AppDelegate.m */,
-				96FE28961E5AE29F00317099 /* ViewController.h */,
-				96FE28971E5AE29F00317099 /* ViewController.m */,
 				96FE28991E5AE29F00317099 /* Main.storyboard */,
 				96FE289C1E5AE29F00317099 /* Assets.xcassets */,
 				96FE289E1E5AE29F00317099 /* LaunchScreen.storyboard */,
 				96FE28A11E5AE29F00317099 /* Info.plist */,
 				96FE28901E5AE29F00317099 /* Supporting Files */,
+				96D2372D1E5AF73000B051ED /* ContactsViewController.h */,
+				96D2372E1E5AF73000B051ED /* ContactsViewController.m */,
+				96D237301E5AF8A000B051ED /* Contact.h */,
+				96D237311E5AF8A000B051ED /* Contact.m */,
 			);
 			path = messenger;
 			sourceTree = "<group>";
@@ -273,7 +278,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				96FE28981E5AE29F00317099 /* ViewController.m in Sources */,
+				96D2372F1E5AF73000B051ED /* ContactsViewController.m in Sources */,
+				96D237321E5AF8A000B051ED /* Contact.m in Sources */,
 				96FE28951E5AE29F00317099 /* AppDelegate.m in Sources */,
 				96FE28921E5AE29F00317099 /* main.m in Sources */,
 			);
@@ -507,6 +513,7 @@
 				96FE28BC1E5AE29F00317099 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		96FE28BD1E5AE29F00317099 /* Build configuration list for PBXNativeTarget "messengerTests" */ = {
 			isa = XCConfigurationList;
@@ -515,6 +522,7 @@
 				96FE28BF1E5AE29F00317099 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		96FE28C01E5AE29F00317099 /* Build configuration list for PBXNativeTarget "messengerUITests" */ = {
 			isa = XCConfigurationList;
@@ -523,6 +531,7 @@
 				96FE28C21E5AE29F00317099 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
