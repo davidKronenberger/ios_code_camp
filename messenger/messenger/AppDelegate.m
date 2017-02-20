@@ -10,6 +10,7 @@
 
 #import "Contact.h"
 #import "ContactsViewController.h"
+#import <Contacts/Contacts.h>
 
 @interface AppDelegate ()
 
@@ -18,31 +19,96 @@
 @implementation AppDelegate
 {
  NSMutableArray *_contacts;
+
 }
+
+
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     _contacts = [NSMutableArray arrayWithCapacity:20];
     
-    Contact *contact = [[Contact alloc] init];
-    contact.name = @"Bill Evans";
-    contact.number = @"Tic-Tac-Toe";
-    [_contacts addObject:contact];
+    [self contactScan];
     
-    contact = [[Contact alloc] init];
-    contact.name = @"Oscar Peterson";
-    contact.number = @"Spin the Bottle";
-    [_contacts addObject:contact];
-    
-    contact = [[Contact alloc] init];
-    contact.name = @"Dave Brubeck";
-    contact.number = @"Texas Hold’em Poker";
-    [_contacts addObject:contact];
     
     UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
     ContactsViewController *contactsViewController = (ContactsViewController *)[navigationController viewControllers][0];;
     contactsViewController.contacts = _contacts;
     
+
     return YES;
+}
+
+
+- (void) contactScan
+{
+    if ([CNContactStore class]) {
+        //ios9 or later
+        CNEntityType entityType = CNEntityTypeContacts;
+        if( [CNContactStore authorizationStatusForEntityType:entityType] == CNAuthorizationStatusNotDetermined)
+        {
+            CNContactStore * contactStore = [[CNContactStore alloc] init];
+            [contactStore requestAccessForEntityType:entityType completionHandler:^(BOOL granted, NSError * _Nullable error) {
+                if(granted){
+                    [self getAllContact];
+                }
+            }];
+        }
+        else if( [CNContactStore authorizationStatusForEntityType:entityType]== CNAuthorizationStatusAuthorized)
+        {
+            [self getAllContact];
+        }
+    }
+}
+
+-(void)getAllContact
+{
+    if([CNContactStore class])
+    {
+        //iOS 9 or later
+        NSError* contactError;
+        CNContactStore* addressBook = [[CNContactStore alloc]init];
+        [addressBook containersMatchingPredicate:[CNContainer predicateForContainersWithIdentifiers: @[addressBook.defaultContainerIdentifier]] error:&contactError];
+        NSArray * keysToFetch =@[CNContactEmailAddressesKey, CNContactPhoneNumbersKey, CNContactFamilyNameKey, CNContactGivenNameKey, CNContactPostalAddressesKey];
+        
+        
+        CNContactFetchRequest * request = [[CNContactFetchRequest alloc]initWithKeysToFetch:keysToFetch];
+        BOOL success = [addressBook enumerateContactsWithFetchRequest:request error:&contactError usingBlock:^(CNContact * __nonnull contact, BOOL * __nonnull stop){
+            [self parseContactWithContact:contact];
+        }];
+    }
+}
+
+- (void)parseContactWithContact :(CNContact* )contact
+{
+    NSString * firstName =  contact.givenName;
+    NSString * lastName =  contact.familyName;
+    NSMutableArray * phone = [[contact.phoneNumbers valueForKey:@"value"] valueForKey:@"digits"];
+    NSString * email = [contact.emailAddresses valueForKey:@"value"];
+    NSArray * addrArr = [self parseAddressWithContac:contact];
+    
+    Contact *ct = [[Contact alloc] init];
+    ct.name = firstName;
+    ct.number = (NSString *)(phone[0]);
+    
+    [_contacts addObject:ct];
+    
+}
+
+
+
+
+- (NSMutableArray *)parseAddressWithContac: (CNContact *)contact
+{
+    NSMutableArray * addrArr = [[NSMutableArray alloc]init];
+    CNPostalAddressFormatter * formatter = [[CNPostalAddressFormatter alloc]init];
+    NSArray * addresses = (NSArray*)[contact.postalAddresses valueForKey:@"value"];
+    if (addresses.count > 0) {
+        for (CNPostalAddress* address in addresses) {
+            [addrArr addObject:[formatter stringFromPostalAddress:address]];
+        }
+    }
+    
+    return addrArr;
 }
 
 
