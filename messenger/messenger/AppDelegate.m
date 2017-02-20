@@ -29,7 +29,6 @@
     
     [self contactScan];
     
-    
     UINavigationController *navigationController = (UINavigationController *)self.window.rootViewController;
     ContactsViewController *contactsViewController = (ContactsViewController *)[navigationController viewControllers][0];;
     contactsViewController.contacts = _contacts;
@@ -72,7 +71,7 @@
         
         
         CNContactFetchRequest * request = [[CNContactFetchRequest alloc]initWithKeysToFetch:keysToFetch];
-        BOOL success = [addressBook enumerateContactsWithFetchRequest:request error:&contactError usingBlock:^(CNContact * __nonnull contact, BOOL * __nonnull stop){
+        [addressBook enumerateContactsWithFetchRequest:request error:&contactError usingBlock:^(CNContact * __nonnull contact, BOOL * __nonnull stop){
             [self parseContactWithContact:contact];
         }];
     }
@@ -83,32 +82,13 @@
     NSString * firstName =  contact.givenName;
     NSString * lastName =  contact.familyName;
     NSMutableArray * phone = [[contact.phoneNumbers valueForKey:@"value"] valueForKey:@"digits"];
-    NSString * email = [contact.emailAddresses valueForKey:@"value"];
-    NSArray * addrArr = [self parseAddressWithContac:contact];
     
     Contact *ct = [[Contact alloc] init];
-    ct.name = firstName;
+    ct.name = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
     ct.number = (NSString *)(phone[0]);
     
     [_contacts addObject:ct];
     
-}
-
-
-
-
-- (NSMutableArray *)parseAddressWithContac: (CNContact *)contact
-{
-    NSMutableArray * addrArr = [[NSMutableArray alloc]init];
-    CNPostalAddressFormatter * formatter = [[CNPostalAddressFormatter alloc]init];
-    NSArray * addresses = (NSArray*)[contact.postalAddresses valueForKey:@"value"];
-    if (addresses.count > 0) {
-        for (CNPostalAddress* address in addresses) {
-            [addrArr addObject:[formatter stringFromPostalAddress:address]];
-        }
-    }
-    
-    return addrArr;
 }
 
 
