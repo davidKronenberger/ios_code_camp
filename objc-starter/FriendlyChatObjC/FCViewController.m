@@ -47,6 +47,9 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
 @property (strong, nonatomic) FIRStorageReference *storageRef;
 @property (nonatomic, strong) FIRRemoteConfig *remoteConfig;
 
+
+@property (nonatomic, strong) NSString *currentGroup; //always update current group
+
 @end
 
 @implementation FCViewController
@@ -57,6 +60,9 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
   _messages = [[NSMutableArray alloc] init];
   _myGroups = [[NSMutableArray alloc] init];
   _allUsers = [[NSMutableArray alloc] init];
+    
+  _currentGroup = [[NSString alloc] init];
+    
   [_clientTable registerClass:UITableViewCell.self forCellReuseIdentifier:@"tableViewCell"];
 
   [self configureDatabase];
@@ -68,11 +74,10 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
 }
 
 - (void)dealloc {
-    [[_ref child:@"messages"] removeObserverWithHandle:_refHandle];
+    [_ref removeAllObservers];
 }
 
 - (void)configureDatabase {
-    
     
     
     _ref = [[FIRDatabase database] reference];
@@ -85,7 +90,6 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
     [[[_ref child:@"users"] child:user.uid]
      setValue:@{@"username": user.displayName}];
     
-    
     // -------------Listener for groups-------------
     _refHandle = [[_ref child:@"groups"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
         
@@ -95,7 +99,6 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
         
         //get all groups of current user
         for (FIRDataSnapshot *child in snapshot.children) {
-            NSLog(@"%@",child.key);
             if([child.key isEqualToString: @"name"]){
                 groupName = child.value;
             }else if([child.key isEqualToString: @"user"]){
@@ -110,8 +113,8 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
             //save groups of current user
             [_myGroups addObject:@{@"id" : groupId, @"name" : groupName}];
         }
-        NSLog(@"%@",_myGroups);
     }];
+    
     
     // -------------Listener for users-------------
     _refHandle = [[_ref child:@"users"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
@@ -134,9 +137,8 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
     
     
     
-    
-    // Listen for new messages in the Firebase database
-    _refHandle = [[_ref child:@"messages"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
+    // -------------Listener for messages in current group-------------
+    _refHandle = [[[[_ref child:@"groups"] child: @"gggggg"] child:@"messages"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
         [_messages addObject:snapshot];
         [_clientTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_messages.count-1 inSection:0]] withRowAnimation: UITableViewRowAnimationAutomatic];
         [_clientTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
@@ -151,6 +153,23 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
     }
     return false;
     
+}
+
+- (void) onGroupChanged {
+    
+}
+
+- (void)sendMessageToGroup:(NSString *)message withGroupId:(NSString *)groupdId{
+    
+    FIRUser *user = [FIRAuth auth].currentUser;
+    
+    //get current time
+    NSDate * now = [NSDate date];
+    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+    [outputFormatter setDateFormat:@"HH:mm:ss"];
+    NSString *newDateString = [outputFormatter stringFromDate:now];
+    
+    [[[[[_ref child:@"groups"] child:groupdId] child:@"messages"] childByAutoId] setValue:@{@"text": message, @"user": user.displayName, @"time": newDateString}];
 }
 
 - (void)configureStorage {
@@ -191,7 +210,7 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
     // Unpack message from Firebase DataSnapshot
     FIRDataSnapshot *messageSnapshot = _messages[indexPath.row];
     NSDictionary<NSString *, NSString *> *message = messageSnapshot.value;
-    NSString *name = message[MessageFieldsname];
+    NSString *name = message[@"user"];
     NSString *imageURL = message[MessageFieldsimageURL];
     if (imageURL) {
         if ([imageURL hasPrefix:@"gs://"]) {
@@ -245,14 +264,23 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
 
 - (void)sendMessage:(NSDictionary *)data {
     NSMutableDictionary *mdata = [data mutableCopy];
-    mdata[MessageFieldsname] = [FIRAuth auth].currentUser.displayName;
+    mdata[@"user"] = [FIRAuth auth].currentUser.displayName;
     NSURL *photoURL = [FIRAuth auth].currentUser.photoURL;
     if (photoURL) {
         mdata[MessageFieldsphotoURL] = [photoURL absoluteString];
     }
     
+    //get current time
+    NSDate * now = [NSDate date];
+    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+    [outputFormatter setDateFormat:@"HH:mm:ss"];
+    NSString *newDateString = [outputFormatter stringFromDate:now];
+    
+    mdata[@"time"] = newDateString;
+
+    
     // Push data to Firebase Database
-    [[[_ref child:@"messages"] childByAutoId] setValue:mdata];
+    [[[[[_ref child:@"groups"] child: @"gggggg"] child:@"messages"] childByAutoId] setValue:mdata];
 }
 
 # pragma mark - Image Picker
