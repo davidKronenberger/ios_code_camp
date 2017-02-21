@@ -46,10 +46,6 @@
     return [_contacts count];
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return @"Kontakte";
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ContactCell"];
     
@@ -71,6 +67,19 @@
   
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    Contact *contact = nil;
+    contact = [_contacts objectAtIndex:indexPath.row];
+    
+    [self performSegueWithIdentifier:@"ContactsToFC" sender:self];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    UIViewController *vcToPushTo = segue.destinationViewController;
 }
 
 - (void) contactScan {
