@@ -61,6 +61,19 @@
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    Contact *contact = nil;
+    contact = [_contacts objectAtIndex:indexPath.row];
+    
+    [self performSegueWithIdentifier:@"ContactsToFC" sender:self];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    UIViewController *vcToPushTo = segue.destinationViewController;
+}
+
 - (void) contactScan {
     if ([CNContactStore class]) {
         //ios9 or later
