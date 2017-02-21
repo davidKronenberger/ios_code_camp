@@ -43,6 +43,7 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
 @property (strong, nonatomic) FIRDatabaseReference *ref;
 @property (strong, nonatomic) NSMutableArray<FIRDataSnapshot *> *messages;
 @property (strong, nonatomic) NSMutableArray<NSDictionary *> *myGroups;
+@property (strong, nonatomic) NSMutableArray<NSDictionary *> *allUsers;
 @property (strong, nonatomic) FIRStorageReference *storageRef;
 @property (nonatomic, strong) FIRRemoteConfig *remoteConfig;
 
@@ -55,6 +56,7 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
 
   _messages = [[NSMutableArray alloc] init];
   _myGroups = [[NSMutableArray alloc] init];
+  _allUsers = [[NSMutableArray alloc] init];
   [_clientTable registerClass:UITableViewCell.self forCellReuseIdentifier:@"tableViewCell"];
 
   [self configureDatabase];
@@ -84,7 +86,7 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
      setValue:@{@"username": user.displayName}];
     
     
-    // Listen for new messages in the Firebase database
+    // -------------Listener for groups-------------
     _refHandle = [[_ref child:@"groups"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
         
         NSString *groupId = snapshot.key;
@@ -97,8 +99,8 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
             if([child.key isEqualToString: @"name"]){
                 groupName = child.value;
             }else if([child.key isEqualToString: @"user"]){
-                NSString* allUsers = [NSString stringWithFormat:@"%@", child.value];
-                if([allUsers containsString: user.uid]){
+                NSString* allCurUsers = [NSString stringWithFormat:@"%@", child.value];
+                if([allCurUsers containsString: user.uid]){
                     isInGroup = true;
                 }
             }
@@ -111,6 +113,25 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
         NSLog(@"%@",_myGroups);
     }];
     
+    // -------------Listener for users-------------
+    _refHandle = [[_ref child:@"users"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
+        
+        NSString *userId = snapshot.key;
+        NSString *username = @"";
+        NSString *email = @"";
+        
+        //get all users from DB
+        for (FIRDataSnapshot *child in snapshot.children) {
+            if([child.key isEqualToString: @"username"]){
+                username = child.value;
+            }else if([child.key isEqualToString: @"email"]){
+                email = child.value;
+            }
+        }
+
+        [_allUsers addObject:@{@"id" : userId, @"username" : username, @"email" : email}];
+    }];
+    
     
     
     
@@ -120,6 +141,16 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
         [_clientTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_messages.count-1 inSection:0]] withRowAnimation: UITableViewRowAnimationAutomatic];
         [_clientTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }];
+}
+
+- (BOOL) emailAvailable:(NSString *)email {
+    for (NSDictionary *dict in _allUsers) {
+        if ([dict[@"email"] isEqualToString: email]) {
+            return true;
+        }
+    }
+    return false;
+    
 }
 
 - (void)configureStorage {
