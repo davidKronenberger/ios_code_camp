@@ -20,6 +20,8 @@
 		10AF4CD41DD238C00096D192 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 10AF4CD01DD238C00096D192 /* LaunchScreen.xib */; };
 		26ACB5D6C6C073FE021D1443 /* libPods-FriendlyChatObjC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AC41C60E0E8F2E76911399C /* libPods-FriendlyChatObjC.a */; };
 		96E2AAAE1E5C363E0079E975 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 96E2AAAD1E5C363E0079E975 /* GoogleService-Info.plist */; };
+		96E2AAB11E5C3C210079E975 /* ContactsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E2AAB01E5C3C210079E975 /* ContactsTableViewController.m */; };
+		96E2AAB41E5C3DDD0079E975 /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E2AAB31E5C3DDD0079E975 /* Contact.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +46,10 @@
 		1F87D3FB8E0CFE0F623FC29E /* Pods-FriendlyChatObjC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FriendlyChatObjC.release.xcconfig"; path = "Pods/Target Support Files/Pods-FriendlyChatObjC/Pods-FriendlyChatObjC.release.xcconfig"; sourceTree = "<group>"; };
 		3AC41C60E0E8F2E76911399C /* libPods-FriendlyChatObjC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FriendlyChatObjC.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		96E2AAAD1E5C363E0079E975 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		96E2AAAF1E5C3C210079E975 /* ContactsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsTableViewController.h; sourceTree = "<group>"; };
+		96E2AAB01E5C3C210079E975 /* ContactsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsTableViewController.m; sourceTree = "<group>"; };
+		96E2AAB21E5C3DDD0079E975 /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
+		96E2AAB31E5C3DDD0079E975 /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
 		9ED8D1017B9927C5A7CCA356 /* Pods-FriendlyChatObjC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FriendlyChatObjC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FriendlyChatObjC/Pods-FriendlyChatObjC.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -85,6 +91,8 @@
 				107960861C6130EF003DB6CC /* AppDelegate.h */,
 				107960871C6130EF003DB6CC /* AppDelegate.m */,
 				107960891C6130EF003DB6CC /* FCViewController.h */,
+				96E2AAB21E5C3DDD0079E975 /* Contact.h */,
+				96E2AAB31E5C3DDD0079E975 /* Contact.m */,
 				1079608A1C6130EF003DB6CC /* FCViewController.m */,
 				107960AC1C613207003DB6CC /* MeasurementHelper.h */,
 				107960AD1C613207003DB6CC /* MeasurementHelper.m */,
@@ -93,6 +101,8 @@
 				107960AF1C61321D003DB6CC /* Constants.h */,
 				107960B01C61321D003DB6CC /* Constants.m */,
 				107960831C6130EF003DB6CC /* Supporting Files */,
+				96E2AAAF1E5C3C210079E975 /* ContactsTableViewController.h */,
+				96E2AAB01E5C3C210079E975 /* ContactsTableViewController.m */,
 			);
 			path = FriendlyChatObjC;
 			sourceTree = "<group>";
@@ -267,7 +277,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				96E2AAB41E5C3DDD0079E975 /* Contact.m in Sources */,
 				107960B11C61321D003DB6CC /* Constants.m in Sources */,
+				96E2AAB11E5C3C210079E975 /* ContactsTableViewController.m in Sources */,
 				107960AE1C613207003DB6CC /* MeasurementHelper.m in Sources */,
 				1079608B1C6130EF003DB6CC /* FCViewController.m in Sources */,
 				107960881C6130EF003DB6CC /* AppDelegate.m in Sources */,
