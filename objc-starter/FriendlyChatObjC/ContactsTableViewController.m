@@ -50,13 +50,12 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ContactCell"];
     
    //tableView.backgroundColor = [UIColor colorWithRed:1.00 green:1.00 blue:1.00 alpha:0.90];
-    if (indexPath.row % 2 == 1)
-    {
-        cell.backgroundColor = tableView.backgroundColor;
-    }
-    else
-    {
-        cell.backgroundColor = [UIColor whiteColor];
+    const CGFloat *colors = CGColorGetComponents([tableView.backgroundColor CGColor]);
+    
+    if (indexPath.row % 2 == 1) {
+        cell.backgroundColor = [UIColor colorWithRed:colors[0] - 0.05 green:colors[1] - 0.05 blue:colors[2] - 0.05 alpha:colors[3]];
+    } else {
+        cell.backgroundColor = [UIColor colorWithRed:colors[0] - 0.025 green:colors[1] - 0.025 blue:colors[2] - 0.025 alpha:colors[3]];
     }
     
     Contact *contact = (_contacts)[indexPath.row];

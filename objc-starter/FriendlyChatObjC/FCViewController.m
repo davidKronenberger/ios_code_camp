@@ -32,7 +32,6 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
 @interface FCViewController ()<UITableViewDataSource, UITableViewDelegate,
     UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate,
         FIRInviteDelegate> {
-  int _msglength;
   FIRDatabaseHandle _refHandle;
 }
 
@@ -54,7 +53,6 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
 - (void)viewDidLoad {
   [super viewDidLoad];
 
-  _msglength = 10;
   _messages = [[NSMutableArray alloc] init];
   [_clientTable registerClass:UITableViewCell.self forCellReuseIdentifier:@"tableViewCell"];
 
@@ -111,15 +109,6 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
 - (void)loadAd {
 }
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(nonnull NSString *)string {
-  NSString *text = textField.text;
-  if (!text) {
-    return YES;
-  }
-  long newLength = text.length + string.length - range.length;
-  return (newLength <= _msglength);
-}
-
 - (void)viewWillAppear:(BOOL)animated {
 }
 
@@ -170,6 +159,15 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
             }
         }
     }
+    
+    const CGFloat *colors = CGColorGetComponents([tableView.backgroundColor CGColor]);
+    
+    if (indexPath.row % 2 == 1) {
+        cell.backgroundColor = [UIColor colorWithRed:colors[0] - 0.05 green:colors[1] - 0.05 blue:colors[2] - 0.05 alpha:colors[3]];
+    } else {
+        cell.backgroundColor = [UIColor colorWithRed:colors[0] - 0.025 green:colors[1] - 0.025 blue:colors[2] - 0.025 alpha:colors[3]];
+    }
+    
     return cell;
 }
 
