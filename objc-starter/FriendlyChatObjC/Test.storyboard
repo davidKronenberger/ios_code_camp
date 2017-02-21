@@ -45,19 +45,23 @@
                     </view>
                     <connections>
                         <outlet property="signInButton" destination="zOL-0c-Cx3" id="pba-KS-Z7N"/>
-                        <segue destination="RlK-jL-8oe" kind="show" identifier="SignInToFP" id="847-Ro-ZW9"/>
+                        <segue destination="i4w-pc-dZM" kind="show" identifier="SignInToFP" id="Z8B-7I-txj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="txP-jG-AoV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-398" y="55"/>
         </scene>
-        <!--Kontakte-->
-        <scene sceneID="oaM-Ha-Q8D">
+        <!--Contacts Table View Controller-->
+        <scene sceneID="ctK-bN-MpB">
             <objects>
-                <tableViewController storyboardIdentifier="ContactsTableViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="RlK-jL-8oe" customClass="ContactsTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="vBs-7a-At1">
-                        <rect key="frame" x="0.0" y="0.0" width="378" height="667"/>
+                <viewController id="i4w-pc-dZM" customClass="ContactsTableViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="arz-bM-Tiv"/>
+                        <viewControllerLayoutGuide type="bottom" id="aye-bd-2Pk"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Ml5-S7-3gY">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.9328639768089978" green="0.9421002538071066" blue="0.9421002538071066" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
