@@ -22,6 +22,7 @@
 		96E2AAAE1E5C363E0079E975 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 96E2AAAD1E5C363E0079E975 /* GoogleService-Info.plist */; };
 		96E2AAB11E5C3C210079E975 /* ContactsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E2AAB01E5C3C210079E975 /* ContactsTableViewController.m */; };
 		96E2AAB41E5C3DDD0079E975 /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E2AAB31E5C3DDD0079E975 /* Contact.m */; };
+		96E2AAB61E5C43C70079E975 /* nouser.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 96E2AAB51E5C43C70079E975 /* nouser.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		96E2AAB01E5C3C210079E975 /* ContactsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsTableViewController.m; sourceTree = "<group>"; };
 		96E2AAB21E5C3DDD0079E975 /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
 		96E2AAB31E5C3DDD0079E975 /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
+		96E2AAB51E5C43C70079E975 /* nouser.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = nouser.jpg; path = ../nouser.jpg; sourceTree = "<group>"; };
 		9ED8D1017B9927C5A7CCA356 /* Pods-FriendlyChatObjC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FriendlyChatObjC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FriendlyChatObjC/Pods-FriendlyChatObjC.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -91,9 +93,9 @@
 				107960861C6130EF003DB6CC /* AppDelegate.h */,
 				107960871C6130EF003DB6CC /* AppDelegate.m */,
 				107960891C6130EF003DB6CC /* FCViewController.h */,
+				1079608A1C6130EF003DB6CC /* FCViewController.m */,
 				96E2AAB21E5C3DDD0079E975 /* Contact.h */,
 				96E2AAB31E5C3DDD0079E975 /* Contact.m */,
-				1079608A1C6130EF003DB6CC /* FCViewController.m */,
 				107960AC1C613207003DB6CC /* MeasurementHelper.h */,
 				107960AD1C613207003DB6CC /* MeasurementHelper.m */,
 				107960B41C613263003DB6CC /* SignInViewController.h */,
@@ -131,6 +133,7 @@
 		10AF4CCC1DD238C00096D192 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				96E2AAB51E5C43C70079E975 /* nouser.jpg */,
 				10AF4CCD1DD238C00096D192 /* logo1024.png */,
 			);
 			path = assets;
@@ -215,6 +218,7 @@
 			files = (
 				10AF4CD41DD238C00096D192 /* LaunchScreen.xib in Resources */,
 				10AF4CD21DD238C00096D192 /* Bladefile in Resources */,
+				96E2AAB61E5C43C70079E975 /* nouser.jpg in Resources */,
 				10AF4CD31DD238C00096D192 /* Images.xcassets in Resources */,
 				107960A91C6131B6003DB6CC /* Test.storyboard in Resources */,
 				10AF4CD11DD238C00096D192 /* logo1024.png in Resources */,

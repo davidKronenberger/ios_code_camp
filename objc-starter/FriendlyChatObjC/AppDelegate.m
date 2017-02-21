@@ -16,8 +16,6 @@
 
 #import "AppDelegate.h"
 #import "ContactsTableViewController.h"
-#import "Contact.h"
-#import <Contacts/Contacts.h>
 
 @import Firebase;
 @import GoogleSignIn;
@@ -66,137 +64,10 @@ didSignInForUser:(GIDGoogleUser *)user
 - (BOOL)application:(UIApplication *)application
 didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    _contacts = [NSMutableArray arrayWithCapacity:20];
-    
-    [self contactScan];
-    
-    ContactsTableViewController *contactsViewController = [[UIStoryboard storyboardWithName:@"Test" bundle:nil] instantiateViewControllerWithIdentifier:@"ContactsTableViewController"];
-    
-    contactsViewController.contacts = _contacts;
-    
     [FIRApp configure];
     [GIDSignIn sharedInstance].clientID = [FIRApp defaultApp].options.clientID;
     [GIDSignIn sharedInstance].delegate = self;
     return YES;
 }
-
-- (void) contactScan {
-    
-    if ([CNContactStore class]) {
-        
-        //ios9 or later
-        
-        CNEntityType entityType = CNEntityTypeContacts;
-        
-        if( [CNContactStore authorizationStatusForEntityType:entityType] == CNAuthorizationStatusNotDetermined)
-            
-        {
-            
-            CNContactStore * contactStore = [[CNContactStore alloc] init];
-            
-            [contactStore requestAccessForEntityType:entityType completionHandler:^(BOOL granted, NSError * _Nullable error) {
-                
-                if(granted){
-                    
-                    [self getAllContact];
-                    
-                }
-                
-            }];
-            
-        }
-        
-        else if( [CNContactStore authorizationStatusForEntityType:entityType]== CNAuthorizationStatusAuthorized)
-            
-        {
-            
-            [self getAllContact];
-            
-        }
-        
-    }
-    
-}
-
-
-
--(void)getAllContact
-
-{
-    
-    if([CNContactStore class])
-        
-    {
-        
-        //iOS 9 or later
-        
-        NSError* contactError;
-        
-        CNContactStore* addressBook = [[CNContactStore alloc]init];
-        
-        [addressBook containersMatchingPredicate:[CNContainer predicateForContainersWithIdentifiers: @[addressBook.defaultContainerIdentifier]] error:&contactError];
-        
-        NSArray * keysToFetch =@[CNContactPhoneNumbersKey, CNContactFamilyNameKey, CNContactGivenNameKey, CNContactImageDataKey, CNContactImageDataAvailableKey];
-        
-        
-        
-        
-        
-        CNContactFetchRequest * request = [[CNContactFetchRequest alloc]initWithKeysToFetch:keysToFetch];
-        
-        [addressBook enumerateContactsWithFetchRequest:request error:&contactError usingBlock:^(CNContact * __nonnull contact, BOOL * __nonnull stop){
-            
-            [self parseContactWithContact:contact];
-            
-        }];
-        
-    }
-    
-}
-
-
-
-- (void)parseContactWithContact :(CNContact* )contact
-
-{
-    
-    NSString * firstName =  contact.givenName;
-    
-    NSString * lastName =  contact.familyName;
-    
-    NSMutableArray * phone = [[contact.phoneNumbers valueForKey:@"value"] valueForKey:@"digits"];
-    
-    
-    
-    UIImage * image;
-    
-    if(contact.imageDataAvailable){
-        
-        image = [UIImage imageWithData:(NSData *) contact.imageData];
-        
-    }else{
-        
-        image = [UIImage imageNamed:@"nouser.jpg"];
-        
-    }
-    
-    
-    
-    Contact *ct = [[Contact alloc] init];
-    
-    ct.name = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
-    
-    ct.number = (NSString *)(phone[0]);
-    
-    ct.image = image;
-    
-    
-    
-    [_contacts addObject:ct];
-    
-    
-    
-}
-
 
 @end
