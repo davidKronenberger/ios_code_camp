@@ -349,6 +349,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 }
 
 - (IBAction)signOut:(UIButton *)sender {
+    /*
     FIRAuth *firebaseAuth = [FIRAuth auth];
     NSError *signOutError;
     BOOL status = [firebaseAuth signOut:&signOutError];
@@ -356,6 +357,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
         NSLog(@"Error signing out: %@", signOutError);
         return;
     }
+     */
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
