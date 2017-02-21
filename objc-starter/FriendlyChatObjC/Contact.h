@@ -13,5 +13,7 @@
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *number;
 @property (nonatomic, copy) NSObject *image;
+@property (nonatomic, copy) NSString *email;
+
 
 @end

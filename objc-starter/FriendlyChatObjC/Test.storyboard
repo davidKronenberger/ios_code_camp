@@ -59,7 +59,7 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="vBs-7a-At1">
                         <rect key="frame" x="0.0" y="0.0" width="378" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.9328639768089978" green="0.9421002538071066" blue="0.9421002538071066" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="ContactCell" textLabel="LtX-Ii-Dqk" detailTextLabel="rac-me-Gic" imageView="d8l-JG-4yN" style="IBUITableViewCellStyleSubtitle" id="Bwf-xY-SgQ">
                                 <rect key="frame" x="0.0" y="28" width="378" height="44"/>
@@ -95,13 +95,13 @@
                             <outlet property="delegate" destination="RlK-jL-8oe" id="t3G-gp-qJQ"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Kontakte" id="LzQ-39-aou"/>
+                    <navigationItem key="navigationItem" title="Kontakte" id="LzQ-39-aou" userLabel="Kontakte"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="378" height="667"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L3j-rz-bko" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="441" y="54"/>
+            <point key="canvasLocation" x="436.80000000000001" y="54.422788605697157"/>
         </scene>
         <!--FPViewController-->
         <scene sceneID="moX-1M-48c">
