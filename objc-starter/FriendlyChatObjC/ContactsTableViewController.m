@@ -53,10 +53,22 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ContactCell"];
     
+   //tableView.backgroundColor = [UIColor colorWithRed:1.00 green:1.00 blue:1.00 alpha:0.90];
+    if (indexPath.row % 2 == 1)
+    {
+        cell.backgroundColor = tableView.backgroundColor;
+    }
+    else
+    {
+        cell.backgroundColor = [UIColor whiteColor];
+    }
+    
     Contact *contact = (_contacts)[indexPath.row];
-    cell.textLabel.text = contact.name;
-    cell.detailTextLabel.text = contact.number;
+    cell.textLabel.text = contact.name;  //contact.name
+    cell.detailTextLabel.text = contact.email;
     cell.imageView.image = (UIImage *)contact.image;
+    
+  
     
     return cell;
 }
@@ -100,7 +112,7 @@
         NSError* contactError;
         CNContactStore* addressBook = [[CNContactStore alloc]init];
         [addressBook containersMatchingPredicate:[CNContainer predicateForContainersWithIdentifiers: @[addressBook.defaultContainerIdentifier]] error:&contactError];
-        NSArray * keysToFetch =@[CNContactPhoneNumbersKey, CNContactFamilyNameKey, CNContactGivenNameKey, CNContactImageDataKey, CNContactImageDataAvailableKey];
+        NSArray * keysToFetch =@[CNContactPhoneNumbersKey, CNContactFamilyNameKey, CNContactGivenNameKey, CNContactImageDataKey, CNContactImageDataAvailableKey, CNContactEmailAddressesKey];
         
         
         CNContactFetchRequest * request = [[CNContactFetchRequest alloc]initWithKeysToFetch:keysToFetch];
@@ -116,7 +128,7 @@
     NSString * firstName =  contact.givenName;
     NSString * lastName =  contact.familyName;
     NSMutableArray * phone = [[contact.phoneNumbers valueForKey:@"value"] valueForKey:@"digits"];
-    
+    NSMutableArray * email = [contact.emailAddresses valueForKey:@"value"];
     
     UIImage * image;
     if(contact.imageDataAvailable){
@@ -131,6 +143,11 @@
     ct.name = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
     ct.number = (NSString *)(phone[0]);
     ct.image = image;
+    if([email count] > 0 ){
+        ct.email = (NSString *) (email[0]);
+    }else{
+        ct.email = @"keine E-Mail vorhanden.";
+    }
     
     [_contacts addObject:ct];
 }
