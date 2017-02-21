@@ -38,7 +38,6 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
 @property(nonatomic, weak) IBOutlet UITextField *textField;
 @property(nonatomic, weak) IBOutlet UIButton *sendButton;
 
-@property(nonatomic, weak) IBOutlet GADBannerView *banner;
 @property(nonatomic, weak) IBOutlet UITableView *clientTable;
 
 @property (strong, nonatomic) FIRDatabaseReference *ref;
@@ -74,6 +73,7 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
     _refHandle = [[_ref child:@"messages"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
         [_messages addObject:snapshot];
         [_clientTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_messages.count-1 inSection:0]] withRowAnimation: UITableViewRowAnimationAutomatic];
+        [_clientTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }];
 }
 
@@ -87,20 +87,8 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
 
 - (void)fetchConfig {
 }
-
-- (IBAction)didPressFreshConfig:(id)sender {
-  [self fetchConfig];
-}
-
 - (IBAction)didSendMessage:(UIButton *)sender {
   [self textFieldShouldReturn:_textField];
-}
-
-- (IBAction)didPressCrash:(id)sender {
-  assert(NO);
-}
-
-- (IBAction)inviteTapped:(id)sender {
 }
 
 - (void)logViewLoaded {
