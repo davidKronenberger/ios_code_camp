@@ -35,9 +35,7 @@
     self._contactsTableView.delegate = self;
     self._contactsTableView.dataSource = self;
     
-    contactsViewController.contacts = _contacts;
-
-    
+    [self._contactsTableView setNeedsDisplay];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -65,7 +63,7 @@
         cell.backgroundColor = [UIColor whiteColor];
     }
     
-    Contact *contact = (self.contacts)[indexPath.row];
+    Contact *contact = (_contacts)[indexPath.row];
     cell.textLabel.text = contact.name;  //contact.name
     cell.detailTextLabel.text = contact.email;
     cell.imageView.image = (UIImage *)contact.image;
@@ -117,7 +115,7 @@
     NSString * firstName =  contact.givenName;
     NSString * lastName =  contact.familyName;
     NSMutableArray * phone = [[contact.phoneNumbers valueForKey:@"value"] valueForKey:@"digits"];
-    NSString * email = [contact.emailAddresses valueForKey:@"value"];
+    NSMutableArray * email = [contact.emailAddresses valueForKey:@"value"];
     
     UIImage * image;
     if(contact.imageDataAvailable){
@@ -132,7 +130,11 @@
     ct.name = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
     ct.number = (NSString *)(phone[0]);
     ct.image = image;
-    if(!email ==  "") ct.email = email;
+    if([email count] > 0 ){
+        ct.email = (NSString *) (email[0]);
+    }else{
+        ct.email = @"keine E-Mail vorhanden.";
+    }
     
     [_contacts addObject:ct];
 }
