@@ -14,10 +14,13 @@
 @import GoogleMobileAds;
 
 @interface ContactsTableViewController ()
+@property (weak, nonatomic) IBOutlet UITableView *_contactsTableView;
 
 @end
 
-@implementation ContactsTableViewController
+@implementation ContactsTableViewController {
+    NSMutableArray *_contacts;
+}
 
 
 #pragma mark - Table view data source
@@ -29,9 +32,10 @@
     
     [self contactScan];
     
-    ContactsTableViewController *contactsViewController = [[UIStoryboard storyboardWithName:@"Test" bundle:nil] instantiateViewControllerWithIdentifier:@"ContactsTableViewController"];
+    self._contactsTableView.delegate = self;
+    self._contactsTableView.dataSource = self;
     
-    contactsViewController.contacts = _contacts;
+    [self._contactsTableView setNeedsDisplay];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -39,14 +43,17 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.contacts count];
+    return [_contacts count];
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    return @"Kontakte";
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ContactCell"];
     
-    Contact *contact = (self.contacts)[indexPath.row];
+    Contact *contact = (_contacts)[indexPath.row];
     cell.textLabel.text = contact.name;
     cell.detailTextLabel.text = contact.number;
     cell.imageView.image = (UIImage *)contact.image;

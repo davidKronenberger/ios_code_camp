@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ContactsTableViewController : UITableViewController
-
-@property (nonatomic, strong) NSMutableArray *contacts;
+@interface ContactsTableViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 @end
