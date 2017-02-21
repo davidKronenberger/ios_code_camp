@@ -95,7 +95,6 @@
 -(void)getAllContact {
     if([CNContactStore class]) {
         
-        //iOS 9 or later
         NSError* contactError;
         CNContactStore* addressBook = [[CNContactStore alloc]init];
         [addressBook containersMatchingPredicate:[CNContainer predicateForContainersWithIdentifiers: @[addressBook.defaultContainerIdentifier]] error:&contactError];
@@ -116,8 +115,8 @@
     NSString * lastName =  contact.familyName;
     NSMutableArray * phone = [[contact.phoneNumbers valueForKey:@"value"] valueForKey:@"digits"];
     NSMutableArray * email = [contact.emailAddresses valueForKey:@"value"];
-    
     UIImage * image;
+    
     if(contact.imageDataAvailable){
         image = [UIImage imageWithData:(NSData *) contact.imageData];
     } else {
@@ -125,16 +124,44 @@
     }
     
     
-    
     Contact *ct = [[Contact alloc] init];
-    ct.name = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
-    ct.number = (NSString *)(phone[0]);
-    ct.image = image;
+    
+    //If there are E-Mail adresses available
     if([email count] > 0 ){
+        
+        //use the first address by default
+        NSUInteger count = [email count];
         ct.email = (NSString *) (email[0]);
+
+        //for every contact check if there is an gmail adress available
+        //if so prefer it over the default
+        for(int i = 0; i < count; i++){
+            if ([email[i] rangeOfString:@"gmail."].location == NSNotFound) {
+                //address is not a gmail address
+                continue;
+            } else {
+                //address is a gmail address
+                ct.email = (NSString *) (email[i]);
+                break;
+            }
+        }
+    //If there are no Mail adresses
     }else{
         ct.email = @"keine E-Mail vorhanden.";
     }
+    
+    
+    ct.name = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
+    
+    //check if there is a phone number available
+    if([phone count] > 0 ){
+        ct.number = (NSString *)(phone[0]);
+    }else{
+        ct.number = @"Keine Nummer gefudnen.";
+    }
+    
+    ct.image = image;
+    
     
     [_contacts addObject:ct];
 }
