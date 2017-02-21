@@ -42,6 +42,7 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
 
 @property (strong, nonatomic) FIRDatabaseReference *ref;
 @property (strong, nonatomic) NSMutableArray<FIRDataSnapshot *> *messages;
+@property (strong, nonatomic) NSMutableArray<NSDictionary *> *myGroups;
 @property (strong, nonatomic) FIRStorageReference *storageRef;
 @property (nonatomic, strong) FIRRemoteConfig *remoteConfig;
 
@@ -53,6 +54,7 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
   [super viewDidLoad];
 
   _messages = [[NSMutableArray alloc] init];
+  _myGroups = [[NSMutableArray alloc] init];
   [_clientTable registerClass:UITableViewCell.self forCellReuseIdentifier:@"tableViewCell"];
 
   [self configureDatabase];
@@ -68,7 +70,50 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
 }
 
 - (void)configureDatabase {
+    
+    
+    
     _ref = [[FIRDatabase database] reference];
+    
+    
+    
+    //get current user
+    FIRUser *user = [FIRAuth auth].currentUser;
+    //add user to DB
+    [[[_ref child:@"users"] child:user.uid]
+     setValue:@{@"username": user.displayName}];
+    
+    
+    // Listen for new messages in the Firebase database
+    _refHandle = [[_ref child:@"groups"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
+        
+        NSString *groupId = snapshot.key;
+        NSString *groupName = @"unknown";
+        BOOL isInGroup = false;
+        
+        //get all groups of current user
+        for (FIRDataSnapshot *child in snapshot.children) {
+            NSLog(@"%@",child.key);
+            if([child.key isEqualToString: @"name"]){
+                groupName = child.value;
+            }else if([child.key isEqualToString: @"user"]){
+                NSString* allUsers = [NSString stringWithFormat:@"%@", child.value];
+                if([allUsers containsString: user.uid]){
+                    isInGroup = true;
+                }
+            }
+        }
+        
+        if(isInGroup){
+            //save groups of current user
+            [_myGroups addObject:@{@"id" : groupId, @"name" : groupName}];
+        }
+        NSLog(@"%@",_myGroups);
+    }];
+    
+    
+    
+    
     // Listen for new messages in the Firebase database
     _refHandle = [[_ref child:@"messages"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
         [_messages addObject:snapshot];
