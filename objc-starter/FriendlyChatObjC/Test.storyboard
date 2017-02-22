@@ -184,7 +184,7 @@
                                 <rect key="frame" x="0.0" y="72" width="375" height="545"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MessageCell" id="UVt-Vb-ixN" customClass="MessageCellTableViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MessageCellOwn" id="UVt-Vb-ixN" customClass="MessageCellTableViewCell">
                                         <rect key="frame" x="0.0" y="22" width="375" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UVt-Vb-ixN" id="YNo-L0-A91">
@@ -192,11 +192,11 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="black_bubble.png" translatesAutoresizingMaskIntoConstraints="NO" id="qmj-me-yZ1">
-                                                    <rect key="frame" x="8" y="8" width="351" height="33.5"/>
+                                                    <rect key="frame" x="54" y="8" width="313" height="33.5"/>
                                                     <rect key="contentStretch" x="0.25" y="0.5" width="0.0" height="0.0"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="wordWrap" numberOfLines="0" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B1y-p4-gld">
-                                                    <rect key="frame" x="24" y="16" width="235" height="9.5"/>
+                                                    <rect key="frame" x="78" y="24" width="181" height="1.5"/>
                                                     <string key="text">Sehr interessante Nachricht. Sehr lnag vorallem. Man kann sich kaum vorstellen wie lang die Nachricht eigentlich ist. Sie ist immer genau so lang, dass sie in Diese Speech bubble passt. oder ist es eventuell anders herum. Also passt sich etwa die Speech bubble der Text Größe an. Manno mann das wäre ja verrückt.</string>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -204,18 +204,52 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="qmj-me-yZ1" firstAttribute="top" secondItem="B1y-p4-gld" secondAttribute="top" constant="-8" id="21r-Ug-bup"/>
+                                                <constraint firstItem="qmj-me-yZ1" firstAttribute="top" secondItem="B1y-p4-gld" secondAttribute="top" constant="-16" id="21r-Ug-bup"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="B1y-p4-gld" secondAttribute="trailing" constant="108" id="CdW-x9-qNp"/>
-                                                <constraint firstItem="qmj-me-yZ1" firstAttribute="trailing" secondItem="B1y-p4-gld" secondAttribute="trailing" constant="100" id="F4u-b0-bxt"/>
-                                                <constraint firstItem="qmj-me-yZ1" firstAttribute="leading" secondItem="B1y-p4-gld" secondAttribute="leading" constant="-16" id="JNd-PC-W4k"/>
-                                                <constraint firstAttribute="topMargin" secondItem="B1y-p4-gld" secondAttribute="top" constant="-8" id="VIC-fD-Xg2"/>
-                                                <constraint firstItem="B1y-p4-gld" firstAttribute="leading" secondItem="YNo-L0-A91" secondAttribute="leadingMargin" constant="16" id="XtV-TD-a6n"/>
+                                                <constraint firstItem="qmj-me-yZ1" firstAttribute="trailing" secondItem="B1y-p4-gld" secondAttribute="trailing" constant="108" id="F4u-b0-bxt"/>
+                                                <constraint firstItem="qmj-me-yZ1" firstAttribute="leading" secondItem="B1y-p4-gld" secondAttribute="leading" constant="-24" id="JNd-PC-W4k"/>
+                                                <constraint firstAttribute="topMargin" secondItem="B1y-p4-gld" secondAttribute="top" constant="-16" id="VIC-fD-Xg2"/>
+                                                <constraint firstItem="B1y-p4-gld" firstAttribute="leading" secondItem="YNo-L0-A91" secondAttribute="leadingMargin" constant="70" id="XtV-TD-a6n"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="B1y-p4-gld" secondAttribute="bottom" constant="16" id="kU8-Iz-lJ6"/>
                                                 <constraint firstItem="qmj-me-yZ1" firstAttribute="bottom" secondItem="B1y-p4-gld" secondAttribute="bottom" constant="16" id="nq4-sg-tiY"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="message" destination="B1y-p4-gld" id="Pq9-YW-XBl"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MessageCellOther" id="D11-Tv-wxU" customClass="MessageCellTableViewCell">
+                                        <rect key="frame" x="0.0" y="72" width="375" height="50"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="D11-Tv-wxU" id="IvP-HT-A7e">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="white_bubble.png" translatesAutoresizingMaskIntoConstraints="NO" id="Pc1-0o-2Mg">
+                                                    <rect key="frame" x="8" y="8" width="313" height="33.5"/>
+                                                    <rect key="contentStretch" x="0.75" y="0.5" width="0.0" height="0.0"/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="wordWrap" numberOfLines="0" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KJW-Og-oUD">
+                                                    <rect key="frame" x="116" y="24" width="181" height="1.5"/>
+                                                    <string key="text">Sehr interessante Nachricht. Sehr lnag vorallem. Man kann sich kaum vorstellen wie lang die Nachricht eigentlich ist. Sie ist immer genau so lang, dass sie in Diese Speech bubble passt. oder ist es eventuell anders herum. Also passt sich etwa die Speech bubble der Text Größe an. Manno mann das wäre ja verrückt.</string>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="KJW-Og-oUD" firstAttribute="leading" secondItem="IvP-HT-A7e" secondAttribute="leadingMargin" constant="108" id="41b-uL-f2S"/>
+                                                <constraint firstItem="Pc1-0o-2Mg" firstAttribute="top" secondItem="KJW-Og-oUD" secondAttribute="top" constant="-16" id="4OG-dE-J5f"/>
+                                                <constraint firstItem="Pc1-0o-2Mg" firstAttribute="bottom" secondItem="KJW-Og-oUD" secondAttribute="bottom" constant="16" id="KvF-Ai-j70"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="KJW-Og-oUD" secondAttribute="trailing" constant="70" id="PjC-y7-obe"/>
+                                                <constraint firstItem="Pc1-0o-2Mg" firstAttribute="leading" secondItem="KJW-Og-oUD" secondAttribute="leading" constant="-108" id="Xbh-uS-Q3g"/>
+                                                <constraint firstItem="KJW-Og-oUD" firstAttribute="top" secondItem="IvP-HT-A7e" secondAttribute="topMargin" constant="16" id="htJ-rm-HAj"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="KJW-Og-oUD" secondAttribute="bottom" constant="16" id="oH9-gB-JVg"/>
+                                                <constraint firstItem="Pc1-0o-2Mg" firstAttribute="trailing" secondItem="KJW-Og-oUD" secondAttribute="trailing" constant="24" id="ygO-o3-D4W"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="message" destination="KJW-Og-oUD" id="Oq0-Jo-2ze"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -276,5 +310,6 @@
         <image name="black_bubble.png" width="194" height="87"/>
         <image name="ic_add_a_photo" width="24" height="24"/>
         <image name="nouser.jpg" width="500" height="500"/>
+        <image name="white_bubble.png" width="191" height="84"/>
     </resources>
 </document>
