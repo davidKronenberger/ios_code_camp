@@ -91,8 +91,6 @@ __weak ContactsTableViewController *weakViewController;
     }];
     
     
-    
-    
     // -------------Listener for users-------------
     
         _refHandle = [[_ref child:@"users"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
@@ -119,8 +117,6 @@ __weak ContactsTableViewController *weakViewController;
     
     self._contactsTableView.delegate = self;
     self._contactsTableView.dataSource = self;
-    
-    [self createGroup:@"firstGroup"];
     
     [self._contactsTableView setNeedsDisplay];
 }
@@ -339,9 +335,7 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
         ct.image = image;
         
         [weakViewController._contacts addObject:ct];
-    }
-     [_contacts addObject:ct];
-    
+        }
     }
 
 - (IBAction)signOut:(UIButton *)sender {
