@@ -54,6 +54,8 @@
         
         NSString *groupId = snapshot.key;
         NSString *groupName = @"unknown";
+        NSString *groupUsers = @"";
+        BOOL groupIsPrivate = false;
         BOOL isInGroup = false;
         
         //get all groups of current user
@@ -61,17 +63,28 @@
             if([child.key isEqualToString: @"name"]){
                 groupName = child.value;
             }else if([child.key isEqualToString: @"user"]){
+                groupUsers = child.value;
                 NSString* allCurUsers = [NSString stringWithFormat:@"%@", child.value];
                 if([allCurUsers containsString: user.uid]){
                     isInGroup = true;
+                }
+            }else if([child.key isEqualToString: @"isPrivate"]){
+                
+                if([child.key isEqualToString:@""]){
+                    groupIsPrivate = false;
+                }else{
+                    groupIsPrivate = true;
                 }
             }
         }
         
         if(isInGroup){
             //save groups of current user
-            [_myGroups addObject:@{@"id" : groupId, @"name" : groupName}];
+            [_myGroups addObject:@{@"id" : groupId, @"name" : groupName, @"isPrivate" : [NSNumber numberWithBool:groupIsPrivate], @"users" : groupUsers}];
+
         }
+        
+        
     }];
     
     
@@ -92,10 +105,11 @@
         }
         
         [_allUsers addObject:@{@"id" : userId, @"username" : username, @"email" : email}];
-        NSLog(@"%@", _allUsers);
     }];
     
     [self contactScan];
+    
+    
     
     self._contactsTableView.delegate = self;
     self._contactsTableView.dataSource = self;
@@ -115,6 +129,27 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
+}
+
+- (void) onPrivatePressed: (NSString *) selectedEmail {
+    for (NSDictionary *dict in _myGroups) {
+        if ([dict[@"isPrivate"] intValue] == 1) {
+            NSString *contactId = [self getIdFromEmail:selectedEmail];
+            if([[NSString stringWithFormat: @"%@", dict[@"users"]] containsString: contactId]){
+                NSLog(@"%@", dict[@"id"]);
+            }
+        }
+    }
+
+}
+
+- (NSString *) getIdFromEmail:(NSString *) email {
+    for (NSDictionary *dict in _allUsers) {
+        if ([dict[@"email"] isEqualToString: email]) {
+            return dict[@"id"];
+        }
+    }
+    return @"";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
