@@ -22,13 +22,13 @@
 @property (strong, nonatomic) NSMutableArray<NSDictionary *> *myGroups;
 @property (strong, nonatomic) NSMutableArray<NSDictionary *> *allUsers;
 @property (strong, nonatomic) NSMutableArray<NSDictionary *> *myUsers;
+@property (strong, nonatomic) NSMutableArray<NSDictionary *> *_contacts;
 
 @end
 
-
+__weak ContactsTableViewController *weakViewController;
 
 @implementation ContactsTableViewController {
-    NSMutableArray *_contacts;
     FIRDatabaseHandle _refHandle;
 }
 
@@ -38,10 +38,12 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
+    weakViewController = self;
+    
     _myGroups = [[NSMutableArray alloc] init];
     _allUsers = [[NSMutableArray alloc] init];
     _myUsers = [[NSMutableArray alloc] init];
-    _contacts = [NSMutableArray arrayWithCapacity:20];
+    weakViewController._contacts = [NSMutableArray arrayWithCapacity:20];
     
     _ref = [[FIRDatabase database] reference];
     
@@ -143,7 +145,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [_contacts count];
+    return [weakViewController._contacts count];
 }
 
 
@@ -152,7 +154,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ContactCell"];
    
-    Contact *contact = (_contacts)[indexPath.row];
+    Contact *contact = (weakViewController._contacts)[indexPath.row];
     cell.textLabel.text = contact.name;  //contact.name
     cell.detailTextLabel.text = contact.email;
     cell.imageView.image = (UIImage *)contact.image;
@@ -172,7 +174,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Contact *contact = nil;
-    contact = [_contacts objectAtIndex:indexPath.row];
+    contact = [weakViewController._contacts objectAtIndex:indexPath.row];
     
     [self performSegueWithIdentifier:@"ContactsToFC" sender:self];
 }
@@ -201,11 +203,14 @@
     }
 }
 
-void(^requestAllContactsDone)(BOOL) = ^(BOOL model) {
+void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
     // At this point all contacts are loaded from the addressbook of the device.
     
     // At this point we want to check which contact uses this app too.
     
+    if (contactsFound) {
+        weakViewController._contacts;
+    }
     
    //   //If it is a valid user copy the contact information
    //   //and add the Object for creating a new cell.
@@ -294,7 +299,7 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL model) {
         }
         ct.image = image;
         
-        [_contacts addObject:ct];
+        [weakViewController._contacts addObject:ct];
     }
     
     }
