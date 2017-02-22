@@ -54,6 +54,7 @@
         
         NSString *groupId = snapshot.key;
         NSString *groupName = @"unknown";
+        NSString *groupUsers = @"";
         BOOL groupIsPrivate = false;
         BOOL isInGroup = false;
         
@@ -62,6 +63,7 @@
             if([child.key isEqualToString: @"name"]){
                 groupName = child.value;
             }else if([child.key isEqualToString: @"user"]){
+                groupUsers = child.value;
                 NSString* allCurUsers = [NSString stringWithFormat:@"%@", child.value];
                 if([allCurUsers containsString: user.uid]){
                     isInGroup = true;
@@ -78,7 +80,7 @@
         
         if(isInGroup){
             //save groups of current user
-            [_myGroups addObject:@{@"id" : groupId, @"name" : groupName, @"isPrivate" : [NSNumber numberWithBool:groupIsPrivate]}];
+            [_myGroups addObject:@{@"id" : groupId, @"name" : groupName, @"isPrivate" : [NSNumber numberWithBool:groupIsPrivate], @"users" : groupUsers}];
             NSLog(@"%@", _myGroups);
 
         }
