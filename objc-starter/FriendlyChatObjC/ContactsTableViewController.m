@@ -109,22 +109,8 @@
     
     [self contactScan];
     
-    
-    
     self._contactsTableView.delegate = self;
     self._contactsTableView.dataSource = self;
-    
-    [self._contactsTableView setNeedsDisplay];
-}
-
-- (BOOL) emailAvailable:(NSString *)email {
-    for (NSDictionary *dict in _allUsers) {
-        if ([dict[@"email"] isEqualToString: email]) {
-            return true;
-        }
-    }
-    return false;
-    
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -201,17 +187,38 @@
             CNContactStore * contactStore = [[CNContactStore alloc] init];
             [contactStore requestAccessForEntityType:entityType completionHandler:^(BOOL granted, NSError * _Nullable error) {
                 if(granted) {
-                    [self getAllContact];
+                    [self getAllContact:requestAllContactsDone];
                 }
             }];
             
         } else if( [CNContactStore authorizationStatusForEntityType:entityType]== CNAuthorizationStatusAuthorized) {
-            [self getAllContact];
+            [self getAllContact:requestAllContactsDone];
         }
     }
 }
 
--(void)getAllContact {
+void(^requestAllContactsDone)(BOOL) = ^(BOOL model) {
+    // At this point all contacts are loaded from the addressbook of the device.
+    
+    // At this point we want to check which contact uses this app too.
+    
+    
+   //   //If it is a valid user copy the contact information
+   //   //and add the Object for creating a new cell.
+   //   if([self emailAvailable: ct.email] == true){
+};
+
+- (BOOL) emailAvailable:(NSString *)email {
+    for (NSDictionary *dict in _allUsers) {
+        if ([dict[@"email"] isEqualToString: email]) {
+            return true;
+        }
+    }
+    return false;
+    
+}
+
+-(void)getAllContact:(void (^)(BOOL requestSuccess))block {
     if([CNContactStore class]) {
         
         NSError* contactError;
@@ -221,9 +228,9 @@
         
         
         CNContactFetchRequest * request = [[CNContactFetchRequest alloc]initWithKeysToFetch:keysToFetch];
-        [addressBook enumerateContactsWithFetchRequest:request error:&contactError usingBlock:^(CNContact * __nonnull contact, BOOL * __nonnull stop){
+        block([addressBook enumerateContactsWithFetchRequest:request error:&contactError usingBlock:^(CNContact * __nonnull contact, BOOL * __nonnull stop){
             [self parseContactWithContact:contact];
-        }];
+        }]);
     }
 }
 
@@ -273,22 +280,17 @@
     
     //if the user has a valid EMail address
     if(validuser){
-        
-        //If it is a valid user copy the contact information
-        //and add the Object for creating a new cell.
-        if([self emailAvailable: ct.email] == true){
-            ct.name = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
+        ct.name = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
             
-            //check if there is a phone number available
-            if([phone count] > 0 ){
-                ct.number = (NSString *)(phone[0]);
-            }else{
-                ct.number = @"Keine Nummer gefudnen.";
-            }
-            ct.image = image;
-            
-            [_contacts addObject:ct];
+        //check if there is a phone number available
+        if([phone count] > 0 ){
+           ct.number = (NSString *)(phone[0]);
+        } else {
+           ct.number = @"Keine Nummer gefunden.";
         }
+        ct.image = image;
+        
+        [_contacts addObject:ct];
     }
     
     }
