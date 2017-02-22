@@ -54,6 +54,7 @@
         
         NSString *groupId = snapshot.key;
         NSString *groupName = @"unknown";
+        BOOL groupIsPrivate = false;
         BOOL isInGroup = false;
         
         //get all groups of current user
@@ -65,12 +66,21 @@
                 if([allCurUsers containsString: user.uid]){
                     isInGroup = true;
                 }
+            }else if([child.key isEqualToString: @"isPrivate"]){
+                
+                if([child.key isEqualToString:@""]){
+                    groupIsPrivate = false;
+                }else{
+                    groupIsPrivate = true;
+                }
             }
         }
         
         if(isInGroup){
             //save groups of current user
-            [_myGroups addObject:@{@"id" : groupId, @"name" : groupName}];
+            [_myGroups addObject:@{@"id" : groupId, @"name" : groupName, @"isPrivate" : [NSNumber numberWithBool:groupIsPrivate]}];
+            NSLog(@"%@", _myGroups);
+
         }
     }];
     
@@ -92,8 +102,7 @@
         }
         
         [_allUsers addObject:@{@"id" : userId, @"username" : username, @"email" : email}];
-        NSLog(@"%@", _allUsers);
-    }];
+            }];
     
     [self contactScan];
     
@@ -115,6 +124,14 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
+}
+
+- (void) onPrivatePressed: (NSString *) selectedEmail {
+    for (NSDictionary *dict in _myGroups) {
+        if ([dict[@"email"] isEqualToString: selectedEmail]) {
+            
+        }
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
