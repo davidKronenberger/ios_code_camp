@@ -21,6 +21,7 @@
 
 @property (strong, nonatomic) NSMutableArray<NSDictionary *> *myGroups;
 @property (strong, nonatomic) NSMutableArray<NSDictionary *> *allUsers;
+@property (strong, nonatomic) NSMutableArray<NSDictionary *> *myUsers;
 
 @end
 
@@ -39,6 +40,7 @@
     
     _myGroups = [[NSMutableArray alloc] init];
     _allUsers = [[NSMutableArray alloc] init];
+    _myUsers = [[NSMutableArray alloc] init];
     _contacts = [NSMutableArray arrayWithCapacity:20];
     
     _ref = [[FIRDatabase database] reference];
@@ -88,6 +90,8 @@
     }];
     
     
+    
+    
     // -------------Listener for users-------------
     _refHandle = [[_ref child:@"users"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
         
@@ -110,7 +114,11 @@
     [self contactScan];
     
     
+    //iterate emails
+    [[[[_ref child:@"users"] queryOrderedByChild:@"username"] queryEqualToValue:@"Tactical Sloth"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
+        //add to _myUsers
     
+    }];
     self._contactsTableView.delegate = self;
     self._contactsTableView.dataSource = self;
     
