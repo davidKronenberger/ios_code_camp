@@ -173,11 +173,11 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
                                                                           NSLog(@"Error downloading: %@", error);
                                                                           return;
                                                                       }
-                                                                      //cell.imageView.image = [UIImage imageWithData:data];
+                                                                      cell.imageUploadView.image = [UIImage imageWithData:data];
                                                                       [tableView reloadData];
                                                                   }];
         } else {
-            //cell.imageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
+            cell.imageUploadView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
         }
         //cell.textLabel.text = [NSString stringWithFormat:@"sent by: %@", name];
     } else {
@@ -201,19 +201,8 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
     cell.avatar.layer.masksToBounds = YES;
     cell.avatar.layer.borderWidth = 0;
     
-    //[cell.avatar setFrame:CGRectMake(100, cell., cell.avatar.frame.size.width, cell.avatar.frame.size.height)];
-   
-    
-    const CGFloat *colors = CGColorGetComponents([tableView.backgroundColor CGColor]);
-    
     cell.backgroundColor = tableView.backgroundColor;
     
-   /* if (indexPath.row % 2 == 1) {
-        cell.backgroundColor = [UIColor colorWithRed:colors[0] - 0.05 green:colors[1] - 0.05 blue:colors[2] - 0.05 alpha:colors[3]];
-    } else {
-        cell.backgroundColor = [UIColor colorWithRed:colors[0] - 0.025 green:colors[1] - 0.025 blue:colors[2] - 0.025 alpha:colors[3]];
-    }*/
-
     return cell;
 }
 

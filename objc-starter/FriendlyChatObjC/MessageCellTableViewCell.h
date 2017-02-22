@@ -14,4 +14,6 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *avatar;
 
+@property (weak, nonatomic) IBOutlet UIImageView *imageUploadView;
+
 @end

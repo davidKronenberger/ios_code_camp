@@ -124,15 +124,6 @@ __weak ContactsTableViewController *weakViewController;
 }
 
 
-- (BOOL) emailAvailable:(NSString *)email {
-    for (NSDictionary *dict in _allUsers) {
-        if ([dict[@"email"] isEqualToString: email]) {
-            return true;
-        }
-    }
-    return false;
-    
-}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
@@ -331,9 +322,7 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
         
         [weakViewController._contacts addObject:ct];
     }
-     [_contacts addObject:ct];
-    
-    }
+}
 
 - (IBAction)signOut:(UIButton *)sender {
     FIRAuth *firebaseAuth = [FIRAuth auth];
