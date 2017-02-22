@@ -104,6 +104,7 @@
         }
         
         [_allUsers addObject:@{@"id" : userId, @"username" : username, @"email" : email}];
+        
             }];
     
     [self contactScan];
@@ -134,6 +135,17 @@
             
         }
     }
+}
+
+- (NSString *) getIdFromEmail:(NSString *) email {
+    for (NSDictionary *dict in _allUsers) {
+        if ([dict[@"email"] isEqualToString: email]) {
+            NSLog(@"TRUETRUE");
+            return dict[@"id"];
+        }
+    }
+    NSLog(@"FALSEFALSE");
+    return @"";
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
