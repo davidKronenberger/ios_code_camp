@@ -92,33 +92,33 @@ __weak ContactsTableViewController *weakViewController;
         if(isInGroup){
             //save groups of current user
             [_myGroups addObject:@{@"id" : groupId, @"name" : groupName, @"isPrivate" : [NSNumber numberWithBool:groupIsPrivate], @"users" : groupUsers}];
-
         }
         
         
     }];
-    
-    
     
     
     // -------------Listener for users-------------
-    _refHandle = [[_ref child:@"users"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
-        
-        NSString *userId = snapshot.key;
-        NSString *username = @"";
-        NSString *email = @"";
-        
-        //get all users from DB
-        for (FIRDataSnapshot *child in snapshot.children) {
-            if([child.key isEqualToString: @"username"]){
-                username = child.value;
-            }else if([child.key isEqualToString: @"email"]){
-                email = child.value;
+    
+        _refHandle = [[_ref child:@"users"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
+            
+            NSString *userId = snapshot.key;
+            NSString *username = @"";
+            NSString *email = @"";
+            
+            //get all users from DB
+            for (FIRDataSnapshot *child in snapshot.children) {
+                if([child.key isEqualToString: @"username"]){
+                    username = child.value;
+                }else if([child.key isEqualToString: @"email"]){
+                    email = child.value;
+                }
             }
-        }
-        
-        [_allUsers addObject:@{@"id" : userId, @"username" : username, @"email" : email}];
-    }];
+            
+            [_allUsers addObject:@{@"id" : userId, @"username" : username, @"email" : email}];
+            
+            
+        }];
     
     
     
@@ -126,11 +126,42 @@ __weak ContactsTableViewController *weakViewController;
     
     self._contactsTableView.delegate = self;
     self._contactsTableView.dataSource = self;
+    
+    [self._contactsTableView setNeedsDisplay];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
+
+
+- (void) addUserToGroup: (NSDictionary *) userDict withGroupID: (NSString *) groupID withRights: (NSString*)rights{
+    [[[[[_ref child:@"groups"] child:groupID] child:@"user"] child:userDict[@"id"] ]setValue:@{@"joined": [self getCurrentTime], @"rights": rights}];
+}
+
+
+- (void) createGroup :(NSString *) name{
+    NSString *newGroupID = [[_ref child:@"groups"] childByAutoId].key;
+    
+    [[[_ref child:@"groups"] child:newGroupID] setValue:@{@"created": [self getCurrentTime], @"name":name}];
+    
+    FIRUser *user = [FIRAuth auth].currentUser;
+    
+    NSDictionary *userDict = @{@"id" : user.uid, @"username" : user.displayName, @"email" : user.email};
+    
+    [self addUserToGroup:userDict withGroupID:newGroupID withRights:@"Admin"];
+}
+
+
+- (NSString *) getCurrentTime {
+    NSDate *date = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"dd.MM.yyyy HH:mm:ss"];
+    NSString *timeString = [formatter stringFromDate:date];
+    
+    return timeString;
+}
+
 
 - (void) onPrivatePressed: (NSString *) selectedEmail {
     for (NSDictionary *dict in _myGroups) {
