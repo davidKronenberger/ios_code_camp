@@ -49,7 +49,7 @@
     FIRUser *user = [FIRAuth auth].currentUser;
     //add user to DB
     [[[_ref child:@"users"] child:user.uid]
-     setValue:@{@"username": user.displayName}];
+     setValue:@{@"username": user.displayName, @"email": user.email}];
 
     //------Register listener for groups of current user
     _refHandle = [[_ref child:@"groups"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
