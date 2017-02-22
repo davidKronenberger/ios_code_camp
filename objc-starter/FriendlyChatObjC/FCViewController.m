@@ -16,6 +16,7 @@
 
 #import "Constants.h"
 #import "FCViewController.h"
+#import "MessageCellTableViewCell.h"
 
 @import Photos;
 
@@ -61,6 +62,9 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
     
   [_clientTable registerClass:UITableViewCell.self forCellReuseIdentifier:@"tableViewCell"];
 
+  _clientTable.rowHeight = UITableViewAutomaticDimension;
+  _clientTable.estimatedRowHeight = 140;
+    
   [self configureDatabase];
   [self configureStorage];
   [self configureRemoteConfig];
@@ -145,7 +149,13 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     // Dequeue cell
-    UITableViewCell *cell = [_clientTable dequeueReusableCellWithIdentifier:@"tableViewCell" forIndexPath:indexPath];
+    MessageCellTableViewCell *cell = nil;
+    
+    if (indexPath.row % 2 == 1) {
+        cell = (MessageCellTableViewCell *)[_clientTable dequeueReusableCellWithIdentifier:@"MessageCellOwn" forIndexPath:indexPath];
+    } else {
+        cell = (MessageCellTableViewCell *)[_clientTable dequeueReusableCellWithIdentifier:@"MessageCellOther" forIndexPath:indexPath];
+    }
     
     // Unpack message from Firebase DataSnapshot
     FIRDataSnapshot *messageSnapshot = _messages[indexPath.row];
@@ -160,24 +170,24 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
                                                                           NSLog(@"Error downloading: %@", error);
                                                                           return;
                                                                       }
-                                                                      cell.imageView.image = [UIImage imageWithData:data];
+                                                                      //cell.imageView.image = [UIImage imageWithData:data];
                                                                       [tableView reloadData];
                                                                   }];
         } else {
-            cell.imageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
+            //cell.imageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
         }
-        cell.textLabel.text = [NSString stringWithFormat:@"sent by: %@", name];
+        //cell.textLabel.text = [NSString stringWithFormat:@"sent by: %@", name];
     } else {
         NSString *text = message[MessageFieldstext];
-        cell.textLabel.text = [NSString stringWithFormat:@"%@: %@", name, text];
-        cell.imageView.image = [UIImage imageNamed: @"ic_account_circle"];
+        cell.message.text = [NSString stringWithFormat:@"%@: %@", name, text];
+        //cell.imageView.image = [UIImage imageNamed: @"ic_account_circle"];
         NSString *photoURL = message[MessageFieldsphotoURL];
         if (photoURL) {
             NSURL *URL = [NSURL URLWithString:photoURL];
             if (URL) {
                 NSData *data = [NSData dataWithContentsOfURL:URL];
                 if (data) {
-                    cell.imageView.image = [UIImage imageWithData:data];
+                    //cell.imageView.image = [UIImage imageWithData:data];
                 }
             }
         }
@@ -190,7 +200,7 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
     } else {
         cell.backgroundColor = [UIColor colorWithRed:colors[0] - 0.025 green:colors[1] - 0.025 blue:colors[2] - 0.025 alpha:colors[3]];
     }
-    
+
     return cell;
 }
 

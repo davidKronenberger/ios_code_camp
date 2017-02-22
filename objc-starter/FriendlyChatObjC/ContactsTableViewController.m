@@ -81,9 +81,10 @@
         if(isInGroup){
             //save groups of current user
             [_myGroups addObject:@{@"id" : groupId, @"name" : groupName, @"isPrivate" : [NSNumber numberWithBool:groupIsPrivate], @"users" : groupUsers}];
-            NSLog(@"%@", _myGroups);
 
         }
+        
+        
     }];
     
     
@@ -104,10 +105,11 @@
         }
         
         [_allUsers addObject:@{@"id" : userId, @"username" : username, @"email" : email}];
-        
-            }];
+    }];
     
     [self contactScan];
+    
+    
     
     self._contactsTableView.delegate = self;
     self._contactsTableView.dataSource = self;
@@ -131,20 +133,22 @@
 
 - (void) onPrivatePressed: (NSString *) selectedEmail {
     for (NSDictionary *dict in _myGroups) {
-        if ([dict[@"email"] isEqualToString: selectedEmail]) {
-            
+        if ([dict[@"isPrivate"] intValue] == 1) {
+            NSString *contactId = [self getIdFromEmail:selectedEmail];
+            if([[NSString stringWithFormat: @"%@", dict[@"users"]] containsString: contactId]){
+                NSLog(@"%@", dict[@"id"]);
+            }
         }
     }
+
 }
 
 - (NSString *) getIdFromEmail:(NSString *) email {
     for (NSDictionary *dict in _allUsers) {
         if ([dict[@"email"] isEqualToString: email]) {
-            NSLog(@"TRUETRUE");
             return dict[@"id"];
         }
     }
-    NSLog(@"FALSEFALSE");
     return @"";
 }
 
