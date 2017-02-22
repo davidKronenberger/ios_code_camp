@@ -120,17 +120,31 @@ __weak ContactsTableViewController *weakViewController;
     self._contactsTableView.delegate = self;
     self._contactsTableView.dataSource = self;
     
+    [self createGroup:@"firstGroup"];
+    
     [self._contactsTableView setNeedsDisplay];
 }
-
-
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
-- (void) addUserToGroup: (NSDictionary *) userDict withGroupID: (NSString *) groupID {
-    [[[[[_ref child:@"groups"] child:groupID] child:@"user"] child:userDict[@"id"] ]setValue:@{@"joined": [self getCurrentTime]}];
+
+- (void) addUserToGroup: (NSDictionary *) userDict withGroupID: (NSString *) groupID withRights: (NSString*)rights{
+    [[[[[_ref child:@"groups"] child:groupID] child:@"user"] child:userDict[@"id"] ]setValue:@{@"joined": [self getCurrentTime], @"rights": rights}];
+}
+
+
+- (void) createGroup :(NSString *) name{
+    NSString *newGroupID = [[_ref child:@"groups"] childByAutoId].key;
+    
+    [[[_ref child:@"groups"] child:newGroupID] setValue:@{@"created": [self getCurrentTime], @"name":name}];
+    
+    FIRUser *user = [FIRAuth auth].currentUser;
+    
+    NSDictionary *userDict = @{@"id" : user.uid, @"username" : user.displayName, @"email" : user.email};
+    
+    [self addUserToGroup:userDict withGroupID:newGroupID withRights:@"Admin"];
 }
 
 
