@@ -21,13 +21,14 @@
 
 @property (strong, nonatomic) NSMutableArray<NSDictionary *> *myGroups;
 @property (strong, nonatomic) NSMutableArray<NSDictionary *> *allUsers;
+@property (strong, nonatomic) NSMutableArray<NSDictionary *> *myUsers;
+@property (strong, nonatomic) NSMutableArray<NSDictionary *> *_contacts;
 
 @end
 
-
+__weak ContactsTableViewController *weakViewController;
 
 @implementation ContactsTableViewController {
-    NSMutableArray *_contacts;
     FIRDatabaseHandle _refHandle;
 }
 
@@ -37,9 +38,12 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
+    weakViewController = self;
+    
     _myGroups = [[NSMutableArray alloc] init];
     _allUsers = [[NSMutableArray alloc] init];
-    _contacts = [NSMutableArray arrayWithCapacity:20];
+    _myUsers = [[NSMutableArray alloc] init];
+    weakViewController._contacts = [NSMutableArray arrayWithCapacity:20];
     
     _ref = [[FIRDatabase database] reference];
     
@@ -85,6 +89,8 @@
         
         
     }];
+    
+    
     
     
     // -------------Listener for users-------------
@@ -169,7 +175,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [_contacts count];
+    return [weakViewController._contacts count];
 }
 
 
@@ -178,7 +184,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ContactCell"];
    
-    Contact *contact = (_contacts)[indexPath.row];
+    Contact *contact = (weakViewController._contacts)[indexPath.row];
     cell.textLabel.text = contact.name;  //contact.name
     cell.detailTextLabel.text = contact.email;
     cell.imageView.image = (UIImage *)contact.image;
@@ -198,7 +204,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Contact *contact = nil;
-    contact = [_contacts objectAtIndex:indexPath.row];
+    contact = [weakViewController._contacts objectAtIndex:indexPath.row];
     
     [self performSegueWithIdentifier:@"ContactsToFC" sender:self];
 }
@@ -217,17 +223,41 @@
             CNContactStore * contactStore = [[CNContactStore alloc] init];
             [contactStore requestAccessForEntityType:entityType completionHandler:^(BOOL granted, NSError * _Nullable error) {
                 if(granted) {
-                    [self getAllContact];
+                    [self getAllContact:requestAllContactsDone];
                 }
             }];
             
         } else if( [CNContactStore authorizationStatusForEntityType:entityType]== CNAuthorizationStatusAuthorized) {
-            [self getAllContact];
+            [self getAllContact:requestAllContactsDone];
         }
     }
 }
 
--(void)getAllContact {
+void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
+    // At this point all contacts are loaded from the addressbook of the device.
+    
+    // At this point we want to check which contact uses this app too.
+    
+    if (contactsFound) {
+        weakViewController._contacts;
+    }
+    
+   //   //If it is a valid user copy the contact information
+   //   //and add the Object for creating a new cell.
+   //   if([self emailAvailable: ct.email] == true){
+};
+
+- (BOOL) emailAvailable:(NSString *)email {
+    for (NSDictionary *dict in _allUsers) {
+        if ([dict[@"email"] isEqualToString: email]) {
+            return true;
+        }
+    }
+    return false;
+    
+}
+
+-(void)getAllContact:(void (^)(BOOL requestSuccess))block {
     if([CNContactStore class]) {
         
         NSError* contactError;
@@ -237,9 +267,9 @@
         
         
         CNContactFetchRequest * request = [[CNContactFetchRequest alloc]initWithKeysToFetch:keysToFetch];
-        [addressBook enumerateContactsWithFetchRequest:request error:&contactError usingBlock:^(CNContact * __nonnull contact, BOOL * __nonnull stop){
+        block([addressBook enumerateContactsWithFetchRequest:request error:&contactError usingBlock:^(CNContact * __nonnull contact, BOOL * __nonnull stop){
             [self parseContactWithContact:contact];
-        }];
+        }]);
     }
 }
 
@@ -289,22 +319,17 @@
     
     //if the user has a valid EMail address
     if(validuser){
-        
-        //If it is a valid user copy the contact information
-        //and add the Object for creating a new cell.
-        if([self emailAvailable: ct.email] == true){
-            ct.name = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
+        ct.name = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
             
-            //check if there is a phone number available
-            if([phone count] > 0 ){
-                ct.number = (NSString *)(phone[0]);
-            }else{
-                ct.number = @"Keine Nummer gefudnen.";
-            }
-            ct.image = image;
-            
-            [_contacts addObject:ct];
+        //check if there is a phone number available
+        if([phone count] > 0 ){
+           ct.number = (NSString *)(phone[0]);
+        } else {
+           ct.number = @"Keine Nummer gefunden.";
         }
+        ct.image = image;
+        
+        [weakViewController._contacts addObject:ct];
     }
     
     }
