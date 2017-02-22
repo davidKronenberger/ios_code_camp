@@ -86,9 +86,6 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
     
     //get current user
     FIRUser *user = [FIRAuth auth].currentUser;
-    //add user to DB
-    [[[_ref child:@"users"] child:user.uid]
-     setValue:@{@"username": user.displayName}];
     
     
     // -------------Listener for messages in current group-------------

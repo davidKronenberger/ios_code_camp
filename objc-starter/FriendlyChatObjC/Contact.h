@@ -10,6 +10,7 @@
 
 @interface Contact : NSObject
 
+@property (nonatomic, copy) NSString *userId;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *number;
 @property (nonatomic, copy) NSObject *image;

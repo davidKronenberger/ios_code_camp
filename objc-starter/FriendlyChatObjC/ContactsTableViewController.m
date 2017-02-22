@@ -22,7 +22,9 @@
 @property (strong, nonatomic) NSMutableArray<NSDictionary *> *myGroups;
 @property (strong, nonatomic) NSMutableArray<NSDictionary *> *allUsers;
 @property (strong, nonatomic) NSMutableArray<NSDictionary *> *myUsers;
+@property (strong, nonatomic) NSMutableArray<NSDictionary *> *_tmpContacts;
 @property (strong, nonatomic) NSMutableArray<NSDictionary *> *_contacts;
+@property (strong, nonatomic) NSMutableArray<NSDictionary *> *_myContacts;
 
 @end
 
@@ -43,9 +45,14 @@ __weak ContactsTableViewController *weakViewController;
     _myGroups = [[NSMutableArray alloc] init];
     _allUsers = [[NSMutableArray alloc] init];
     _myUsers = [[NSMutableArray alloc] init];
-    weakViewController._contacts = [NSMutableArray arrayWithCapacity:20];
+    weakViewController._tmpContacts = [[NSMutableArray alloc] init];
+    weakViewController._contacts = [[NSMutableArray alloc] init];
+    weakViewController._myContacts = [[NSMutableArray alloc] init];
+    
     
     _ref = [[FIRDatabase database] reference];
+    
+    weakViewController.ref =_ref;
     
     //get current user
     FIRUser *user = [FIRAuth auth].currentUser;
@@ -113,6 +120,8 @@ __weak ContactsTableViewController *weakViewController;
         [_allUsers addObject:@{@"id" : userId, @"username" : username, @"email" : email}];
     }];
     
+    
+    
     [self contactScan];
     
     self._contactsTableView.delegate = self;
@@ -145,6 +154,17 @@ __weak ContactsTableViewController *weakViewController;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
+    for(Contact *contact in weakViewController._tmpContacts) {
+        for(NSDictionary *dict in weakViewController._myContacts) {
+            if([contact.email isEqualToString:dict[@"email"]]){
+                [weakViewController._contacts addObject:contact];
+                break;
+            }
+        }
+    }
+    
+    
     return [weakViewController._contacts count];
 }
 
@@ -209,7 +229,26 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
     // At this point we want to check which contact uses this app too.
     
     if (contactsFound) {
-        weakViewController._contacts;
+        for (Contact *contact in weakViewController._tmpContacts) {
+            
+            [[[[weakViewController.ref child:@"users"] queryOrderedByChild:@"email"] queryEqualToValue:contact.email] observeSingleEventOfType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
+                
+                NSString *username = @"";
+                NSString *email = @"";
+                
+                for (FIRDataSnapshot *child in snapshot.children) {
+                    if([child.key isEqualToString: @"username"]){
+                        username = child.value;
+                    }else if([child.key isEqualToString: @"email"]){
+                        email = child.value;
+                    }
+                }
+                
+                [weakViewController._myContacts addObject:@{@"id": snapshot.key, @"username": username, @"email": email}];
+                [weakViewController._contactsTableView reloadData];
+            }];
+            
+        }
     }
     
    //   //If it is a valid user copy the contact information
@@ -299,7 +338,7 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
         }
         ct.image = image;
         
-        [weakViewController._contacts addObject:ct];
+        [weakViewController._tmpContacts addObject:ct];
     }
     
     }
