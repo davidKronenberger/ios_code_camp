@@ -340,6 +340,7 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
         
         [weakViewController._contacts addObject:ct];
     }
+     [_contacts addObject:ct];
     
     }
 

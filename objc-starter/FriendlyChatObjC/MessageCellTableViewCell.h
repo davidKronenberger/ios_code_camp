@@ -12,4 +12,6 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *message;
 
+@property (weak, nonatomic) IBOutlet UIImageView *avatar;
+
 @end
