@@ -370,8 +370,7 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
         ct.image = image;
         
         [weakViewController._tmpContacts addObject:ct];
-    }
-    
+        }
     }
 
 - (IBAction)signOut:(UIButton *)sender {
