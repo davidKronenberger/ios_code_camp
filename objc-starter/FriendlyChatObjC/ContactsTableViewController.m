@@ -290,6 +290,7 @@
             [_contacts addObject:ct];
         }
     }
+     [_contacts addObject:ct];
     
     }
 

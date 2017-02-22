@@ -151,17 +151,20 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
     // Dequeue cell
     MessageCellTableViewCell *cell = nil;
     
-    if (indexPath.row % 2 == 1) {
-        cell = (MessageCellTableViewCell *)[_clientTable dequeueReusableCellWithIdentifier:@"MessageCellOwn" forIndexPath:indexPath];
-    } else {
-        cell = (MessageCellTableViewCell *)[_clientTable dequeueReusableCellWithIdentifier:@"MessageCellOther" forIndexPath:indexPath];
-    }
     
     // Unpack message from Firebase DataSnapshot
     FIRDataSnapshot *messageSnapshot = _messages[indexPath.row];
     NSDictionary<NSString *, NSString *> *message = messageSnapshot.value;
     NSString *name = message[@"user"];
     NSString *imageURL = message[MessageFieldsimageURL];
+    
+    if([name isEqualToString: [FIRAuth auth].currentUser.displayName]){
+        cell = (MessageCellTableViewCell *)[_clientTable dequeueReusableCellWithIdentifier:@"MessageCellOwn" forIndexPath:indexPath];
+ 
+    }else{
+        cell = (MessageCellTableViewCell *)[_clientTable dequeueReusableCellWithIdentifier:@"MessageCellOther" forIndexPath:indexPath];
+    }
+    
     if (imageURL) {
         if ([imageURL hasPrefix:@"gs://"]) {
             [[[FIRStorage storage] referenceForURL:imageURL] dataWithMaxSize:INT64_MAX
@@ -180,26 +183,36 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
     } else {
         NSString *text = message[MessageFieldstext];
         cell.message.text = [NSString stringWithFormat:@"%@: %@", name, text];
-        //cell.imageView.image = [UIImage imageNamed: @"ic_account_circle"];
+        cell.avatar.image = [UIImage imageNamed: @"ic_account_circle"]; //commented out
         NSString *photoURL = message[MessageFieldsphotoURL];
         if (photoURL) {
             NSURL *URL = [NSURL URLWithString:photoURL];
             if (URL) {
                 NSData *data = [NSData dataWithContentsOfURL:URL];
                 if (data) {
-                    //cell.imageView.image = [UIImage imageWithData:data];
+                    cell.avatar.image = [UIImage imageWithData:data];//commented out
                 }
             }
         }
     }
     
+    //Turn the Imageview into a circle with the help of invisible borders.
+    cell.avatar.layer.cornerRadius = cell.avatar.frame.size.height /2;
+    cell.avatar.layer.masksToBounds = YES;
+    cell.avatar.layer.borderWidth = 0;
+    
+    //[cell.avatar setFrame:CGRectMake(100, cell., cell.avatar.frame.size.width, cell.avatar.frame.size.height)];
+   
+    
     const CGFloat *colors = CGColorGetComponents([tableView.backgroundColor CGColor]);
     
-    if (indexPath.row % 2 == 1) {
+    cell.backgroundColor = tableView.backgroundColor;
+    
+   /* if (indexPath.row % 2 == 1) {
         cell.backgroundColor = [UIColor colorWithRed:colors[0] - 0.05 green:colors[1] - 0.05 blue:colors[2] - 0.05 alpha:colors[3]];
     } else {
         cell.backgroundColor = [UIColor colorWithRed:colors[0] - 0.025 green:colors[1] - 0.025 blue:colors[2] - 0.025 alpha:colors[3]];
-    }
+    }*/
 
     return cell;
 }
