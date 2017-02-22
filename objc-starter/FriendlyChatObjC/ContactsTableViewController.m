@@ -13,13 +13,22 @@
 @import Firebase;
 @import GoogleMobileAds;
 
+
 @interface ContactsTableViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *_contactsTableView;
 
+@property (strong, nonatomic) FIRDatabaseReference *ref;
+
+@property (strong, nonatomic) NSMutableArray<NSDictionary *> *myGroups;
+@property (strong, nonatomic) NSMutableArray<NSDictionary *> *allUsers;
+
 @end
+
+
 
 @implementation ContactsTableViewController {
     NSMutableArray *_contacts;
+    FIRDatabaseHandle _refHandle;
 }
 
 
@@ -28,7 +37,63 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
+    _myGroups = [[NSMutableArray alloc] init];
+    _allUsers = [[NSMutableArray alloc] init];
     _contacts = [NSMutableArray arrayWithCapacity:20];
+    
+    _ref = [[FIRDatabase database] reference];
+    
+    //get current user
+    FIRUser *user = [FIRAuth auth].currentUser;
+    //add user to DB
+    [[[_ref child:@"users"] child:user.uid]
+     setValue:@{@"username": user.displayName}];
+
+    //------Register listener for groups of current user
+    _refHandle = [[_ref child:@"groups"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
+        
+        NSString *groupId = snapshot.key;
+        NSString *groupName = @"unknown";
+        BOOL isInGroup = false;
+        
+        //get all groups of current user
+        for (FIRDataSnapshot *child in snapshot.children) {
+            if([child.key isEqualToString: @"name"]){
+                groupName = child.value;
+            }else if([child.key isEqualToString: @"user"]){
+                NSString* allCurUsers = [NSString stringWithFormat:@"%@", child.value];
+                if([allCurUsers containsString: user.uid]){
+                    isInGroup = true;
+                }
+            }
+        }
+        
+        if(isInGroup){
+            //save groups of current user
+            [_myGroups addObject:@{@"id" : groupId, @"name" : groupName}];
+        }
+    }];
+    
+    
+    // -------------Listener for users-------------
+    _refHandle = [[_ref child:@"users"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
+        
+        NSString *userId = snapshot.key;
+        NSString *username = @"";
+        NSString *email = @"";
+        
+        //get all users from DB
+        for (FIRDataSnapshot *child in snapshot.children) {
+            if([child.key isEqualToString: @"username"]){
+                username = child.value;
+            }else if([child.key isEqualToString: @"email"]){
+                email = child.value;
+            }
+        }
+        
+        [_allUsers addObject:@{@"id" : userId, @"username" : username, @"email" : email}];
+        NSLog(@"%@", _allUsers);
+    }];
     
     [self contactScan];
     
@@ -36,6 +101,16 @@
     self._contactsTableView.dataSource = self;
     
     [self._contactsTableView setNeedsDisplay];
+}
+
+- (BOOL) emailAvailable:(NSString *)email {
+    for (NSDictionary *dict in _allUsers) {
+        if ([dict[@"email"] isEqualToString: email]) {
+            return true;
+        }
+    }
+    return false;
+    
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
