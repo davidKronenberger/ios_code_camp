@@ -126,10 +126,6 @@ __weak ContactsTableViewController *weakViewController;
 }
 
 
--(void) addUserToGroup: (NSDictionary *) userDict withGroupID: (NSString *) groupID {
-    [self addUserToGroup:userDict withGroupID:groupID withRights:@"default"];
-}
-
 - (void) addUserToGroup: (NSDictionary *) userDict withGroupID: (NSString *) groupID withRights: (NSString*)rights{
     [[[[[_ref child:@"groups"] child:groupID] child:@"user"] child:userDict[@"id"] ]setValue:@{@"joined": [self getCurrentTime], @"rights": rights}];
 }
