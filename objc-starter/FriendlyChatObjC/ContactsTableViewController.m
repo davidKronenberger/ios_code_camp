@@ -152,10 +152,18 @@
     return [_contacts count];
 }
 
+
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ContactCell"];
+   
+    Contact *contact = (_contacts)[indexPath.row];
+    cell.textLabel.text = contact.name;  //contact.name
+    cell.detailTextLabel.text = contact.email;
+    cell.imageView.image = (UIImage *)contact.image;
     
-   //tableView.backgroundColor = [UIColor colorWithRed:1.00 green:1.00 blue:1.00 alpha:0.90];
+    
     const CGFloat *colors = CGColorGetComponents([tableView.backgroundColor CGColor]);
     
     if (indexPath.row % 2 == 1) {
@@ -163,13 +171,6 @@
     } else {
         cell.backgroundColor = [UIColor colorWithRed:colors[0] - 0.025 green:colors[1] - 0.025 blue:colors[2] - 0.025 alpha:colors[3]];
     }
-    
-    Contact *contact = (_contacts)[indexPath.row];
-    cell.textLabel.text = contact.name;  //contact.name
-    cell.detailTextLabel.text = contact.email;
-    cell.imageView.image = (UIImage *)contact.image;
-    
-  
     
     return cell;
 }
@@ -225,30 +226,34 @@
 
 
 - (void)parseContactWithContact :(CNContact* )contact {
+    
+    //Get all information of the contact
     NSString * firstName =  contact.givenName;
     NSString * lastName =  contact.familyName;
     NSMutableArray * phone = [[contact.phoneNumbers valueForKey:@"value"] valueForKey:@"digits"];
     NSMutableArray * email = [contact.emailAddresses valueForKey:@"value"];
-    UIImage * image;
     
+    //if there is no picture to be found take the default one
+    UIImage * image;
     if(contact.imageDataAvailable){
         image = [UIImage imageWithData:(NSData *) contact.imageData];
     } else {
         image = [UIImage imageNamed:@"nouser.jpg"];
     }
     
-    
     Contact *ct = [[Contact alloc] init];
+    Boolean validuser = false;
     
-    //If there are E-Mail adresses available
+    //Check if the user found in contacts is a valid user and
+    //therefor has the applikation.
+    
+    //1. Check if there is an valid E-Mail adresses available
     if([email count] > 0 ){
         
-        //use the first address by default
         NSUInteger count = [email count];
-        ct.email = (NSString *) (email[0]);
 
         //for every contact check if there is an gmail adress available
-        //if so prefer it over the default
+        //if so prefer it over any other address.
         for(int i = 0; i < count; i++){
             if ([email[i] rangeOfString:@"gmail."].location == NSNotFound) {
                 //address is not a gmail address
@@ -256,29 +261,33 @@
             } else {
                 //address is a gmail address
                 ct.email = (NSString *) (email[i]);
+                validuser = true;
                 break;
             }
         }
-    //If there are no Mail adresses
-    }else{
-        ct.email = @"keine E-Mail vorhanden.";
     }
     
-    
-    ct.name = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
-    
-    //check if there is a phone number available
-    if([phone count] > 0 ){
-        ct.number = (NSString *)(phone[0]);
-    }else{
-        ct.number = @"Keine Nummer gefudnen.";
+    //if the user has a valid EMail address
+    if(validuser){
+        
+        //If it is a valid user copy the contact information
+        //and add the Object for creating a new cell.
+        if([self emailAvailable: ct.email] == true){
+            ct.name = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
+            
+            //check if there is a phone number available
+            if([phone count] > 0 ){
+                ct.number = (NSString *)(phone[0]);
+            }else{
+                ct.number = @"Keine Nummer gefudnen.";
+            }
+            ct.image = image;
+            
+            [_contacts addObject:ct];
+        }
     }
     
-    ct.image = image;
-    
-    
-    [_contacts addObject:ct];
-}
+    }
 
 - (IBAction)signOut:(UIButton *)sender {
     FIRAuth *firebaseAuth = [FIRAuth auth];
