@@ -154,6 +154,7 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
     FIRDataSnapshot *messageSnapshot = _messages[indexPath.row];
     NSDictionary<NSString *, NSString *> *message = messageSnapshot.value;
     NSString *name = message[@"user"];
+    NSString *time = message[@"time"];
     NSString *imageURL = message[MessageFieldsimageURL];
     
     if([name isEqualToString: [FIRAuth auth].currentUser.displayName]){
@@ -183,11 +184,13 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
             cell.imageUploadView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
         }
         cell.sentBy.text = [NSString stringWithFormat:@"sent by: %@", name];
+        cell.sentAt.text = time;
     } else {
         [cell.imageUploadView removeFromSuperview];
         
         NSString *text = message[MessageFieldstext];
         cell.sentBy.text = name;
+        cell.sentAt.text = time;
         cell.message.text = text;
         cell.avatar.image = [UIImage imageNamed: @"ic_account_circle"]; //commented out
         NSString *photoURL = message[MessageFieldsphotoURL];
@@ -205,7 +208,7 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
     //Turn the Imageview into a circle with the help of invisible borders.
     cell.avatar.layer.cornerRadius = cell.avatar.frame.size.height /2;
     cell.avatar.layer.masksToBounds = YES;
-    cell.avatar.layer.borderWidth = 1;
+    cell.avatar.layer.borderWidth = 0;
     cell.avatar.layer.borderColor = [[UIColor blackColor] CGColor];
     
     //Turn the Imageview into a circle with the help of invisible borders.

@@ -16,5 +16,6 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageUploadView;
 @property (weak, nonatomic) IBOutlet UILabel *sentBy;
+@property (weak, nonatomic) IBOutlet UILabel *sentAt;
 
 @end
