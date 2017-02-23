@@ -157,9 +157,13 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
     
     if([name isEqualToString: [FIRAuth auth].currentUser.displayName]){
         cell = (MessageCellTableViewCell *)[_clientTable dequeueReusableCellWithIdentifier:@"MessageCellOwn" forIndexPath:indexPath];
+        
+        cell.imageUploadView.layer.borderColor = [[UIColor whiteColor] CGColor];
  
     }else{
         cell = (MessageCellTableViewCell *)[_clientTable dequeueReusableCellWithIdentifier:@"MessageCellOther" forIndexPath:indexPath];
+        
+        cell.imageUploadView.layer.borderColor = [[UIColor blackColor] CGColor];
     }
     
     if (imageURL) {
@@ -171,6 +175,7 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
                                                                           return;
                                                                       }
                                                                       cell.imageUploadView.image = [UIImage imageWithData:data];
+    
                                                                       [tableView reloadData];
                                                                   }];
         } else {
@@ -196,7 +201,13 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
     //Turn the Imageview into a circle with the help of invisible borders.
     cell.avatar.layer.cornerRadius = cell.avatar.frame.size.height /2;
     cell.avatar.layer.masksToBounds = YES;
-    cell.avatar.layer.borderWidth = 0;
+    cell.avatar.layer.borderWidth = 1;
+    cell.avatar.layer.borderColor = [[UIColor blackColor] CGColor];
+    
+    //Turn the Imageview into a circle with the help of invisible borders.
+    cell.imageUploadView.layer.cornerRadius = cell.imageUploadView.frame.size.height /2;
+    cell.imageUploadView.layer.masksToBounds = YES;
+    cell.imageUploadView.layer.borderWidth = 1;
     
     cell.backgroundColor = tableView.backgroundColor;
     
