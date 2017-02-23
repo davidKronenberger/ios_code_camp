@@ -9,6 +9,7 @@
 #import "ContactsTableViewController.h"
 #import "Contact.h"
 #import <Contacts/Contacts.h>
+#import "FCViewController.h"
 
 @import Firebase;
 @import GoogleMobileAds;
@@ -25,6 +26,8 @@
 @property (strong, nonatomic) NSMutableArray<NSDictionary *> *_tmpContacts;
 @property (strong, nonatomic) NSMutableArray<NSDictionary *> *_contacts;
 @property (strong, nonatomic) NSMutableArray<NSDictionary *> *_myContacts;
+
+@property (strong, nonatomic) NSString *selectedGroup;
 
 @end
 
@@ -109,9 +112,6 @@ __weak ContactsTableViewController *weakViewController;
             [weakViewController._contacts addObject:ct];
             [weakViewController._contactsTableView reloadData];
             
-            
-            //3. wenn auf celle gedrückt wird (onclick) dann ermittle mittels groupname (firstname) die gruppenid
-            //4. übergebe die gruppenid dem nächsten viewcontroller ( frag sascha nochmal)
         }
         
         
@@ -264,6 +264,7 @@ __weak ContactsTableViewController *weakViewController;
 {
     Contact *contact = nil;
     contact = [weakViewController._contacts objectAtIndex:indexPath.row];
+    self.selectedGroup = contact.userId;
     
     [self performSegueWithIdentifier:@"ContactsToFC" sender:self];
     
@@ -271,7 +272,10 @@ __weak ContactsTableViewController *weakViewController;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    UIViewController *vcToPushTo = segue.destinationViewController;
+    FCViewController *vcToPushTo = segue.destinationViewController;
+  //UIViewController *vcToPushTo = segue.destinationViewController;  <- Für Übergabe der GroupId geändert.
+    vcToPushTo.currentGroup = _selectedGroup;
+
 }
 
 - (void) contactScan {
