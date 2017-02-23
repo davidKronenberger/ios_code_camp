@@ -74,6 +74,9 @@ __weak ContactsTableViewController *weakViewController;
         
         //get all groups of current user
         //iterate all his keys and add proper values
+     //   [self contactScan];
+        
+        
         for (FIRDataSnapshot *child in snapshot.children) {
             if([child.key isEqualToString: @"name"]){
                 groupName = child.value;
@@ -98,19 +101,50 @@ __weak ContactsTableViewController *weakViewController;
             //save groups of current user
             [_myGroups addObject:@{@"id" : groupId, @"name" : groupName, @"isPrivate" : [NSNumber numberWithBool:groupIsPrivate], @"users" : groupUsers}];
             
-            //1. create an local contact for every group found
-            Contact *ct = [[Contact alloc] init];
 
-            UIImage * image = [UIImage imageNamed:@"nouser.jpg"];
-            ct.image = image;
-            ct.name = groupName;
-            ct.number = @"Keine Nummer gefunden.";
-            ct.email = @"keinemail@gmail.com";
-            ct.userId = groupId;
+            if (groupIsPrivate){
+                
+                NSString* parseOtherId = [NSString stringWithFormat:@"%@", groupUsers];
+                
+                parseOtherId = [parseOtherId stringByReplacingOccurrencesOfString:[FIRAuth auth].currentUser.uid withString:@""];
+                parseOtherId = [parseOtherId stringByReplacingOccurrencesOfString:@"{" withString:@""];
+                parseOtherId = [parseOtherId stringByReplacingOccurrencesOfString:@"}" withString:@""];
+                parseOtherId = [parseOtherId stringByReplacingOccurrencesOfString:@" = 0;" withString:@""];
+                parseOtherId = [parseOtherId stringByReplacingOccurrencesOfString:@" " withString:@""];
+                parseOtherId = [parseOtherId stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+                parseOtherId = [parseOtherId stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
+                
+                [[[weakViewController.ref child:@"users"] child:parseOtherId] observeSingleEventOfType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot2) {
+                    
+                    NSString *otherUserMail = snapshot2.value;
+                    
+                    for(Contact *contact in weakViewController._contacts){
+                        if([contact.email isEqualToString: otherUserMail]){
+                            contact.userId = groupId;
+                            
+                        }
+                    }
+                }];
+
+            }else{
+                
+                //1. create an local contact for every group found
+                Contact *ct = [[Contact alloc] init];
+                
+                UIImage * image = [UIImage imageNamed:@"nouser.jpg"];
+                ct.image = image;
+                ct.name = groupName;
+                ct.number = @"Keine Nummer gefunden.";
+                ct.email = @"keinemail@gmail.com";
+                ct.userId = groupId;
+                
+                //2. push contact to ui
+                [weakViewController._contacts addObject:ct];
+                [weakViewController._contactsTableView reloadData];
+            }
+                
             
-            //2. push contact to ui
-            [weakViewController._contacts addObject:ct];
-            [weakViewController._contactsTableView reloadData];
+           
             
         }
         
