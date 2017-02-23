@@ -29,6 +29,7 @@
 		96E2AAB11E5C3C210079E975 /* ContactsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E2AAB01E5C3C210079E975 /* ContactsTableViewController.m */; };
 		96E2AAB41E5C3DDD0079E975 /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E2AAB31E5C3DDD0079E975 /* Contact.m */; };
 		96E2AAB61E5C43C70079E975 /* nouser.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 96E2AAB51E5C43C70079E975 /* nouser.jpg */; };
+		96FB59AB1E5ED82100489AD0 /* white_final.png in Resources */ = {isa = PBXBuildFile; fileRef = 96FB59AA1E5ED82100489AD0 /* white_final.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,6 +66,7 @@
 		96E2AAB21E5C3DDD0079E975 /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
 		96E2AAB31E5C3DDD0079E975 /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
 		96E2AAB51E5C43C70079E975 /* nouser.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = nouser.jpg; path = ../nouser.jpg; sourceTree = "<group>"; };
+		96FB59AA1E5ED82100489AD0 /* white_final.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = white_final.png; sourceTree = "<group>"; };
 		9ED8D1017B9927C5A7CCA356 /* Pods-FriendlyChatObjC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FriendlyChatObjC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FriendlyChatObjC/Pods-FriendlyChatObjC.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -148,6 +150,7 @@
 		10AF4CCC1DD238C00096D192 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				96FB59AA1E5ED82100489AD0 /* white_final.png */,
 				96E22D8D1E5ED227000CA3D6 /* Ohne Titel Kopie.png */,
 				964307C21E5DD752005144C2 /* wallpaper2.jpg */,
 				964307C01E5DD386005144C2 /* wallpaper1.jpg */,
@@ -237,6 +240,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				10AF4CD41DD238C00096D192 /* LaunchScreen.xib in Resources */,
+				96FB59AB1E5ED82100489AD0 /* white_final.png in Resources */,
 				10AF4CD21DD238C00096D192 /* Bladefile in Resources */,
 				964307C11E5DD386005144C2 /* wallpaper1.jpg in Resources */,
 				96E22D8E1E5ED227000CA3D6 /* Ohne Titel Kopie.png in Resources */,
