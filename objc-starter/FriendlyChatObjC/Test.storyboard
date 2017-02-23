@@ -191,7 +191,7 @@
                                         <rect key="frame" x="0.0" y="22" width="375" height="150"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UVt-Vb-ixN" id="YNo-L0-A91">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="149"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="149.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2JX-IQ-Wlk">
@@ -257,13 +257,13 @@
                                         <rect key="frame" x="0.0" y="172" width="375" height="150"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="D11-Tv-wxU" id="IvP-HT-A7e">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="149"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="149.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xJ5-5p-fSE">
                                                     <rect key="frame" x="8" y="8" width="359" height="133.5"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="white_bubble.png" translatesAutoresizingMaskIntoConstraints="NO" id="Pc1-0o-2Mg">
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Ohne Titel Kopie.png" translatesAutoresizingMaskIntoConstraints="NO" id="Pc1-0o-2Mg">
                                                             <rect key="frame" x="0.0" y="0.0" width="313" height="133.5"/>
                                                             <rect key="contentStretch" x="0.75" y="0.5" width="0.0" height="0.0"/>
                                                         </imageView>
@@ -378,10 +378,10 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Ohne Titel Kopie.png" width="183" height="85"/>
         <image name="black_bubble.png" width="194" height="87"/>
         <image name="ic_add_a_photo" width="24" height="24"/>
         <image name="nouser.jpg" width="500" height="500"/>
         <image name="wallpaper1.jpg" width="2160" height="1920"/>
-        <image name="white_bubble.png" width="191" height="84"/>
     </resources>
 </document>
