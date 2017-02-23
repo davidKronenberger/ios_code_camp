@@ -24,7 +24,6 @@
 		964307C41E5DD752005144C2 /* wallpaper2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 964307C21E5DD752005144C2 /* wallpaper2.jpg */; };
 		9675F6841E5C9107006AF776 /* MessageCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9675F6821E5C9107006AF776 /* MessageCellTableViewCell.m */; };
 		96AD21F91E5D852400762FC8 /* black_bubble.png in Resources */ = {isa = PBXBuildFile; fileRef = 96AD21F81E5D852400762FC8 /* black_bubble.png */; };
-		96E22D8E1E5ED227000CA3D6 /* Ohne Titel Kopie.png in Resources */ = {isa = PBXBuildFile; fileRef = 96E22D8D1E5ED227000CA3D6 /* Ohne Titel Kopie.png */; };
 		96E22D921E5EE7C1000CA3D6 /* shiny.png in Resources */ = {isa = PBXBuildFile; fileRef = 96E22D911E5EE7C1000CA3D6 /* shiny.png */; };
 		96E2AAAE1E5C363E0079E975 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 96E2AAAD1E5C363E0079E975 /* GoogleService-Info.plist */; };
 		96E2AAB11E5C3C210079E975 /* ContactsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E2AAB01E5C3C210079E975 /* ContactsTableViewController.m */; };
@@ -60,7 +59,6 @@
 		9675F6811E5C9107006AF776 /* MessageCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageCellTableViewCell.h; sourceTree = "<group>"; };
 		9675F6821E5C9107006AF776 /* MessageCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageCellTableViewCell.m; sourceTree = "<group>"; };
 		96AD21F81E5D852400762FC8 /* black_bubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = black_bubble.png; sourceTree = "<group>"; };
-		96E22D8D1E5ED227000CA3D6 /* Ohne Titel Kopie.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Ohne Titel Kopie.png"; sourceTree = "<group>"; };
 		96E22D911E5EE7C1000CA3D6 /* shiny.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shiny.png; sourceTree = "<group>"; };
 		96E2AAAD1E5C363E0079E975 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		96E2AAAF1E5C3C210079E975 /* ContactsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactsTableViewController.h; sourceTree = "<group>"; };
@@ -154,7 +152,6 @@
 			children = (
 				96E22D911E5EE7C1000CA3D6 /* shiny.png */,
 				96FB59AA1E5ED82100489AD0 /* white_final.png */,
-				96E22D8D1E5ED227000CA3D6 /* Ohne Titel Kopie.png */,
 				964307C21E5DD752005144C2 /* wallpaper2.jpg */,
 				964307C01E5DD386005144C2 /* wallpaper1.jpg */,
 				961F222B1E5D99B100255841 /* white_bubble.png */,
@@ -246,7 +243,6 @@
 				96FB59AB1E5ED82100489AD0 /* white_final.png in Resources */,
 				10AF4CD21DD238C00096D192 /* Bladefile in Resources */,
 				964307C11E5DD386005144C2 /* wallpaper1.jpg in Resources */,
-				96E22D8E1E5ED227000CA3D6 /* Ohne Titel Kopie.png in Resources */,
 				96E2AAB61E5C43C70079E975 /* nouser.jpg in Resources */,
 				10AF4CD31DD238C00096D192 /* Images.xcassets in Resources */,
 				96E22D921E5EE7C1000CA3D6 /* shiny.png in Resources */,
