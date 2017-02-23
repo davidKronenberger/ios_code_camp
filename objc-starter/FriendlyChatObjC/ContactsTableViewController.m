@@ -82,6 +82,7 @@ __weak ContactsTableViewController *weakViewController;
                 groupName = child.value;
             }else if([child.key isEqualToString: @"user"]){
                 groupUsers = child.value;
+                
                 NSString* allCurUsers = [NSString stringWithFormat:@"%@", child.value];
                 if([allCurUsers containsString: user.uid]){
                     isInGroup = true;
