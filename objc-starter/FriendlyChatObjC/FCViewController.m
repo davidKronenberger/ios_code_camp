@@ -183,10 +183,13 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
         } else {
             cell.imageUploadView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
         }
-        //cell.textLabel.text = [NSString stringWithFormat:@"sent by: %@", name];
+        cell.sentBy.text = [NSString stringWithFormat:@"sent by: %@", name];
     } else {
+        [cell.imageUploadView removeFromSuperview];
+        
         NSString *text = message[MessageFieldstext];
-        cell.message.text = [NSString stringWithFormat:@"%@: %@", name, text];
+        cell.sentBy.text = name;
+        cell.message.text = text;
         cell.avatar.image = [UIImage imageNamed: @"ic_account_circle"]; //commented out
         NSString *photoURL = message[MessageFieldsphotoURL];
         if (photoURL) {
