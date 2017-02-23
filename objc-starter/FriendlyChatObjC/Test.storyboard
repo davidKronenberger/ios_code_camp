@@ -22,10 +22,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="wallpaper6.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="vYJ-3G-0Si">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nice to Have" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YLb-ik-2ju">
                                 <rect key="frame" x="98" y="204" width="180" height="36"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="zOL-0c-Cx3" customClass="GIDSignInButton">
@@ -37,11 +39,14 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" red="0.99653834139999997" green="0.30215242250000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="vYJ-3G-0Si" firstAttribute="leading" secondItem="OTh-0Q-7iK" secondAttribute="leading" id="2bd-FG-LDL"/>
+                            <constraint firstAttribute="trailing" secondItem="vYJ-3G-0Si" secondAttribute="trailing" id="CB2-Ts-fBZ"/>
                             <constraint firstItem="zOL-0c-Cx3" firstAttribute="top" secondItem="YLb-ik-2ju" secondAttribute="bottom" constant="69" id="JEP-3w-d44"/>
                             <constraint firstItem="YLb-ik-2ju" firstAttribute="centerX" secondItem="OTh-0Q-7iK" secondAttribute="centerX" id="Jua-8g-bRY"/>
+                            <constraint firstItem="bqo-tI-KbX" firstAttribute="top" secondItem="vYJ-3G-0Si" secondAttribute="bottom" id="dhI-rl-ceo"/>
                             <constraint firstItem="zOL-0c-Cx3" firstAttribute="centerX" secondItem="YLb-ik-2ju" secondAttribute="centerX" id="hje-MX-f43"/>
+                            <constraint firstItem="vYJ-3G-0Si" firstAttribute="top" secondItem="OTh-0Q-7iK" secondAttribute="top" id="yWw-bL-VEb"/>
                             <constraint firstItem="zOL-0c-Cx3" firstAttribute="centerY" secondItem="OTh-0Q-7iK" secondAttribute="centerY" id="z2s-r9-Unz"/>
                         </constraints>
                     </view>
@@ -66,17 +71,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="wallpaper6.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="9iv-F8-92F">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Kontakte" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aK1-Qk-Cm1">
                                 <rect key="frame" x="123" y="28" width="129" height="36"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2BF-aC-eBK">
                                 <rect key="frame" x="306" y="28" width="61" height="34"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                 <state key="normal" title="Logout">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="signOut:" destination="i4w-pc-dZM" eventType="touchUpInside" id="USz-gB-p7b"/>
@@ -84,7 +91,7 @@
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="zoe-ZY-Pox">
                                 <rect key="frame" x="0.0" y="70" width="375" height="597"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="ContactCell" textLabel="ypv-E7-75E" detailTextLabel="TSa-a1-V3T" imageView="dLr-XC-Z3s" style="IBUITableViewCellStyleSubtitle" id="0tX-YI-GWN">
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
@@ -117,12 +124,15 @@
                                 </prototypes>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" red="0.99653834139999997" green="0.30215242250000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="aye-bd-2Pk" firstAttribute="top" secondItem="9iv-F8-92F" secondAttribute="bottom" id="5Jl-fR-7eH"/>
                             <constraint firstAttribute="trailing" secondItem="2BF-aC-eBK" secondAttribute="trailing" constant="8" id="Gsx-w2-fuU"/>
+                            <constraint firstItem="9iv-F8-92F" firstAttribute="leading" secondItem="Ml5-S7-3gY" secondAttribute="leading" id="HQh-j4-gG1"/>
                             <constraint firstItem="2BF-aC-eBK" firstAttribute="top" secondItem="arz-bM-Tiv" secondAttribute="bottom" constant="8" id="NJ3-v2-fUa"/>
                             <constraint firstItem="zoe-ZY-Pox" firstAttribute="top" secondItem="2BF-aC-eBK" secondAttribute="bottom" constant="8" id="fJ8-da-vVw"/>
                             <constraint firstItem="zoe-ZY-Pox" firstAttribute="leading" secondItem="Ml5-S7-3gY" secondAttribute="leading" id="hSu-tH-po1"/>
+                            <constraint firstAttribute="trailing" secondItem="9iv-F8-92F" secondAttribute="trailing" id="kJn-zc-oga"/>
+                            <constraint firstItem="9iv-F8-92F" firstAttribute="top" secondItem="Ml5-S7-3gY" secondAttribute="top" id="lZL-Zc-A6d"/>
                             <constraint firstItem="aye-bd-2Pk" firstAttribute="top" secondItem="zoe-ZY-Pox" secondAttribute="bottom" id="oYt-sl-sJ7"/>
                             <constraint firstItem="aK1-Qk-Cm1" firstAttribute="top" secondItem="arz-bM-Tiv" secondAttribute="bottom" constant="8" id="pgY-qx-03o"/>
                             <constraint firstItem="aK1-Qk-Cm1" firstAttribute="centerX" secondItem="Ml5-S7-3gY" secondAttribute="centerX" id="q6g-Cu-3U1"/>
