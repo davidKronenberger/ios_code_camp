@@ -18,5 +18,7 @@
 
 @interface FCViewController : UIViewController
 
+@property (nonatomic) NSString *currentGroup;
+
 @end
 
