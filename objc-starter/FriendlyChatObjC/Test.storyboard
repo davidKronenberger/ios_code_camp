@@ -23,7 +23,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nice to Have" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YLb-ik-2ju">
-                                <rect key="frame" x="98.5" y="204" width="179.5" height="36"/>
+                                <rect key="frame" x="98" y="204" width="180" height="36"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -65,7 +65,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Kontakte" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aK1-Qk-Cm1">
-                                <rect key="frame" x="123.5" y="28" width="129" height="36"/>
+                                <rect key="frame" x="123" y="28" width="129" height="36"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -183,7 +183,7 @@
                                     <action selector="didTapAddPhoto:" destination="uMT-A3-F60" eventType="touchUpInside" id="vaN-73-ycr"/>
                                 </connections>
                             </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="50" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="DHD-HU-kCB">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsMultipleSelection="YES" rowHeight="50" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="DHD-HU-kCB">
                                 <rect key="frame" x="0.0" y="72" width="375" height="545"/>
                                 <color key="backgroundColor" red="0.99019607843137258" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
@@ -191,46 +191,46 @@
                                         <rect key="frame" x="0.0" y="22" width="375" height="150"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UVt-Vb-ixN" id="YNo-L0-A91">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="149.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="150"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2JX-IQ-Wlk">
-                                                    <rect key="frame" x="8" y="8" width="359" height="133.5"/>
+                                                    <rect key="frame" x="8" y="8" width="359" height="134"/>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="black_bubble.png" translatesAutoresizingMaskIntoConstraints="NO" id="qmj-me-yZ1">
-                                                            <rect key="frame" x="46" y="0.0" width="313" height="133.5"/>
+                                                            <rect key="frame" x="46" y="0.0" width="313" height="134"/>
                                                             <rect key="contentStretch" x="0.25" y="0.5" width="0.0" height="0.0"/>
                                                         </imageView>
                                                         <imageView autoresizesSubviews="NO" userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="UDc-S9-Rrt">
-                                                            <rect key="frame" x="274" y="37.5" width="80" height="80"/>
+                                                            <rect key="frame" x="274" y="38" width="80" height="80"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="80" id="AF6-p9-oGK"/>
                                                                 <constraint firstAttribute="height" constant="80" id="Szk-1E-G0A"/>
                                                             </constraints>
                                                         </imageView>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="wordWrap" numberOfLines="0" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B1y-p4-gld">
-                                                            <rect key="frame" x="70" y="16" width="181" height="101.5"/>
-                                                            <string key="text">Sehr interessante Nachricht. Sehr lnag vorallem. Man kann sich kaum vorstellen wie lang die Nachricht eigentlich ist. Sie ist immer genau so lang, dass sie in Diese Speech bubble passt. oder ist es eventuell anders herum. Also passt sich etwa die Speech bubble der Text Größe an. Manno mann das wäre ja verrückt.</string>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sehr interessante Nachricht. Sehr lnag vorallem. Man kann sich kaum vorstellen wie lang die Nachricht eigentlich ist." lineBreakMode="wordWrap" numberOfLines="0" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B1y-p4-gld">
+                                                            <rect key="frame" x="70" y="16" width="181" height="102"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="oWT-xm-aai">
-                                                            <rect key="frame" x="70" y="3" width="181" height="128"/>
+                                                            <rect key="frame" x="70" y="16" width="181" height="102"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="128" id="caO-tG-WZQ"/>
+                                                                <constraint firstAttribute="height" relation="lessThanOrEqual" priority="999" constant="100" id="ahT-aA-FAi"/>
                                                             </constraints>
                                                         </imageView>
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstAttribute="bottom" secondItem="UDc-S9-Rrt" secondAttribute="bottom" constant="16" id="E9r-yl-fZY"/>
+                                                        <constraint firstItem="oWT-xm-aai" firstAttribute="top" secondItem="qmj-me-yZ1" secondAttribute="top" constant="16" id="FmR-sY-fv9"/>
                                                         <constraint firstItem="qmj-me-yZ1" firstAttribute="trailing" secondItem="B1y-p4-gld" secondAttribute="trailing" constant="108" id="GkQ-io-jHn"/>
                                                         <constraint firstItem="qmj-me-yZ1" firstAttribute="top" secondItem="B1y-p4-gld" secondAttribute="top" constant="-16" id="Ka6-kx-aWV"/>
                                                         <constraint firstItem="oWT-xm-aai" firstAttribute="trailing" secondItem="qmj-me-yZ1" secondAttribute="trailing" constant="-108" id="O3M-Ho-xWh"/>
                                                         <constraint firstItem="B1y-p4-gld" firstAttribute="leading" secondItem="2JX-IQ-Wlk" secondAttribute="leading" constant="70" id="RkY-yL-TCL"/>
                                                         <constraint firstItem="B1y-p4-gld" firstAttribute="top" secondItem="2JX-IQ-Wlk" secondAttribute="top" constant="16" id="YdI-zz-ebG"/>
                                                         <constraint firstItem="oWT-xm-aai" firstAttribute="leading" secondItem="qmj-me-yZ1" secondAttribute="leading" constant="24" id="bHV-Z8-PEF"/>
-                                                        <constraint firstItem="oWT-xm-aai" firstAttribute="centerY" secondItem="qmj-me-yZ1" secondAttribute="centerY" id="ckx-FD-tl5"/>
+                                                        <constraint firstItem="oWT-xm-aai" firstAttribute="bottom" secondItem="qmj-me-yZ1" secondAttribute="bottom" constant="-16" id="cpp-vK-r64"/>
                                                         <constraint firstItem="qmj-me-yZ1" firstAttribute="leading" secondItem="B1y-p4-gld" secondAttribute="leading" constant="-24" id="eJK-Qm-ZbV"/>
                                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="90" id="j2b-H5-2HZ"/>
                                                         <constraint firstAttribute="bottom" secondItem="B1y-p4-gld" secondAttribute="bottom" constant="16" id="lop-P1-m2N"/>
@@ -257,34 +257,34 @@
                                         <rect key="frame" x="0.0" y="172" width="375" height="150"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="D11-Tv-wxU" id="IvP-HT-A7e">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="149.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="150"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xJ5-5p-fSE">
-                                                    <rect key="frame" x="8" y="8" width="359" height="133.5"/>
+                                                    <rect key="frame" x="8" y="8" width="359" height="134"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Ohne Titel Kopie.png" translatesAutoresizingMaskIntoConstraints="NO" id="Pc1-0o-2Mg">
-                                                            <rect key="frame" x="0.0" y="0.0" width="313" height="133.5"/>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="white_final.png" translatesAutoresizingMaskIntoConstraints="NO" id="Pc1-0o-2Mg">
+                                                            <rect key="frame" x="0.0" y="0.0" width="313" height="134.5"/>
                                                             <rect key="contentStretch" x="0.75" y="0.5" width="0.0" height="0.0"/>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="wordWrap" numberOfLines="0" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KJW-Og-oUD">
-                                                            <rect key="frame" x="108" y="16" width="181" height="101.5"/>
+                                                            <rect key="frame" x="108" y="16" width="181" height="102"/>
                                                             <string key="text">Sehr interessante Nachricht. Sehr lnag vorallem. Man kann sich kaum vorstellen wie lang die Nachricht eigentlich ist. Sie ist immer genau so lang, dass sie in Diese Speech bubble passt. oder ist es eventuell anders herum. Also passt sich etwa die Speech bubble der Text Größe an. Manno mann das wäre ja verrückt.</string>
                                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ias-R6-22s">
-                                                            <rect key="frame" x="5" y="37.5" width="80" height="80"/>
+                                                            <rect key="frame" x="5" y="38" width="80" height="80"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="80" id="anK-fX-sd2"/>
                                                                 <constraint firstAttribute="width" constant="80" id="vNi-RR-z4u"/>
                                                             </constraints>
                                                         </imageView>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QLM-xc-9eI">
-                                                            <rect key="frame" x="108" y="2" width="181" height="128"/>
+                                                            <rect key="frame" x="108" y="16" width="181" height="102"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="128" id="dIz-RC-oII"/>
+                                                                <constraint firstAttribute="height" relation="lessThanOrEqual" priority="999" constant="100" id="PxX-Rd-kwf"/>
                                                             </constraints>
                                                         </imageView>
                                                     </subviews>
@@ -294,12 +294,13 @@
                                                         <constraint firstAttribute="bottom" secondItem="Ias-R6-22s" secondAttribute="bottom" constant="16" id="7oP-b2-SsH"/>
                                                         <constraint firstItem="KJW-Og-oUD" firstAttribute="leading" secondItem="xJ5-5p-fSE" secondAttribute="leading" constant="108" id="95h-Mm-ttd"/>
                                                         <constraint firstItem="Pc1-0o-2Mg" firstAttribute="trailing" secondItem="KJW-Og-oUD" secondAttribute="trailing" constant="24" id="GH4-Jz-qKa"/>
+                                                        <constraint firstItem="QLM-xc-9eI" firstAttribute="top" secondItem="Pc1-0o-2Mg" secondAttribute="top" constant="16" id="JUY-Mf-ebb"/>
                                                         <constraint firstAttribute="bottom" secondItem="KJW-Og-oUD" secondAttribute="bottom" constant="16" id="L6f-kJ-jbq"/>
                                                         <constraint firstItem="Pc1-0o-2Mg" firstAttribute="top" secondItem="KJW-Og-oUD" secondAttribute="top" constant="-16" id="Qee-M0-Nqf"/>
                                                         <constraint firstAttribute="trailing" secondItem="KJW-Og-oUD" secondAttribute="trailing" constant="70" id="WeW-CX-Xif"/>
                                                         <constraint firstItem="QLM-xc-9eI" firstAttribute="trailing" secondItem="Pc1-0o-2Mg" secondAttribute="trailing" constant="-24" id="WfC-M6-zfv"/>
                                                         <constraint firstItem="Ias-R6-22s" firstAttribute="leading" secondItem="xJ5-5p-fSE" secondAttribute="leading" constant="5" id="kMZ-or-k3k"/>
-                                                        <constraint firstItem="QLM-xc-9eI" firstAttribute="centerY" secondItem="Pc1-0o-2Mg" secondAttribute="centerY" id="lyD-ke-4rf"/>
+                                                        <constraint firstItem="QLM-xc-9eI" firstAttribute="bottom" secondItem="Pc1-0o-2Mg" secondAttribute="bottom" constant="-16" id="qSc-jz-CLl"/>
                                                         <constraint firstItem="Pc1-0o-2Mg" firstAttribute="leading" secondItem="KJW-Og-oUD" secondAttribute="leading" constant="-108" id="rHE-Fs-Yo6"/>
                                                         <constraint firstItem="QLM-xc-9eI" firstAttribute="leading" secondItem="Pc1-0o-2Mg" secondAttribute="leading" constant="108" id="uJ0-Vd-2RR"/>
                                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="90" id="viK-u8-sUV"/>
@@ -337,7 +338,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nice to Have" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CUI-XH-ETH">
-                                <rect key="frame" x="97.5" y="28" width="179.5" height="36"/>
+                                <rect key="frame" x="97" y="28" width="180" height="36"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -378,10 +379,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Ohne Titel Kopie.png" width="183" height="85"/>
         <image name="black_bubble.png" width="194" height="87"/>
         <image name="ic_add_a_photo" width="24" height="24"/>
         <image name="nouser.jpg" width="500" height="500"/>
         <image name="wallpaper1.jpg" width="2160" height="1920"/>
+        <image name="white_final.png" width="183" height="85"/>
     </resources>
 </document>
