@@ -101,6 +101,8 @@ __weak ContactsTableViewController *weakViewController;
             
             if(groupIsPrivate){
                 
+                
+                //ist noch scheiße ...
                 NSString* parseOtherId = [NSString stringWithFormat:@"%@", groupUsers];
                 parseOtherId = [parseOtherId stringByReplacingOccurrencesOfString:[FIRAuth auth].currentUser.uid
                                                 withString:@""];
