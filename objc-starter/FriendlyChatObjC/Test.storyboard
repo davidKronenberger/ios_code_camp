@@ -191,7 +191,7 @@
                                         <rect key="frame" x="0.0" y="22" width="375" height="150"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UVt-Vb-ixN" id="YNo-L0-A91">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="149"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="150"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2JX-IQ-Wlk">
@@ -208,7 +208,7 @@
                                                                 <constraint firstAttribute="height" constant="80" id="Szk-1E-G0A"/>
                                                             </constraints>
                                                         </imageView>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="wordWrap" numberOfLines="0" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B1y-p4-gld">
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sehr interessante Nachricht. Sehr lnag vorallem. Man kann sich kaum vorstellen wie lang die Nachricht eigentlich ist." lineBreakMode="wordWrap" numberOfLines="0" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B1y-p4-gld">
                                                             <rect key="frame" x="70" y="16" width="181" height="102"/>
                                                             <string key="text">Sehr interessante Nachricht. Sehr lnag vorallem. Man kann sich kaum vorstellen wie lang die Nachricht eigentlich ist. Sie ist immer genau so lang, dass sie in Diese Speech bubble passt. oder ist es eventuell anders herum. Also passt sich etwa die Speech bubble der Text Größe an. Manno mann das wäre ja verrückt.</string>
                                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -265,7 +265,7 @@
                                         <rect key="frame" x="0.0" y="172" width="375" height="150"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="D11-Tv-wxU" id="IvP-HT-A7e">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="149"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="150"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xJ5-5p-fSE">
@@ -290,7 +290,7 @@
                                                             </constraints>
                                                         </imageView>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QLM-xc-9eI">
-                                                            <rect key="frame" x="108" y="3" width="181" height="128"/>
+                                                            <rect key="frame" x="108" y="16" width="181" height="102"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" relation="lessThanOrEqual" priority="999" constant="100" id="PxX-Rd-kwf"/>
                                                             </constraints>
