@@ -207,7 +207,11 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
     //Turn the Imageview into a circle with the help of invisible borders.
     cell.imageUploadView.layer.cornerRadius = cell.imageUploadView.frame.size.height /2;
     cell.imageUploadView.layer.masksToBounds = YES;
-    cell.imageUploadView.layer.borderWidth = 1;
+    
+    // We want to show the border only if there are image data.
+    if (cell.imageUploadView.image) {
+        cell.imageUploadView.layer.borderWidth = 1;
+    }
     
     cell.backgroundColor = tableView.backgroundColor;
     
