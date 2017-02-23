@@ -70,6 +70,7 @@ __weak ContactsTableViewController *weakViewController;
         BOOL isInGroup = false;
         
         //get all groups of current user
+        //iterate all his keys and add proper values
         for (FIRDataSnapshot *child in snapshot.children) {
             if([child.key isEqualToString: @"name"]){
                 groupName = child.value;
@@ -89,6 +90,7 @@ __weak ContactsTableViewController *weakViewController;
             }
         }
         
+        //if current user is in this group
         if(isInGroup){
             //save groups of current user
             [_myGroups addObject:@{@"id" : groupId, @"name" : groupName, @"isPrivate" : [NSNumber numberWithBool:groupIsPrivate], @"users" : groupUsers}];
@@ -125,6 +127,7 @@ __weak ContactsTableViewController *weakViewController;
             NSString *email = @"";
             
             //get all users from DB
+            //iterate all his keys and add proper values
             for (FIRDataSnapshot *child in snapshot.children) {
                 if([child.key isEqualToString: @"username"]){
                     username = child.value;
@@ -132,7 +135,7 @@ __weak ContactsTableViewController *weakViewController;
                     email = child.value;
                 }
             }
-            
+            //add to array
             [_allUsers addObject:@{@"id" : userId, @"username" : username, @"email" : email}];
             
             
@@ -167,6 +170,7 @@ __weak ContactsTableViewController *weakViewController;
     
     NSDictionary *userDict = @{@"id" : user.uid, @"username" : user.displayName, @"email" : user.email};
     
+    //set Admin-rights to the creator of the group
     [self addUserToGroup:userDict withGroupID:newGroupID withRights:@"Admin"];
 }
 
@@ -195,6 +199,7 @@ __weak ContactsTableViewController *weakViewController;
 
 - (NSString *) getIdFromEmail:(NSString *) email {
     for (NSDictionary *dict in _allUsers) {
+        //check if email is in allUsers
         if ([dict[@"email"] isEqualToString: email]) {
             return dict[@"id"];
         }
@@ -205,7 +210,7 @@ __weak ContactsTableViewController *weakViewController;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
  
-    
+    //compare my users from contact list with users from firebase
     for(Contact *contact in weakViewController._tmpContacts) {
        
         for(NSDictionary *dict in weakViewController._myContacts) {
@@ -214,10 +219,12 @@ __weak ContactsTableViewController *weakViewController;
                 BOOL containsContact = false;
                 NSString *tmpContactsString = @"";
                 for(Contact *tempContact in weakViewController._contacts){
+                    //check if array already contains user
                     if([tempContact.email isEqualToString:contact.email]){
                         containsContact = true;
                     }
                 }
+                //add user if not available in array
                 if(!containsContact){
                     [weakViewController._contacts addObject:contact];
                     break;
@@ -292,8 +299,10 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
     // At this point we want to check which contact uses this app too.
     
     if (contactsFound) {
+        //iterate all users of current user in his local directory
         for (Contact *contact in weakViewController._tmpContacts) {
             
+            //get all users of current user in db
             [[[[weakViewController.ref child:@"users"] queryOrderedByChild:@"email"] queryEqualToValue:contact.email] observeSingleEventOfType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
                 
                 NSString *username = @"";
@@ -308,6 +317,7 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
                 }
                 
                 [weakViewController._myContacts addObject:@{@"id": snapshot.key, @"username": username, @"email": email}];
+                //reload the table with contacts of current user
                 [weakViewController._contactsTableView reloadData];
             }];
             
