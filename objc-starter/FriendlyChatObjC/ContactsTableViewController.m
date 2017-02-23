@@ -102,6 +102,7 @@ __weak ContactsTableViewController *weakViewController;
             //save groups of current user
             [_myGroups addObject:@{@"id" : groupId, @"name" : groupName, @"isPrivate" : [NSNumber numberWithBool:groupIsPrivate], @"users" : groupUsers}];
             
+          
 
             if (groupIsPrivate){
                 
