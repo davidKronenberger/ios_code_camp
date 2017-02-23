@@ -156,7 +156,7 @@ __weak ContactsTableViewController *weakViewController;
 - (NSString *) getCurrentTime {
     NSDate *date = [NSDate date];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"dd.MM.yyyy HH:mm:ss"];
+    [formatter setDateFormat:@"HH:mm:ss"];
     NSString *timeString = [formatter stringFromDate:date];
     
     return timeString;
@@ -186,11 +186,24 @@ __weak ContactsTableViewController *weakViewController;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
+ 
+    
     for(Contact *contact in weakViewController._tmpContacts) {
+       
         for(NSDictionary *dict in weakViewController._myContacts) {
+            
             if([contact.email isEqualToString:dict[@"email"]]){
-                [weakViewController._contacts addObject:contact];
-                break;
+                BOOL containsContact = false;
+                NSString *tmpContactsString = @"";
+                for(Contact *tempContact in weakViewController._contacts){
+                    if([tempContact.email isEqualToString:contact.email]){
+                        containsContact = true;
+                    }
+                }
+                if(!containsContact){
+                    [weakViewController._contacts addObject:contact];
+                    break;
+                }
             }
         }
     }
@@ -282,10 +295,6 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
             
         }
     }
-    
-   //   //If it is a valid user copy the contact information
-   //   //and add the Object for creating a new cell.
-   //   if([self emailAvailable: ct.email] == true){
 };
 
 - (BOOL) emailAvailable:(NSString *)email {
