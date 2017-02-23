@@ -92,6 +92,24 @@ __weak ContactsTableViewController *weakViewController;
         if(isInGroup){
             //save groups of current user
             [_myGroups addObject:@{@"id" : groupId, @"name" : groupName, @"isPrivate" : [NSNumber numberWithBool:groupIsPrivate], @"users" : groupUsers}];
+            
+            //1. create an local contact for every group found
+            Contact *ct = [[Contact alloc] init];
+
+            UIImage * image = [UIImage imageNamed:@"nouser.jpg"];
+            ct.image = image;
+            ct.name = groupName;
+            ct.number = @"Keine Nummer gefunden.";
+            ct.email = @"keinemail@gmail.com";
+            ct.userId = groupId;
+            
+            //2. push contact to ui
+            [weakViewController._contacts addObject:ct];
+            [weakViewController._contactsTableView reloadData];
+            
+            
+            //3. wenn auf celle gedrückt wird (onclick) dann ermittle mittels groupname (firstname) die gruppenid
+            //4. übergebe die gruppenid dem nächsten viewcontroller ( frag sascha nochmal)
         }
         
         
