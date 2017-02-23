@@ -237,7 +237,7 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
     //get current time
     NSDate * now = [NSDate date];
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
-    [outputFormatter setDateFormat:@"HH:mm:ss"];
+    [outputFormatter setDateFormat:@"dd.MM.yyyy HH:mm:ss"];
     NSString *newDateString = [outputFormatter stringFromDate:now];
     
     mdata[@"time"] = newDateString;
