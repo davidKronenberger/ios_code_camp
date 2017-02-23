@@ -71,6 +71,8 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
   [self fetchConfig];
   [self loadAd];
   [self logViewLoaded];
+    
+  [self registerForKeyboardNotifications];
 }
 
 - (void)dealloc {
@@ -318,5 +320,67 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [self presentViewController:alert animated: true completion: nil];
   });
 }
+
+
+
+
+- (void)keyboardWasShown:(NSNotification*)aNotification
+{
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    
+    const int movementDistance = kbSize.height; // tweak as needed
+    const float movementDuration = 0.3f; // tweak as needed
+    
+    int movement = -movementDistance;
+    
+    [UIView beginAnimations: @"anim" context: nil];
+    [UIView setAnimationBeginsFromCurrentState: YES];
+    [UIView setAnimationDuration: movementDuration];
+    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    [UIView commitAnimations];
+
+}
+
+
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+{
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    
+    const int movementDistance = kbSize.height; // tweak as needed
+    const float movementDuration = 0.3f; // tweak as needed
+    
+    int movement = movementDistance;
+    
+    [UIView beginAnimations: @"anim" context: nil];
+    [UIView setAnimationBeginsFromCurrentState: YES];
+    [UIView setAnimationDuration: movementDuration];
+    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    [UIView commitAnimations];
+    
+}
+
+- (void)registerForKeyboardNotifications{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+    
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self.textField resignFirstResponder];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+}
+
+
 
 @end

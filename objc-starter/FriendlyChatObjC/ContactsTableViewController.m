@@ -228,6 +228,7 @@ __weak ContactsTableViewController *weakViewController;
     contact = [weakViewController._contacts objectAtIndex:indexPath.row];
     
     [self performSegueWithIdentifier:@"ContactsToFC" sender:self];
+    
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
