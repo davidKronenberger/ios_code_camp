@@ -218,6 +218,7 @@ __weak ContactsTableViewController *weakSelf;
         BOOL groupIsPrivate = false;
         BOOL isInGroup = false;
         
+        FIRDataSnapshot *userChilds = [[FIRDataSnapshot alloc] init];
         //get all groups of current user
         //iterate all his keys and add proper values
         //   [self contactScan];
@@ -228,6 +229,7 @@ __weak ContactsTableViewController *weakSelf;
                 groupName = child.value;
             }else if([child.key isEqualToString: @"user"]){
                 groupUsers = child.value;
+                userChilds = child.children;
                 
                 NSString* allCurUsers = [NSString stringWithFormat:@"%@", child.value];
                 if([allCurUsers containsString: user.uid]){
@@ -249,7 +251,13 @@ __weak ContactsTableViewController *weakSelf;
             [_myGroups addObject:@{@"id" : groupId, @"name" : groupName, @"isPrivate" : [NSNumber numberWithBool:groupIsPrivate], @"users" : groupUsers}];
             
             if (groupIsPrivate){
-                NSString* parseOtherId = [NSString stringWithFormat:@"%@", groupUsers];
+                NSString* otherId = @"";
+                for(FIRDataSnapshot *child in userChilds){
+                    if(![child.key containsString:user.uid]){
+                        otherId = child.key;
+                        break;
+                    }
+                }
                 
                 parseOtherId = [parseOtherId stringByReplacingOccurrencesOfString:[FIRAuth auth].currentUser.uid withString:@""];
                 parseOtherId = [parseOtherId stringByReplacingOccurrencesOfString:@"{" withString:@""];
