@@ -133,7 +133,9 @@ __weak ContactsTableViewController *weakSelf;
                             }
                             
                             if(!hasPrivateChat){
-                                [self createPrivateGroup: contactId withName:contact.name];
+                                NSString *newGroupId = [self createPrivateGroup: contactId withName:contact.name];
+                                contact.userId = newGroupId;
+                                
                             }
                        
                             
@@ -334,7 +336,7 @@ __weak ContactsTableViewController *weakSelf;
 
 
 
-- (void) createPrivateGroup: (NSString *) otherUserId withName: (NSString *) otherUserName {
+- (NSString *) createPrivateGroup: (NSString *) otherUserId withName: (NSString *) otherUserName {
     NSString *newGroupID = [[_ref child:@"groups"] childByAutoId].key;
     
     [[[_ref child:@"groups"] child:newGroupID] setValue:@{@"created": [self getCurrentTime], @"isPrivate": [NSNumber numberWithBool:true]}];
@@ -345,6 +347,7 @@ __weak ContactsTableViewController *weakSelf;
     
     [[[[_ref child:@"groups"] child:newGroupID] child:@"user"] setValue:@{user.uid: [NSNumber numberWithBool:false], otherUserId:[NSNumber numberWithBool:false]}];
     //[self addUserToGroup: newGroupID withUserId:otherUserId];
+    return newGroupID;
 }
 
 
