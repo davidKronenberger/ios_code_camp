@@ -55,7 +55,6 @@ FIRInviteDelegate> {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSLog(@"%@",_currentGroup);
     _messages = [[NSMutableArray alloc] init];
     
     _clientTable.rowHeight = UITableViewAutomaticDimension;
