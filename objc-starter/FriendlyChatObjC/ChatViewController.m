@@ -123,13 +123,13 @@ FIRInviteDelegate> {
     NSString *imageURL = message[MessageFieldsimageURL];
     
     // First of all we have to check who sent this message.
-    if([name isEqualToString: [FIRAuth auth].currentUser.displayName]){
+    if ([name isEqualToString: [FIRAuth auth].currentUser.displayName]){
         // Dependent on the fact, that the message is from the current user. We show the message cell own.
         cell = (MessageCellTableViewCell *)[_clientTable dequeueReusableCellWithIdentifier:@"MessageCellOwn" forIndexPath:indexPath];
         
         // This color is for the border of the image view. This will only be used, if the message contains an image.
         cell.imageUploadView.layer.borderColor = [[UIColor whiteColor] CGColor];
-    }else{
+    } else {
         
         // Dependent on the fact, that the message is from another user. We show the message cell other.
         cell = (MessageCellTableViewCell *)[_clientTable dequeueReusableCellWithIdentifier:@"MessageCellOther" forIndexPath:indexPath];
@@ -320,8 +320,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 
 #pragma mark - Keyboard Handling
 
-- (void)keyboardWasShown:(NSNotification*)aNotification
-{
+- (void)keyboardWasShown:(NSNotification*)aNotification {
     NSDictionary* info = [aNotification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     
@@ -340,11 +339,9 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 }
 
 
-- (void)keyboardWillBeHidden:(NSNotification*)aNotification
-{
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification {
     NSDictionary* info = [aNotification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    
     
     const int movementDistance = kbSize.height; // tweak as needed
     const float movementDuration = 0.3f; // tweak as needed
@@ -359,7 +356,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
 }
 
-- (void)registerForKeyboardNotifications{
+- (void)registerForKeyboardNotifications {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWasShown:)
                                                  name:UIKeyboardDidShowNotification object:nil];
@@ -370,8 +367,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.textField resignFirstResponder];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
