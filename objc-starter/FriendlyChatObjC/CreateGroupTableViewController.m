@@ -37,9 +37,6 @@
     [self.contactsTableView setNeedsDisplay];
 }
 
-
-
-
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -72,28 +69,52 @@
     return cell;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     Contact *contact = nil;
     contact = [database._contacts objectAtIndex:indexPath.row];
-    //self.selectedGroup = contact.userId;
     
-    //[self performSegueWithIdentifier:@"ContactsToFC" sender:self];
-    
+    [database._contactsForGroup addObject:contact];
 }
 
-- (IBAction)CreateGroupButtonPressed:(id)sender {
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    Contact *contact = nil;
+    contact = [database._contacts objectAtIndex:indexPath.row];
     
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [database._contactsForGroup removeObject:contact];
+}
 
+#pragma mark - Create Group Handling
+
+- (NSString *) createGroup :(NSString *) name {
+    NSString *newGroupID = [[database._ref child:@"groups"] childByAutoId].key;
+    
+    [[[database._ref child:@"groups"] child:newGroupID] setValue:@{@"created": [DatabaseSingelton getCurrentTime], @"name":name}];
+    
+    FIRUser *user = [FIRAuth auth].currentUser;
+    
+    //set Admin-rights to the creator of the group
+    [DatabaseSingelton addUserToGroup: newGroupID withUserId:user.uid];
+    
+    return newGroupID;
+}
+
+#pragma mark - Button Handling
+
+- (IBAction)CreateGroupButtonPressed:(id)sender {
+    if (sizeof(database._contactsForGroup) > 0) {
+        NSString *groupID = [self createGroup:@"Test1234"];
+        
+        for (Contact *tmpUser in database._contactsForGroup) {
+            [DatabaseSingelton addUserToGroup:groupID withUserId:tmpUser.userId];
+        }
+        
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 - (IBAction)AbortButtonPressed:(id)sender {
-    
-    
+    database._contactsForGroup = [[NSMutableArray alloc] init];
     
     [self dismissViewControllerAnimated:YES completion:nil];
-
 }
 @end

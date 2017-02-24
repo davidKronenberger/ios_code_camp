@@ -12,6 +12,9 @@
 
 @synthesize _contacts;
 
+// Create weak self instance. Its for accessing in whole singleton.
+__weak DatabaseSingelton *weakSingleton;
+
 #pragma mark Singleton Methods
 
 + (id)sharedDatabase {
@@ -23,9 +26,25 @@
     return sharedDatabase;
 }
 
++ (void) addUserToGroup: (NSString *) groupId withUserId: (NSString *) userId {
+    [[[[weakSingleton._ref child:@"groups"] child:groupId] child:@"user"] child:@{userId: [NSNumber numberWithBool:false]}];
+}
+
++ (NSString *) getCurrentTime {
+    NSDate *date = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"HH:mm:ss"];
+    NSString *timeString = [formatter stringFromDate:date];
+    
+    return timeString;
+}
+
 - (id)init {
     if (self = [super init]) {
-        _contacts = [[NSMutableArray alloc] init];
+        weakSingleton = self;
+        self._contacts = [[NSMutableArray alloc] init];
+        self._contactsForGroup = [[NSMutableArray alloc] init];
+        self._ref = [[FIRDatabase database] reference];
     }
     return self;
 }
