@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <QuartzCore/QuartzCore.h>
 #import "CreateGroupTableViewController.h"
 #import "Contact.h"
 #import "DatabaseSingelton.h"
@@ -30,6 +31,8 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
+    [self addBorderToTextView];
+    
     database = [DatabaseSingelton sharedDatabase];
     
     self.contactsTableView.delegate = self;
@@ -39,6 +42,13 @@
 }
 
 #pragma mark - Table view data source
+
+- (void) addBorderToTextView {
+    self.groupNameTextField.layer.cornerRadius=8.0f;
+    self.groupNameTextField.layer.masksToBounds=YES;
+    self.groupNameTextField.layer.borderColor=[[UIColor lightGrayColor] CGColor];
+    self.groupNameTextField.layer.borderWidth= 1.0f;
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // We have just one section.
