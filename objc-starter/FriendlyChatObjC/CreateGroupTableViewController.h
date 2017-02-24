@@ -10,9 +10,4 @@
 
 @interface CreateGroupTableViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
-- (IBAction)CreateGroupButtonPressed:(id)sender;
-
-- (IBAction)AbortButtonPressed:(id)sender;
-
-
 @end

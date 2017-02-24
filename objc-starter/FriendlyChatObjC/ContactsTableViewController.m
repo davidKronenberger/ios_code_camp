@@ -9,6 +9,7 @@
 #import "Contact.h"
 #import <Contacts/Contacts.h>
 #import "ChatViewController.h"
+#import "DatabaseSingelton.h"
 
 @import Firebase;
 @import GoogleMobileAds;
@@ -25,8 +26,6 @@
 @property (strong, nonatomic) NSMutableArray<NSDictionary *> *_myContacts;
 // This array is used to get all contacts of the addressbook on the device, which have a valid email address. (Currently only gmail addresses are valid.)
 @property (strong, nonatomic) NSMutableArray *_tmpContacts;
-// In this object the contacts are saved, which will shown in the table view.
-@property (strong, nonatomic) NSMutableArray *_contacts;
 
 // !!!!!!!!!!PLEASE COMMENT THESE TWO PROPERTIES!!!!!!!!!
 @property (strong, nonatomic) FIRDatabaseReference *ref;
@@ -40,12 +39,17 @@ __weak ContactsTableViewController *weakSelf;
 @implementation ContactsTableViewController {
     // !!!!!!!!!!PLEASE COMMENT OR RENAME!!!!!!!!!
     FIRDatabaseHandle _refHandle;
+    
+    // Singleton instance of database.
+    DatabaseSingelton *database;
 }
 
 - (void) viewDidLoad {
     [super viewDidLoad];
     
     weakSelf = self;
+    
+    database = [DatabaseSingelton sharedDatabase];
     
     [weakSelf initProperties];
     
@@ -63,7 +67,7 @@ __weak ContactsTableViewController *weakSelf;
     _myGroups = [[NSMutableArray alloc] init];
     _allUsers = [[NSMutableArray alloc] init];
     weakSelf._tmpContacts = [[NSMutableArray alloc] init];
-    weakSelf._contacts = [[NSMutableArray alloc] init];
+    database._contacts = [[NSMutableArray alloc] init];
     weakSelf._myContacts = [[NSMutableArray alloc] init];
     
     _ref = [[FIRDatabase database] reference];
@@ -86,7 +90,7 @@ __weak ContactsTableViewController *weakSelf;
             
             if([contact.email isEqualToString:dict[@"email"]]){
                 BOOL containsContact = false;
-                for(Contact *tempContact in weakSelf._contacts){
+                for(Contact *tempContact in database._contacts){
                     //check if array already contains user
                     if([tempContact.email isEqualToString:contact.email]){
                         containsContact = true;
@@ -94,57 +98,7 @@ __weak ContactsTableViewController *weakSelf;
                 }
                 //add user if not available in array
                 if(!containsContact){
-                    
-                    
-                    [[_ref child:@"groups"] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot *snapshot2) {
-                        
-                        
-                        NSMutableArray<NSDictionary *> *array = [[NSMutableArray alloc] init];
-                        
-                        for(FIRDataSnapshot *child in snapshot2.children){
-                            
-                            NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-                            
-                            [dict setObject:child.key forKey:@"id"];
-                            for(FIRDataSnapshot *child2 in child.children){
-                                NSString *key = [NSString stringWithFormat: @"%@", child2.key];
-                                if([key isEqualToString:@"isPrivate"] || [key isEqualToString:@"user"] ){
-                                    [dict setObject:child2.value forKey:child2.key];
-                                }
-                            }
-                            if ([[dict allKeys] containsObject:@"isPrivate"]) {
-                                [array addObject: dict];
-                            }
-                            
-                        }
-                        
-                        
-                        [[[[weakSelf.ref child:@"users"] queryOrderedByChild:@"email"] queryEqualToValue:contact.email] observeSingleEventOfType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
-                            
-                            NSString *contactId = snapshot.key;
-                            BOOL hasPrivateChat = false;
-                            
-                            for(NSDictionary *dict2 in array){
-                                
-                                NSString *usersString = [NSString stringWithFormat: @"%@", dict2[@"user"]];
-                                if([usersString containsString:contactId] && [usersString containsString:[FIRAuth auth].currentUser.uid]){
-                                    hasPrivateChat = true;
-                                }
-                            }
-                            
-                            if(!hasPrivateChat){
-                                NSString *newGroupId = [self createPrivateGroup: contactId withName:contact.name];
-                                contact.userId = newGroupId;
-                                
-                            }
-                       
-                            
-                        }];
-                        
-                        
-                    }];
-                    
-                    [weakSelf._contacts addObject:contact];
+                    [database._contacts addObject:contact];
                     break;
                     
                 }
@@ -153,13 +107,13 @@ __weak ContactsTableViewController *weakSelf;
     }
     
     
-    return [weakSelf._contacts count];
+    return [database._contacts count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ContactCell"];
     
-    Contact *contact = (weakSelf._contacts)[indexPath.row];
+    Contact *contact = (database._contacts)[indexPath.row];
     cell.textLabel.text = contact.name;
     cell.detailTextLabel.text = contact.email;
     cell.imageView.image = (UIImage *)contact.image;
@@ -179,7 +133,7 @@ __weak ContactsTableViewController *weakSelf;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Contact *contact = nil;
-    contact = [weakSelf._contacts objectAtIndex:indexPath.row];
+    contact = [database._contacts objectAtIndex:indexPath.row];
     self.selectedGroup = contact.userId;
     
     [self performSegueWithIdentifier:@"ContactsToFC" sender:self];
@@ -265,7 +219,7 @@ __weak ContactsTableViewController *weakSelf;
                     
                     NSString *otherUserMail = snapshot2.value;
                     
-                    for (Contact *contact in weakSelf._contacts){
+                    for (Contact *contact in database._contacts){
                         if ([contact.email isEqualToString: otherUserMail]){
                             contact.userId = groupId;
                         }
@@ -283,7 +237,7 @@ __weak ContactsTableViewController *weakSelf;
                 ct.userId = groupId;
                 
                 //2. push contact to ui.
-                [weakSelf._contacts addObject:ct];
+                [database._contacts addObject:ct];
                 [weakSelf._contactsTableView reloadData];
             }
         }
@@ -538,13 +492,7 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-
-
-
 - (IBAction)NewGroupButtonPressed:(id)sender {
-    
-    
-      [self performSegueWithIdentifier:@"ContactToCreateNewGroup" sender:self];
-    
+    [self performSegueWithIdentifier:@"ContactToCreateNewGroup" sender:self];
 }
 @end
