@@ -181,8 +181,14 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OAj-UB-iu8">
+                                <rect key="frame" x="16" y="72" width="343" height="30"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="S5t-Nn-m39">
-                                <rect key="frame" x="-4" y="72" width="383" height="533"/>
+                                <rect key="frame" x="-4" y="110" width="383" height="495"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ContactCell" textLabel="w9i-Sn-7cj" detailTextLabel="Npj-Bo-H69" imageView="XcW-Gq-MDt" style="IBUITableViewCellStyleSubtitle" id="sfE-iF-4qi">
@@ -240,22 +246,26 @@
                         <constraints>
                             <constraint firstItem="LQ0-tb-VTR" firstAttribute="top" secondItem="Yfw-GX-pi7" secondAttribute="bottom" constant="-20" id="0gV-hJ-wo1"/>
                             <constraint firstItem="Gkx-tp-ucy" firstAttribute="leading" secondItem="NLS-mo-jhP" secondAttribute="leadingMargin" constant="20" id="1lZ-HR-IGx"/>
+                            <constraint firstItem="OAj-UB-iu8" firstAttribute="top" secondItem="6at-E3-GIR" secondAttribute="bottom" constant="8" id="6zz-1t-SrD"/>
                             <constraint firstAttribute="trailingMargin" secondItem="S5t-Nn-m39" secondAttribute="trailing" constant="-20" id="8Zf-KY-VO5"/>
                             <constraint firstItem="fgP-od-J98" firstAttribute="top" secondItem="Gkx-tp-ucy" secondAttribute="bottom" constant="-38" id="AGl-UZ-vrT"/>
+                            <constraint firstItem="OAj-UB-iu8" firstAttribute="leading" secondItem="NLS-mo-jhP" secondAttribute="leadingMargin" id="Cah-Yi-5Y7"/>
                             <constraint firstAttribute="trailingMargin" secondItem="fgP-od-J98" secondAttribute="trailing" constant="20" id="DOU-ac-IKl"/>
                             <constraint firstItem="6at-E3-GIR" firstAttribute="top" secondItem="Yfw-GX-pi7" secondAttribute="bottom" constant="8" id="EEg-pl-UHo"/>
                             <constraint firstItem="Gkx-tp-ucy" firstAttribute="top" secondItem="S5t-Nn-m39" secondAttribute="bottom" constant="12" id="JSj-Zq-6Vy"/>
+                            <constraint firstItem="S5t-Nn-m39" firstAttribute="top" secondItem="OAj-UB-iu8" secondAttribute="bottom" constant="8" id="MNV-Pr-1jP"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="OAj-UB-iu8" secondAttribute="trailing" id="SQZ-DU-RUn"/>
                             <constraint firstItem="IqW-wt-IRI" firstAttribute="top" secondItem="LQ0-tb-VTR" secondAttribute="bottom" id="Tpq-uw-zk9"/>
                             <constraint firstItem="LQ0-tb-VTR" firstAttribute="leading" secondItem="NLS-mo-jhP" secondAttribute="leadingMargin" constant="-20" id="bba-IA-iW2"/>
                             <constraint firstItem="6at-E3-GIR" firstAttribute="centerX" secondItem="NLS-mo-jhP" secondAttribute="centerX" id="d9o-3p-4oL"/>
                             <constraint firstAttribute="trailingMargin" secondItem="LQ0-tb-VTR" secondAttribute="trailing" constant="-20" id="jiP-4o-yFh"/>
                             <constraint firstItem="IqW-wt-IRI" firstAttribute="top" secondItem="Gkx-tp-ucy" secondAttribute="bottom" constant="12" id="onB-PP-DJy"/>
                             <constraint firstItem="S5t-Nn-m39" firstAttribute="leading" secondItem="NLS-mo-jhP" secondAttribute="leadingMargin" constant="-20" id="tmp-X7-XeQ"/>
-                            <constraint firstItem="S5t-Nn-m39" firstAttribute="top" secondItem="6at-E3-GIR" secondAttribute="bottom" constant="8" id="uC4-KG-6tV"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="contactsTableView" destination="S5t-Nn-m39" id="iQZ-jI-6TS"/>
+                        <outlet property="groupNameTextField" destination="OAj-UB-iu8" id="92t-zL-GjH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hl3-cu-pWX" userLabel="First Responder" sceneMemberID="firstResponder"/>

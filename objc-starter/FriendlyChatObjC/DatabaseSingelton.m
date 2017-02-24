@@ -27,7 +27,7 @@ __weak DatabaseSingelton *weakSingleton;
 }
 
 + (void) addUserToGroup: (NSString *) groupId withUserId: (NSString *) userId {
-    [[[[weakSingleton._ref child:@"groups"] child:groupId] child:@"user"] child:@{userId: [NSNumber numberWithBool:false]}];
+    [[[[weakSingleton._ref child:@"groups"] child:groupId] child:@"user"] setValue:@{userId: [NSNumber numberWithBool:false]}];
 }
 
 + (void) addUserToGroup: (NSString *) groupId withUsers: (NSMutableDictionary *) users {
