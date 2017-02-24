@@ -285,7 +285,6 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 
 #pragma mark - TextView Handling
 
-// UITextViewDelegate protocol methods
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [self sendMessage:@{MessageFieldstext: textField.text}];
     textField.text = @"";
