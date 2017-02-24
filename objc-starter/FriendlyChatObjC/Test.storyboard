@@ -230,7 +230,7 @@
                                 <rect key="frame" x="-4" y="0.0" width="383" height="667"/>
                             </imageView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="STK-FK-gn5" userLabel="TextField">
-                                <rect key="frame" x="44" y="625" width="265" height="30"/>
+                                <rect key="frame" x="46" y="625" width="263" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
@@ -251,11 +251,12 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nhb-8J-WZ5">
-                                <rect key="frame" x="12" y="628" width="24" height="24"/>
+                                <rect key="frame" x="12" y="627" width="26" height="26"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="24" id="1IF-84-GVk"/>
+                                    <constraint firstAttribute="width" constant="26" id="1IF-84-GVk"/>
+                                    <constraint firstAttribute="height" constant="26" id="i5l-Ea-Ts6"/>
                                 </constraints>
-                                <state key="normal" image="ic_add_a_photo">
+                                <state key="normal" image="add_picture.png">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -507,8 +508,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="add_picture.png" width="64" height="64"/>
         <image name="black_bubble.png" width="194" height="87"/>
-        <image name="ic_add_a_photo" width="24" height="24"/>
         <image name="nouser.jpg" width="500" height="500"/>
         <image name="shiny.png" width="7000" height="7000"/>
         <image name="wallpaper6.jpg" width="1242" height="2208"/>
