@@ -23,6 +23,7 @@
 
 + (id)sharedDatabase;
 + (void) addUserToGroup: (NSString *) groupId withUserId: (NSString *) userId;
++ (void) addUserToGroup: (NSString *) groupId withUsers: (NSMutableDictionary *) userId;
 + (NSString *) getCurrentTime;
 
 @end

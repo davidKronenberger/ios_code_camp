@@ -104,9 +104,13 @@
     if (sizeof(database._contactsForGroup) > 0) {
         NSString *groupID = [self createGroup:@"Test1234"];
         
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
         for (Contact *tmpUser in database._contactsForGroup) {
-            [DatabaseSingelton addUserToGroup:groupID withUserId:tmpUser.userId];
+            
+            [dict setObject:[NSNumber numberWithBool:false] forKey:tmpUser.userId];
         }
+        
+        [DatabaseSingelton addUserToGroup:groupID withUsers:dict];
         
         [self dismissViewControllerAnimated:YES completion:nil];
     }
