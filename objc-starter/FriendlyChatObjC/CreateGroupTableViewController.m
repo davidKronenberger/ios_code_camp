@@ -17,6 +17,7 @@
 
 @interface CreateGroupTableViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *contactsTableView;
+@property (weak, nonatomic) IBOutlet UITextField *groupNameTextField;
 
 @end
 
@@ -74,6 +75,8 @@
     contact = [database._contacts objectAtIndex:indexPath.row];
     
     [database._contactsForGroup addObject:contact];
+    
+    [self.groupNameTextField resignFirstResponder];
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
@@ -81,6 +84,8 @@
     contact = [database._contacts objectAtIndex:indexPath.row];
     
     [database._contactsForGroup removeObject:contact];
+    
+    [self.groupNameTextField resignFirstResponder];
 }
 
 #pragma mark - Create Group Handling
@@ -102,7 +107,7 @@
 
 - (IBAction)CreateGroupButtonPressed:(id)sender {
     if (sizeof(database._contactsForGroup) > 0) {
-        NSString *groupID = [self createGroup:@"Test1234"];
+        NSString *groupID = [self createGroup:self.groupNameTextField.text];
         
         for (Contact *tmpUser in database._contactsForGroup) {
             [DatabaseSingelton addUserToGroup:groupID withUserId:tmpUser.userId];
