@@ -140,7 +140,7 @@ __weak ContactsTableViewController *weakViewController;
                 ct.email = @"keinemail@gmail.com";
                 ct.userId = groupId;
                 
-                //2. push contact to ui
+                //2. push contact to ui.
                 [weakViewController._contacts addObject:ct];
                 [weakViewController._contactsTableView reloadData];
             }
