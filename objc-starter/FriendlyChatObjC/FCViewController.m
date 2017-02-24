@@ -46,8 +46,7 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
 @property (strong, nonatomic) FIRStorageReference *storageRef;
 @property (nonatomic, strong) FIRRemoteConfig *remoteConfig;
 
-
-@property (nonatomic, strong) NSString *currentGroup; //always update current group
+//@property (nonatomic, strong) NSString *currentGroup; //always update current group
 
 @end
 
@@ -55,10 +54,10 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
 
 - (void)viewDidLoad {
   [super viewDidLoad];
-
+    
+    NSLog(@"%@",_currentGroup);
   _messages = [[NSMutableArray alloc] init];
     
-  _currentGroup = [[NSString alloc] init];
     
   [_clientTable registerClass:UITableViewCell.self forCellReuseIdentifier:@"tableViewCell"];
 
@@ -71,6 +70,8 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
   [self fetchConfig];
   [self loadAd];
   [self logViewLoaded];
+    
+  [self registerForKeyboardNotifications];
 }
 
 - (void)dealloc {
@@ -89,7 +90,7 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
     
     
     // -------------Listener for messages in current group-------------
-    _refHandle = [[[[_ref child:@"groups"] child: @"gggggg"] child:@"messages"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
+    _refHandle = [[[[_ref child:@"groups"] child: _currentGroup] child:@"messages"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
         [_messages addObject:snapshot];
         [_clientTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_messages.count-1 inSection:0]] withRowAnimation: UITableViewRowAnimationAutomatic];
         [_clientTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
@@ -153,13 +154,18 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
     FIRDataSnapshot *messageSnapshot = _messages[indexPath.row];
     NSDictionary<NSString *, NSString *> *message = messageSnapshot.value;
     NSString *name = message[@"user"];
+    NSString *time = message[@"time"];
     NSString *imageURL = message[MessageFieldsimageURL];
     
     if([name isEqualToString: [FIRAuth auth].currentUser.displayName]){
         cell = (MessageCellTableViewCell *)[_clientTable dequeueReusableCellWithIdentifier:@"MessageCellOwn" forIndexPath:indexPath];
+        
+        cell.imageUploadView.layer.borderColor = [[UIColor whiteColor] CGColor];
  
     }else{
         cell = (MessageCellTableViewCell *)[_clientTable dequeueReusableCellWithIdentifier:@"MessageCellOther" forIndexPath:indexPath];
+        
+        cell.imageUploadView.layer.borderColor = [[UIColor blackColor] CGColor];
     }
     
     if (imageURL) {
@@ -171,15 +177,21 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
                                                                           return;
                                                                       }
                                                                       cell.imageUploadView.image = [UIImage imageWithData:data];
+    
                                                                       [tableView reloadData];
                                                                   }];
         } else {
             cell.imageUploadView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
         }
-        //cell.textLabel.text = [NSString stringWithFormat:@"sent by: %@", name];
+        cell.sentBy.text = [NSString stringWithFormat:@"sent by: %@", name];
+        cell.sentAt.text = time;
     } else {
+        [cell.imageUploadView removeFromSuperview];
+        
         NSString *text = message[MessageFieldstext];
-        cell.message.text = [NSString stringWithFormat:@"%@: %@", name, text];
+        cell.sentBy.text = name;
+        cell.sentAt.text = time;
+        cell.message.text = text;
         cell.avatar.image = [UIImage imageNamed: @"ic_account_circle"]; //commented out
         NSString *photoURL = message[MessageFieldsphotoURL];
         if (photoURL) {
@@ -197,6 +209,16 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
     cell.avatar.layer.cornerRadius = cell.avatar.frame.size.height /2;
     cell.avatar.layer.masksToBounds = YES;
     cell.avatar.layer.borderWidth = 0;
+    cell.avatar.layer.borderColor = [[UIColor blackColor] CGColor];
+    
+    //Turn the Imageview into a circle with the help of invisible borders.
+    cell.imageUploadView.layer.cornerRadius = cell.imageUploadView.frame.size.height /2;
+    cell.imageUploadView.layer.masksToBounds = YES;
+    
+    // We want to show the border only if there are image data.
+    if (cell.imageUploadView.image) {
+        cell.imageUploadView.layer.borderWidth = 1;
+    }
     
     cell.backgroundColor = tableView.backgroundColor;
     
@@ -222,14 +244,14 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
     //get current time
     NSDate * now = [NSDate date];
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
-    [outputFormatter setDateFormat:@"HH:mm:ss"];
+    [outputFormatter setDateFormat:@"dd.MM.yyyy HH:mm:ss"];
     NSString *newDateString = [outputFormatter stringFromDate:now];
     
     mdata[@"time"] = newDateString;
 
     
     // Push data to Firebase Database
-    [[[[[_ref child:@"groups"] child: @"gggggg"] child:@"messages"] childByAutoId] setValue:mdata];
+    [[[[[_ref child:@"groups"] child: _currentGroup] child:@"messages"] childByAutoId] setValue:mdata];
 }
 
 # pragma mark - Image Picker
@@ -318,5 +340,67 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [self presentViewController:alert animated: true completion: nil];
   });
 }
+
+
+
+
+- (void)keyboardWasShown:(NSNotification*)aNotification
+{
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    
+    const int movementDistance = kbSize.height; // tweak as needed
+    const float movementDuration = 0.3f; // tweak as needed
+    
+    int movement = -movementDistance;
+    
+    [UIView beginAnimations: @"anim" context: nil];
+    [UIView setAnimationBeginsFromCurrentState: YES];
+    [UIView setAnimationDuration: movementDuration];
+    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    [UIView commitAnimations];
+
+}
+
+
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+{
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    
+    const int movementDistance = kbSize.height; // tweak as needed
+    const float movementDuration = 0.3f; // tweak as needed
+    
+    int movement = movementDistance;
+    
+    [UIView beginAnimations: @"anim" context: nil];
+    [UIView setAnimationBeginsFromCurrentState: YES];
+    [UIView setAnimationDuration: movementDuration];
+    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    [UIView commitAnimations];
+    
+}
+
+- (void)registerForKeyboardNotifications{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+    
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self.textField resignFirstResponder];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+}
+
+
 
 @end

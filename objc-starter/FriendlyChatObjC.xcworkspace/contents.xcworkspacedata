@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:white_final.png">
+   </FileRef>
+   <FileRef
       location = "group:FriendlyChatObjC.xcodeproj">
    </FileRef>
    <FileRef
