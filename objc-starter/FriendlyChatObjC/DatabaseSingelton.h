@@ -6,15 +6,15 @@
 //  Copyright © 2017 Ibrahim Ulukaya. All rights reserved.
 //
 
-##import <foundation/Foundation.h>
+#import <foundation/Foundation.h>
 
 @interface DatabaseSingelton : NSObject {
-    NSString *someProperty;
+    NSMutableArray *_contacts;
 }
 
-
+// In this object the contacts are saved, which will shown in the table view.
 @property (strong, nonatomic) NSMutableArray *_contacts;
 
-+ (id)sharedManager;
++ (id)sharedDatabase;
 
 @end
