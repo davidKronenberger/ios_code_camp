@@ -259,15 +259,7 @@ __weak ContactsTableViewController *weakSelf;
                     }
                 }
                 
-                parseOtherId = [parseOtherId stringByReplacingOccurrencesOfString:[FIRAuth auth].currentUser.uid withString:@""];
-                parseOtherId = [parseOtherId stringByReplacingOccurrencesOfString:@"{" withString:@""];
-                parseOtherId = [parseOtherId stringByReplacingOccurrencesOfString:@"}" withString:@""];
-                parseOtherId = [parseOtherId stringByReplacingOccurrencesOfString:@" = 0;" withString:@""];
-                parseOtherId = [parseOtherId stringByReplacingOccurrencesOfString:@" " withString:@""];
-                parseOtherId = [parseOtherId stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-                parseOtherId = [parseOtherId stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-
-                [[[weakSelf.database._ref child:@"users"] child:parseOtherId] observeSingleEventOfType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot2) {
+                [[[weakSelf.database._ref child:@"users"] child:otherId] observeSingleEventOfType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot2) {
                     
                     NSString *otherUserMail = snapshot2.value;
                     
