@@ -154,7 +154,8 @@ __weak ContactsTableViewController *weakViewController;
         
     }];
     
-    // -------------eventtypechildadded Listener for users-------------
+  /*
+    // -------------Listener for users-------------
     
         _refHandle = [[_ref child:@"users"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
             
@@ -175,10 +176,7 @@ __weak ContactsTableViewController *weakViewController;
             [_allUsers addObject:@{@"id" : userId, @"username" : username, @"email" : email}];
             
         }];
-    // -------------onchange Listener for users-------------
-        _refHandle = [[_ref child:@"users"] observeEventType:FIRDataEventTypeChildChanged withBlock:^(FIRDataSnapshot *snapshot) {
-            [self changeUserOnReceive:snapshot isRemoveUser:false];
-        }];
+    */
     
     _refHandle = [[_ref child:@"users"] observeEventType:FIRDataEventTypeChildRemoved withBlock:^(FIRDataSnapshot *snapshot) {
         [self changeUserOnReceive:snapshot isRemoveUser:true];
@@ -276,6 +274,8 @@ __weak ContactsTableViewController *weakViewController;
     [[[_ref child:@"groups"] child:newGroupID] setValue:@{@"created": [self getCurrentTime], @"name":name}];
     FIRUser *user = [FIRAuth auth].currentUser;
     NSDictionary *userDict = @{@"id" : user.uid, @"username" : user.displayName, @"email" : user.email};
+    
+    //set Admin-rights to the creator of the group
     [self addUserToGroup:userDict withGroupID:newGroupID withRights:@"Admin"];
 }
 
@@ -352,19 +352,26 @@ __weak ContactsTableViewController *weakViewController;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    
+ 
+    //compare my users from contact list with users from firebase
     for(Contact *contact in weakViewController._tmpContacts) {
        
         for(NSDictionary *dict in weakViewController._myContacts) {
             
             if([contact.email isEqualToString:dict[@"email"]]){
-                [weakViewController._contacts addObject:contact];
-                for(NSDictionary *tmpGroup in _myGroups){
-                    NSLog(@"%@", contact.email);
-                    NSLog(@"%@",[self getIdFromEmail:contact.email]);
+                BOOL containsContact = false;
+                NSString *tmpContactsString = @"";
+                for(Contact *tempContact in weakViewController._contacts){
+                    //check if array already contains user
+                    if([tempContact.email isEqualToString:contact.email]){
+                        containsContact = true;
+                    }
                 }
-                
-                break;
+                //add user if not available in array
+                if(!containsContact){
+                    [weakViewController._contacts addObject:contact];
+                    break;
+                }
             }
         }
     }
