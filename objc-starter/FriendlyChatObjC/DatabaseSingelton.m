@@ -30,6 +30,10 @@ __weak DatabaseSingelton *weakSingleton;
     [[[[weakSingleton._ref child:@"groups"] child:groupId] child:@"user"] setValue:@{userId: [NSNumber numberWithBool:false]}];
 }
 
++ (void) addUserToGroup: (NSString *) groupId withUsers: (NSMutableDictionary *) users {
+    [[[[weakSingleton._ref child:@"groups"] child:groupId] child:@"user"] setValue:users];
+}
+
 + (NSString *) getCurrentTime {
     NSDate *date = [NSDate date];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
