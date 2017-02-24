@@ -98,7 +98,17 @@
     FIRUser *user = [FIRAuth auth].currentUser;
     
     //set Admin-rights to the creator of the group
-    [DatabaseSingelton addUserToGroup: newGroupID withUserId:user.uid];
+    //[DatabaseSingelton addUserToGroup: newGroupID withUserId:user.uid];
+    
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    for (Contact *tmpUser in database._contactsForGroup) {
+        
+        [dict setObject:[NSNumber numberWithBool:false] forKey:tmpUser.userId];
+    }
+    
+    [DatabaseSingelton addUserToGroup:newGroupID withUsers:dict];
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
     
     return newGroupID;
 }
@@ -109,15 +119,7 @@
     if (sizeof(database._contactsForGroup) > 0) {
         NSString *groupID = [self createGroup:self.groupNameTextField.text];
         
-        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-        for (Contact *tmpUser in database._contactsForGroup) {
-            
-            [dict setObject:[NSNumber numberWithBool:false] forKey:tmpUser.userId];
-        }
         
-        [DatabaseSingelton addUserToGroup:groupID withUsers:dict];
-        
-        [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 
