@@ -153,7 +153,7 @@ __weak ContactsTableViewController *weakViewController;
         
     }];
     
-    
+  /*
     // -------------Listener for users-------------
     
         _refHandle = [[_ref child:@"users"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
@@ -176,7 +176,7 @@ __weak ContactsTableViewController *weakViewController;
             
             
         }];
-    
+    */
     
     
     [self contactScan];
@@ -220,7 +220,7 @@ __weak ContactsTableViewController *weakViewController;
     return timeString;
 }
 
-
+/*
 - (void) onPrivatePressed: (NSString *) selectedEmail {
     for (NSDictionary *dict in _myGroups) {
         if ([dict[@"isPrivate"] intValue] == 1) {
@@ -242,6 +242,7 @@ __weak ContactsTableViewController *weakViewController;
     }
     return @"";
 }
+ */
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
@@ -365,6 +366,7 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
     }
 };
 
+/*
 - (BOOL) emailAvailable:(NSString *)email {
     for (NSDictionary *dict in _allUsers) {
         if ([dict[@"email"] isEqualToString: email]) {
@@ -374,7 +376,8 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
     return false;
     
 }
-
+*/
+ 
 -(void)getAllContact:(void (^)(BOOL requestSuccess))block {
     if([CNContactStore class]) {
         
