@@ -94,8 +94,57 @@ __weak ContactsTableViewController *weakSelf;
                 }
                 //add user if not available in array
                 if(!containsContact){
+                    
+                    
+                    [[_ref child:@"groups"] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot *snapshot2) {
+                        
+                        
+                        NSMutableArray<NSDictionary *> *array = [[NSMutableArray alloc] init];
+                        
+                        for(FIRDataSnapshot *child in snapshot2.children){
+                            
+                            NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+                            
+                            [dict setObject:child.key forKey:@"id"];
+                            for(FIRDataSnapshot *child2 in child.children){
+                                NSString *key = [NSString stringWithFormat: @"%@", child2.key];
+                                if([key isEqualToString:@"isPrivate"] || [key isEqualToString:@"user"] ){
+                                    [dict setObject:child2.value forKey:child2.key];
+                                }
+                            }
+                            if ([[dict allKeys] containsObject:@"isPrivate"]) {
+                                [array addObject: dict];
+                            }
+                            
+                        }
+                        
+                        
+                        [[[[weakSelf.ref child:@"users"] queryOrderedByChild:@"email"] queryEqualToValue:contact.email] observeSingleEventOfType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
+                            
+                            NSString *contactId = snapshot.key;
+                            BOOL hasPrivateChat = false;
+                            
+                            for(NSDictionary *dict2 in array){
+                                
+                                NSString *usersString = [NSString stringWithFormat: @"%@", dict2[@"user"]];
+                                if([usersString containsString:contactId] && [usersString containsString:[FIRAuth auth].currentUser.uid]){
+                                    hasPrivateChat = true;
+                                }
+                            }
+                            
+                            if(!hasPrivateChat){
+                                [self createPrivateGroup: contactId withName:contact.name];
+                            }
+                       
+                            
+                        }];
+                        
+                        
+                    }];
+                    
                     [weakSelf._contacts addObject:contact];
                     break;
+                    
                 }
             }
         }
@@ -201,7 +250,7 @@ __weak ContactsTableViewController *weakSelf;
                 parseOtherId = [parseOtherId stringByReplacingOccurrencesOfString:@" " withString:@""];
                 parseOtherId = [parseOtherId stringByReplacingOccurrencesOfString:@"\n" withString:@""];
                 parseOtherId = [parseOtherId stringByTrimmingCharactersInSet:[NSCharacterSet newlineCharacterSet]];
-                
+
                 [[[weakSelf.ref child:@"users"] child:parseOtherId] observeSingleEventOfType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot2) {
                     
                     NSString *otherUserMail = snapshot2.value;
@@ -256,12 +305,12 @@ __weak ContactsTableViewController *weakSelf;
      */
 }
 
-- (void) addUserToGroup: (NSDictionary *) userDict withGroupID: (NSString *) groupID withRights: (NSString*)rights{
-    [[[[[_ref child:@"groups"] child:groupID] child:@"user"] child:userDict[@"id"] ]setValue:@{@"joined": [self getCurrentTime], @"rights": rights}];
+- (void) addUserToGroup: (NSString *) groupId withUserId: (NSString *) userId{
+    [[[[_ref child:@"groups"] child:groupId] child:@"user"] setValue:@{userId: [NSNumber numberWithBool:false]}];
 }
 
 
-- (void) createGroup :(NSString *) name{
+- (void) createGroup :(NSString *) name {
     NSString *newGroupID = [[_ref child:@"groups"] childByAutoId].key;
     
     [[[_ref child:@"groups"] child:newGroupID] setValue:@{@"created": [self getCurrentTime], @"name":name}];
@@ -271,7 +320,23 @@ __weak ContactsTableViewController *weakSelf;
     NSDictionary *userDict = @{@"id" : user.uid, @"username" : user.displayName, @"email" : user.email};
     
     //set Admin-rights to the creator of the group
-    [self addUserToGroup:userDict withGroupID:newGroupID withRights:@"Admin"];
+    [self addUserToGroup: newGroupID withUserId:user.uid];
+}
+
+
+
+
+- (void) createPrivateGroup: (NSString *) otherUserId withName: (NSString *) otherUserName {
+    NSString *newGroupID = [[_ref child:@"groups"] childByAutoId].key;
+    
+    [[[_ref child:@"groups"] child:newGroupID] setValue:@{@"created": [self getCurrentTime], @"isPrivate": [NSNumber numberWithBool:true]}];
+    
+    FIRUser *user = [FIRAuth auth].currentUser;
+
+    [self addUserToGroup: newGroupID withUserId:user.uid];
+    
+    [[[[_ref child:@"groups"] child:newGroupID] child:@"user"] setValue:@{user.uid: [NSNumber numberWithBool:false], otherUserId:[NSNumber numberWithBool:false]}];
+    //[self addUserToGroup: newGroupID withUserId:otherUserId];
 }
 
 
