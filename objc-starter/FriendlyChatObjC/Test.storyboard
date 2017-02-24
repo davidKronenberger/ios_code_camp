@@ -214,7 +214,7 @@
             </objects>
             <point key="canvasLocation" x="476" y="814.54272863568224"/>
         </scene>
-        <!--FPViewController-->
+        <!--ChatViewController-->
         <scene sceneID="moX-1M-48c">
             <objects>
                 <viewController title="ChatViewController" id="uMT-A3-F60" customClass="ChatViewController" sceneMemberID="viewController">

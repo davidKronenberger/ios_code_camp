@@ -329,7 +329,7 @@
 				107960B11C61321D003DB6CC /* Constants.m in Sources */,
 				96E2AAB11E5C3C210079E975 /* ContactsTableViewController.m in Sources */,
 				107960AE1C613207003DB6CC /* MeasurementHelper.m in Sources */,
-				1079608B1C6130EF003DB6CC /* FCViewController.m in Sources */,
+				1079608B1C6130EF003DB6CC /* ChatViewController.m in Sources */,
 				96F610791E604265007ED0E1 /* DatabaseSingelton.m in Sources */,
 				107960881C6130EF003DB6CC /* AppDelegate.m in Sources */,
 				107960B61C613263003DB6CC /* SignInViewController.m in Sources */,

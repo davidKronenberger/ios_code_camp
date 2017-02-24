@@ -12,7 +12,8 @@
     NSString *someProperty;
 }
 
-@property (nonatomic, retain) NSString *someProperty;
+
+@property (strong, nonatomic) NSMutableArray *_contacts;
 
 + (id)sharedManager;
 

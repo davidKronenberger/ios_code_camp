@@ -137,10 +137,18 @@ __weak ContactsTableViewController *weakSelf;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    ChatViewController *vcToPushTo = segue.destinationViewController;
-    //UIViewController *vcToPushTo = segue.destinationViewController;  <- Für Übergabe der GroupId geändert.
-    vcToPushTo.currentGroup = _selectedGroup;
     
+    if([segue.identifier isEqualToString:@"ContactsToFC"]){
+        
+        ChatViewController *vcToPushTo = segue.destinationViewController;
+        //UIViewController *vcToPushTo = segue.destinationViewController;  <- Für Übergabe der GroupId geändert.
+        vcToPushTo.currentGroup = _selectedGroup;
+        
+    }else if([segue.identifier isEqualToString:@"ContactToCreateNewGroup"]){
+        
+        
+    }
+
 }
 
 #pragma mark - Group Handling
@@ -295,76 +303,18 @@ __weak ContactsTableViewController *weakSelf;
  }
  }
  
-    //compare my users from contact list with users from firebase
-    for(Contact *contact in weakViewController._tmpContacts) {
-       
-        for(NSDictionary *dict in weakViewController._myContacts) {
-            
-            if([contact.email isEqualToString:dict[@"email"]]){
-                BOOL containsContact = false;
-                NSString *tmpContactsString = @"";
-                for(Contact *tempContact in weakViewController._contacts){
-                    //check if array already contains user
-                    if([tempContact.email isEqualToString:contact.email]){
-                        containsContact = true;
-                    }
-                }
-                //add user if not available in array
-                if(!containsContact){
-                    [weakViewController._contacts addObject:contact];
-                    break;
-                }
-            }
-        }
-    }
-    
-    
-    return [weakViewController._contacts count];
-}
-
-
-
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ContactCell"];
-   
-    Contact *contact = (weakViewController._contacts)[indexPath.row];
-    cell.textLabel.text = contact.name;  //contact.name
-    cell.detailTextLabel.text = contact.email;
-    cell.imageView.image = (UIImage *)contact.image;
-    
-    
-    const CGFloat *colors = CGColorGetComponents([tableView.backgroundColor CGColor]);
-    
-    if (indexPath.row % 2 == 1) {
-        cell.backgroundColor = [UIColor colorWithRed:colors[0] - 0.05 green:colors[1] - 0.05 blue:colors[2] - 0.05 alpha:colors[3]];
-    } else {
-        cell.backgroundColor = [UIColor colorWithRed:colors[0] - 0.025 green:colors[1] - 0.025 blue:colors[2] - 0.025 alpha:colors[3]];
-    }
-    
-    return cell;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    Contact *contact = nil;
-    contact = [weakViewController._contacts objectAtIndex:indexPath.row];
-    self.selectedGroup = contact.userId;
-    
-    [self performSegueWithIdentifier:@"ContactsToFC" sender:self];
-    
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if([segue.identifier isEqualToString:@"ContactsToFC"]){
-        FCViewController *vcToPushTo = segue.destinationViewController;
-        //UIViewController *vcToPushTo = segue.destinationViewController;  <- Für Übergabe der GroupId geändert.
-        vcToPushTo.currentGroup = _selectedGroup;
-    }else if([segue.identifier isEqualToString:@"ContactToCreateNewGroup"]) {
-        //nothing
-    }
-    
+ }
+ 
+ - (NSString *) getIdFromEmail:(NSString *) email {
+ for (NSDictionary *dict in _allUsers) {
+ //check if email is in allUsers
+ if ([dict[@"email"] isEqualToString: email]) {
+ return dict[@"id"];
+ }
+ }
+ return @"";
+ }
+ */
 
 #pragma mark - Contact Handling
 
@@ -519,6 +469,8 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
     }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
+
 
 
 - (IBAction)NewGroupButtonPressed:(id)sender {
