@@ -309,9 +309,14 @@ __weak ContactsTableViewController *weakViewController;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    FCViewController *vcToPushTo = segue.destinationViewController;
-  //UIViewController *vcToPushTo = segue.destinationViewController;  <- Für Übergabe der GroupId geändert.
-    vcToPushTo.currentGroup = _selectedGroup;
+    if([segue.identifier isEqualToString:@"ContactsToFC"]){
+        FCViewController *vcToPushTo = segue.destinationViewController;
+        //UIViewController *vcToPushTo = segue.destinationViewController;  <- Für Übergabe der GroupId geändert.
+        vcToPushTo.currentGroup = _selectedGroup;
+    }else if([segue.identifier isEqualToString:@"ContactToCreateNewGroup"]) {
+        //nothing
+    }
+    
 
 }
 
@@ -466,4 +471,10 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
 }
 
 
+- (IBAction)NewGroupButtonPressed:(id)sender {
+    
+    
+      [self performSegueWithIdentifier:@"ContactToCreateNewGroup" sender:self];
+    
+}
 @end

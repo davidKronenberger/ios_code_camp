@@ -10,4 +10,7 @@
 
 @interface ContactsTableViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
+- (IBAction)NewGroupButtonPressed:(id)sender;
+
+
 @end
