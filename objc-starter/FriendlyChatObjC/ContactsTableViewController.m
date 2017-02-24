@@ -286,31 +286,6 @@ __weak ContactsTableViewController *weakSelf;
             }
         }
     }];
-    
-    /*
-     // -------------Listener for users-------------
-     
-     _refHandle = [[_ref child:@"users"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
-     
-     NSString *userId = snapshot.key;
-     NSString *username = @"";
-     NSString *email = @"";
-     
-     //get all users from DB
-     //iterate all his keys and add proper values
-     for (FIRDataSnapshot *child in snapshot.children) {
-     if([child.key isEqualToString: @"username"]){
-     username = child.value;
-     }else if([child.key isEqualToString: @"email"]){
-     email = child.value;
-     }
-     }
-     //add to array
-     [_allUsers addObject:@{@"id" : userId, @"username" : username, @"email" : email}];
-     
-     
-     }];
-     */
 }
 
 - (NSString *) createPrivateGroup: (NSString *) otherUserId withName: (NSString *) otherUserName {
@@ -326,20 +301,6 @@ __weak ContactsTableViewController *weakSelf;
     //[self addUserToGroup: newGroupID withUserId:otherUserId];
     return newGroupID;
 }
-
-/*
- - (void) onPrivatePressed: (NSString *) selectedEmail {
- for (NSDictionary *dict in _myGroups) {
- if ([dict[@"isPrivate"] intValue] == 1) {
- NSString *contactId = [self getIdFromEmail:selectedEmail];
- if([[NSString stringWithFormat: @"%@", dict[@"users"]] containsString: contactId]){
- NSLog(@"%@", dict[@"id"]);
- }
- }
- }
- 
- }
- */
 
 #pragma mark - Contact Handling
 
@@ -393,18 +354,6 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
         }
     }
 };
-
-/*
- - (BOOL) emailAvailable:(NSString *)email {
- for (NSDictionary *dict in _allUsers) {
- if ([dict[@"email"] isEqualToString: email]) {
- return true;
- }
- }
- return false;
- 
- }
- */
 
 -(void)getAllContact:(void (^)(BOOL requestSuccess))block {
     if([CNContactStore class]) {
