@@ -23,9 +23,9 @@
 @property (strong, nonatomic) NSMutableArray<NSDictionary *> *myGroups;
 @property (strong, nonatomic) NSMutableArray<NSDictionary *> *allUsers;
 @property (strong, nonatomic) NSMutableArray<NSDictionary *> *myUsers;
-@property (strong, nonatomic) NSMutableArray<NSDictionary *> *_tmpContacts;
-@property (strong, nonatomic) NSMutableArray<NSDictionary *> *_contacts;
 @property (strong, nonatomic) NSMutableArray<NSDictionary *> *_myContacts;
+@property (strong, nonatomic) NSMutableArray *_tmpContacts;
+@property (strong, nonatomic) NSMutableArray *_contacts;
 
 @property (strong, nonatomic) NSString *selectedGroup;
 
@@ -62,7 +62,7 @@ __weak ContactsTableViewController *weakViewController;
     //add user to DB
     [[[_ref child:@"users"] child:user.uid]
      setValue:@{@"username": user.displayName, @"email": user.email}];
-
+    
     //------Register listener for groups of current user
     _refHandle = [[_ref child:@"groups"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
         
@@ -74,7 +74,7 @@ __weak ContactsTableViewController *weakViewController;
         
         //get all groups of current user
         //iterate all his keys and add proper values
-     //   [self contactScan];
+        //   [self contactScan];
         
         
         for (FIRDataSnapshot *child in snapshot.children) {
@@ -102,8 +102,8 @@ __weak ContactsTableViewController *weakViewController;
             //save groups of current user
             [_myGroups addObject:@{@"id" : groupId, @"name" : groupName, @"isPrivate" : [NSNumber numberWithBool:groupIsPrivate], @"users" : groupUsers}];
             
-          
-
+            
+            
             if (groupIsPrivate){
                 
                 NSString* parseOtherId = [NSString stringWithFormat:@"%@", groupUsers];
@@ -127,7 +127,7 @@ __weak ContactsTableViewController *weakViewController;
                         }
                     }
                 }];
-
+                
             }else{
                 
                 //1. create an local contact for every group found
@@ -144,39 +144,39 @@ __weak ContactsTableViewController *weakViewController;
                 [weakViewController._contacts addObject:ct];
                 [weakViewController._contactsTableView reloadData];
             }
-                
             
-           
+            
+            
             
         }
         
         
     }];
     
-  /*
-    // -------------Listener for users-------------
-    
-        _refHandle = [[_ref child:@"users"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
-            
-            NSString *userId = snapshot.key;
-            NSString *username = @"";
-            NSString *email = @"";
-            
-            //get all users from DB
-            //iterate all his keys and add proper values
-            for (FIRDataSnapshot *child in snapshot.children) {
-                if([child.key isEqualToString: @"username"]){
-                    username = child.value;
-                }else if([child.key isEqualToString: @"email"]){
-                    email = child.value;
-                }
-            }
-            //add to array
-            [_allUsers addObject:@{@"id" : userId, @"username" : username, @"email" : email}];
-            
-            
-        }];
-    */
+    /*
+     // -------------Listener for users-------------
+     
+     _refHandle = [[_ref child:@"users"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
+     
+     NSString *userId = snapshot.key;
+     NSString *username = @"";
+     NSString *email = @"";
+     
+     //get all users from DB
+     //iterate all his keys and add proper values
+     for (FIRDataSnapshot *child in snapshot.children) {
+     if([child.key isEqualToString: @"username"]){
+     username = child.value;
+     }else if([child.key isEqualToString: @"email"]){
+     email = child.value;
+     }
+     }
+     //add to array
+     [_allUsers addObject:@{@"id" : userId, @"username" : username, @"email" : email}];
+     
+     
+     }];
+     */
     
     
     [self contactScan];
@@ -221,40 +221,39 @@ __weak ContactsTableViewController *weakViewController;
 }
 
 /*
-- (void) onPrivatePressed: (NSString *) selectedEmail {
-    for (NSDictionary *dict in _myGroups) {
-        if ([dict[@"isPrivate"] intValue] == 1) {
-            NSString *contactId = [self getIdFromEmail:selectedEmail];
-            if([[NSString stringWithFormat: @"%@", dict[@"users"]] containsString: contactId]){
-                NSLog(@"%@", dict[@"id"]);
-            }
-        }
-    }
-
-}
-
-- (NSString *) getIdFromEmail:(NSString *) email {
-    for (NSDictionary *dict in _allUsers) {
-        //check if email is in allUsers
-        if ([dict[@"email"] isEqualToString: email]) {
-            return dict[@"id"];
-        }
-    }
-    return @"";
-}
+ - (void) onPrivatePressed: (NSString *) selectedEmail {
+ for (NSDictionary *dict in _myGroups) {
+ if ([dict[@"isPrivate"] intValue] == 1) {
+ NSString *contactId = [self getIdFromEmail:selectedEmail];
+ if([[NSString stringWithFormat: @"%@", dict[@"users"]] containsString: contactId]){
+ NSLog(@"%@", dict[@"id"]);
+ }
+ }
+ }
+ 
+ }
+ 
+ - (NSString *) getIdFromEmail:(NSString *) email {
+ for (NSDictionary *dict in _allUsers) {
+ //check if email is in allUsers
+ if ([dict[@"email"] isEqualToString: email]) {
+ return dict[@"id"];
+ }
+ }
+ return @"";
+ }
  */
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
- 
+    
     //compare my users from contact list with users from firebase
     for(Contact *contact in weakViewController._tmpContacts) {
-       
+        
         for(NSDictionary *dict in weakViewController._myContacts) {
             
             if([contact.email isEqualToString:dict[@"email"]]){
                 BOOL containsContact = false;
-                NSString *tmpContactsString = @"";
                 for(Contact *tempContact in weakViewController._contacts){
                     //check if array already contains user
                     if([tempContact.email isEqualToString:contact.email]){
@@ -279,7 +278,7 @@ __weak ContactsTableViewController *weakViewController;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ContactCell"];
-   
+    
     Contact *contact = (weakViewController._contacts)[indexPath.row];
     cell.textLabel.text = contact.name;  //contact.name
     cell.detailTextLabel.text = contact.email;
@@ -310,9 +309,9 @@ __weak ContactsTableViewController *weakViewController;
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     FCViewController *vcToPushTo = segue.destinationViewController;
-  //UIViewController *vcToPushTo = segue.destinationViewController;  <- Für Übergabe der GroupId geändert.
+    //UIViewController *vcToPushTo = segue.destinationViewController;  <- Für Übergabe der GroupId geändert.
     vcToPushTo.currentGroup = _selectedGroup;
-
+    
 }
 
 - (void) contactScan {
@@ -367,17 +366,17 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
 };
 
 /*
-- (BOOL) emailAvailable:(NSString *)email {
-    for (NSDictionary *dict in _allUsers) {
-        if ([dict[@"email"] isEqualToString: email]) {
-            return true;
-        }
-    }
-    return false;
-    
-}
-*/
+ - (BOOL) emailAvailable:(NSString *)email {
+ for (NSDictionary *dict in _allUsers) {
+ if ([dict[@"email"] isEqualToString: email]) {
+ return true;
+ }
+ }
+ return false;
  
+ }
+ */
+
 -(void)getAllContact:(void (^)(BOOL requestSuccess))block {
     if([CNContactStore class]) {
         
@@ -422,7 +421,7 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
     if([email count] > 0 ){
         
         NSUInteger count = [email count];
-
+        
         //for every contact check if there is an gmail adress available
         //if so prefer it over any other address.
         for(int i = 0; i < count; i++){
@@ -441,18 +440,18 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
     //if the user has a valid EMail address
     if(validuser){
         ct.name = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
-            
+        
         //check if there is a phone number available
         if([phone count] > 0 ){
-           ct.number = (NSString *)(phone[0]);
+            ct.number = (NSString *)(phone[0]);
         } else {
-           ct.number = @"Keine Nummer gefunden.";
+            ct.number = @"Keine Nummer gefunden.";
         }
         ct.image = image;
         
         [weakViewController._tmpContacts addObject:ct];
-        }
     }
+}
 
 - (IBAction)signOut:(UIButton *)sender {
     FIRAuth *firebaseAuth = [FIRAuth auth];

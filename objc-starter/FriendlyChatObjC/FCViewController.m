@@ -31,9 +31,9 @@
 static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/2934735716";
 
 @interface FCViewController ()<UITableViewDataSource, UITableViewDelegate,
-    UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate,
-        FIRInviteDelegate> {
-  FIRDatabaseHandle _refHandle;
+UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate,
+FIRInviteDelegate> {
+    FIRDatabaseHandle _refHandle;
 }
 
 @property(nonatomic, weak) IBOutlet UITextField *textField;
@@ -53,25 +53,25 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
 @implementation FCViewController
 
 - (void)viewDidLoad {
-  [super viewDidLoad];
+    [super viewDidLoad];
     
     NSLog(@"%@",_currentGroup);
-  _messages = [[NSMutableArray alloc] init];
+    _messages = [[NSMutableArray alloc] init];
     
     
-  [_clientTable registerClass:UITableViewCell.self forCellReuseIdentifier:@"tableViewCell"];
-
-  _clientTable.rowHeight = UITableViewAutomaticDimension;
-  _clientTable.estimatedRowHeight = 140;
+    [_clientTable registerClass:UITableViewCell.self forCellReuseIdentifier:@"tableViewCell"];
     
-  [self configureDatabase];
-  [self configureStorage];
-  [self configureRemoteConfig];
-  [self fetchConfig];
-  [self loadAd];
-  [self logViewLoaded];
+    _clientTable.rowHeight = UITableViewAutomaticDimension;
+    _clientTable.estimatedRowHeight = 140;
     
-  [self registerForKeyboardNotifications];
+    [self configureDatabase];
+    [self configureStorage];
+    [self configureRemoteConfig];
+    [self fetchConfig];
+    [self loadAd];
+    [self logViewLoaded];
+    
+    [self registerForKeyboardNotifications];
 }
 
 - (void)dealloc {
@@ -79,15 +79,7 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
 }
 
 - (void)configureDatabase {
-    
-    
     _ref = [[FIRDatabase database] reference];
-    
-    
-    
-    //get current user
-    FIRUser *user = [FIRAuth auth].currentUser;
-    
     
     // -------------Listener for messages in current group-------------
     _refHandle = [[[[_ref child:@"groups"] child: _currentGroup] child:@"messages"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
@@ -125,7 +117,7 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
 - (void)fetchConfig {
 }
 - (IBAction)didSendMessage:(UIButton *)sender {
-  [self textFieldShouldReturn:_textField];
+    [self textFieldShouldReturn:_textField];
 }
 
 - (void)logViewLoaded {
@@ -142,7 +134,7 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
 
 // UITableViewDataSource protocol methods
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-  return [_messages count];
+    return [_messages count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
@@ -161,7 +153,7 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
         cell = (MessageCellTableViewCell *)[_clientTable dequeueReusableCellWithIdentifier:@"MessageCellOwn" forIndexPath:indexPath];
         
         cell.imageUploadView.layer.borderColor = [[UIColor whiteColor] CGColor];
- 
+        
     }else{
         cell = (MessageCellTableViewCell *)[_clientTable dequeueReusableCellWithIdentifier:@"MessageCellOther" forIndexPath:indexPath];
         
@@ -177,7 +169,7 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
                                                                           return;
                                                                       }
                                                                       cell.imageUploadView.image = [UIImage imageWithData:data];
-    
+                                                                      
                                                                       [tableView reloadData];
                                                                   }];
         } else {
@@ -227,10 +219,10 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
 
 // UITextViewDelegate protocol methods
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-  [self sendMessage:@{MessageFieldstext: textField.text}];
-  textField.text = @"";
-  [self.view endEditing:YES];
-  return YES;
+    [self sendMessage:@{MessageFieldstext: textField.text}];
+    textField.text = @"";
+    [self.view endEditing:YES];
+    return YES;
 }
 
 - (void)sendMessage:(NSDictionary *)data {
@@ -248,7 +240,7 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
     NSString *newDateString = [outputFormatter stringFromDate:now];
     
     mdata[@"time"] = newDateString;
-
+    
     
     // Push data to Firebase Database
     [[[[[_ref child:@"groups"] child: _currentGroup] child:@"messages"] childByAutoId] setValue:mdata];
@@ -257,15 +249,15 @@ static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/293473571
 # pragma mark - Image Picker
 
 - (IBAction)didTapAddPhoto:(id)sender {
-  UIImagePickerController * picker = [[UIImagePickerController alloc] init];
-  picker.delegate = self;
-  if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-  } else {
-    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-  }
-
-  [self presentViewController:picker animated:YES completion:NULL];
+    UIImagePickerController * picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    } else {
+        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    }
+    
+    [self presentViewController:picker animated:YES completion:NULL];
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker
@@ -316,29 +308,29 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-  [picker dismissViewControllerAnimated:YES completion:NULL];
+    [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
 - (IBAction)signOut:(UIButton *)sender {
     /*
-    FIRAuth *firebaseAuth = [FIRAuth auth];
-    NSError *signOutError;
-    BOOL status = [firebaseAuth signOut:&signOutError];
-    if (!status) {
-        NSLog(@"Error signing out: %@", signOutError);
-        return;
-    }
+     FIRAuth *firebaseAuth = [FIRAuth auth];
+     NSError *signOutError;
+     BOOL status = [firebaseAuth signOut:&signOutError];
+     if (!status) {
+     NSLog(@"Error signing out: %@", signOutError);
+     return;
+     }
      */
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)showAlert:(NSString *)title message:(NSString *)message {
-  dispatch_async(dispatch_get_main_queue(), ^{
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleDestructive handler:nil];
-    [alert addAction:dismissAction];
-    [self presentViewController:alert animated: true completion: nil];
-  });
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleDestructive handler:nil];
+        [alert addAction:dismissAction];
+        [self presentViewController:alert animated: true completion: nil];
+    });
 }
 
 
@@ -360,7 +352,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [UIView setAnimationDuration: movementDuration];
     self.view.frame = CGRectOffset(self.view.frame, 0, movement);
     [UIView commitAnimations];
-
+    
 }
 
 
