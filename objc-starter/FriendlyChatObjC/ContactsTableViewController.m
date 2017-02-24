@@ -8,7 +8,7 @@
 #import "ContactsTableViewController.h"
 #import "Contact.h"
 #import <Contacts/Contacts.h>
-#import "FCViewController.h"
+#import "ChatViewController.h"
 
 @import Firebase;
 @import GoogleMobileAds;
@@ -137,7 +137,7 @@ __weak ContactsTableViewController *weakSelf;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    FCViewController *vcToPushTo = segue.destinationViewController;
+    ChatViewController *vcToPushTo = segue.destinationViewController;
     //UIViewController *vcToPushTo = segue.destinationViewController;  <- Für Übergabe der GroupId geändert.
     vcToPushTo.currentGroup = _selectedGroup;
     

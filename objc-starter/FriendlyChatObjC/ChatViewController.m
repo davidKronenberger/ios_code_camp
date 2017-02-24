@@ -15,7 +15,7 @@
 //
 
 #import "Constants.h"
-#import "FCViewController.h"
+#import "ChatViewController.h"
 #import "MessageCellTableViewCell.h"
 
 @import Photos;
@@ -30,7 +30,7 @@
  */
 static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/2934735716";
 
-@interface FCViewController ()<UITableViewDataSource, UITableViewDelegate,
+@interface ChatViewController ()<UITableViewDataSource, UITableViewDelegate,
 UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate,
 FIRInviteDelegate> {
     FIRDatabaseHandle _refHandle;
@@ -50,7 +50,7 @@ FIRInviteDelegate> {
 
 @end
 
-@implementation FCViewController
+@implementation ChatViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -58,18 +58,11 @@ FIRInviteDelegate> {
     NSLog(@"%@",_currentGroup);
     _messages = [[NSMutableArray alloc] init];
     
-    
-    [_clientTable registerClass:UITableViewCell.self forCellReuseIdentifier:@"tableViewCell"];
-    
     _clientTable.rowHeight = UITableViewAutomaticDimension;
     _clientTable.estimatedRowHeight = 140;
     
     [self configureDatabase];
     [self configureStorage];
-    [self configureRemoteConfig];
-    [self fetchConfig];
-    [self loadAd];
-    [self logViewLoaded];
     
     [self registerForKeyboardNotifications];
 }
@@ -87,10 +80,6 @@ FIRInviteDelegate> {
         [_clientTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_messages.count-1 inSection:0]] withRowAnimation: UITableViewRowAnimationAutomatic];
         [_clientTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
     }];
-}
-
-- (void) onGroupChanged {
-    
 }
 
 - (void)sendMessageToGroup:(NSString *)message withGroupId:(NSString *)groupdId{
@@ -111,28 +100,13 @@ FIRInviteDelegate> {
     self.storageRef = [[FIRStorage storage] referenceForURL:[NSString stringWithFormat:@"gs://%@", storageUrl]];
 }
 
-- (void)configureRemoteConfig {
+#pragma mark - Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    // We have just one section.
+    return 1;
 }
 
-- (void)fetchConfig {
-}
-- (IBAction)didSendMessage:(UIButton *)sender {
-    [self textFieldShouldReturn:_textField];
-}
-
-- (void)logViewLoaded {
-}
-
-- (void)loadAd {
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-}
-
-// UITableViewDataSource protocol methods
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return [_messages count];
 }
@@ -141,7 +115,6 @@ FIRInviteDelegate> {
     // Dequeue cell
     MessageCellTableViewCell *cell = nil;
     
-    
     // Unpack message from Firebase DataSnapshot
     FIRDataSnapshot *messageSnapshot = _messages[indexPath.row];
     NSDictionary<NSString *, NSString *> *message = messageSnapshot.value;
@@ -149,18 +122,25 @@ FIRInviteDelegate> {
     NSString *time = message[@"time"];
     NSString *imageURL = message[MessageFieldsimageURL];
     
+    // First of all we have to check who sent this message.
     if([name isEqualToString: [FIRAuth auth].currentUser.displayName]){
+        // Dependent on the fact, that the message is from the current user. We show the message cell own.
         cell = (MessageCellTableViewCell *)[_clientTable dequeueReusableCellWithIdentifier:@"MessageCellOwn" forIndexPath:indexPath];
         
+        // This color is for the border of the image view. This will only be used, if the message contains an image.
         cell.imageUploadView.layer.borderColor = [[UIColor whiteColor] CGColor];
-        
     }else{
+        
+        // Dependent on the fact, that the message is from another user. We show the message cell other.
         cell = (MessageCellTableViewCell *)[_clientTable dequeueReusableCellWithIdentifier:@"MessageCellOther" forIndexPath:indexPath];
         
+        // This color is for the border of the image view. This will only be used, if the message contains an image.
         cell.imageUploadView.layer.borderColor = [[UIColor blackColor] CGColor];
     }
     
+    // If the message contains an image.
     if (imageURL) {
+        // We load the image only if it has the prefix gs://. This means it is from firebase.
         if ([imageURL hasPrefix:@"gs://"]) {
             [[[FIRStorage storage] referenceForURL:imageURL] dataWithMaxSize:INT64_MAX
                                                                   completion:^(NSData *data, NSError *error) {
@@ -173,26 +153,31 @@ FIRInviteDelegate> {
                                                                       [tableView reloadData];
                                                                   }];
         } else {
+            // If the prefix is different we show it from the url.
             cell.imageUploadView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
         }
-        cell.sentBy.text = [NSString stringWithFormat:@"sent by: %@", name];
-        cell.sentAt.text = time;
     } else {
+        // There is no image data, so we remove the image view from the parent container.
         [cell.imageUploadView removeFromSuperview];
         
+        // Set the message text to the uiview.
         NSString *text = message[MessageFieldstext];
-        cell.sentBy.text = name;
-        cell.sentAt.text = time;
         cell.message.text = text;
-        cell.avatar.image = [UIImage imageNamed: @"ic_account_circle"]; //commented out
-        NSString *photoURL = message[MessageFieldsphotoURL];
-        if (photoURL) {
-            NSURL *URL = [NSURL URLWithString:photoURL];
-            if (URL) {
-                NSData *data = [NSData dataWithContentsOfURL:URL];
-                if (data) {
-                    cell.avatar.image = [UIImage imageWithData:data];//commented out
-                }
+    }
+    
+    // Set the sender information
+    cell.sentBy.text = name;
+    cell.sentAt.text = time;
+    
+    // Show the sender avatar.
+    cell.avatar.image = [UIImage imageNamed: @"ic_account_circle"];
+    NSString *photoURL = message[MessageFieldsphotoURL];
+    if (photoURL) {
+        NSURL *URL = [NSURL URLWithString:photoURL];
+        if (URL) {
+            NSData *data = [NSData dataWithContentsOfURL:URL];
+            if (data) {
+                cell.avatar.image = [UIImage imageWithData:data];//commented out
             }
         }
     }
@@ -212,53 +197,13 @@ FIRInviteDelegate> {
         cell.imageUploadView.layer.borderWidth = 1;
     }
     
+    // We want that the cell background is allthough transparant like the table view background.
     cell.backgroundColor = tableView.backgroundColor;
     
     return cell;
 }
 
-// UITextViewDelegate protocol methods
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self sendMessage:@{MessageFieldstext: textField.text}];
-    textField.text = @"";
-    [self.view endEditing:YES];
-    return YES;
-}
-
-- (void)sendMessage:(NSDictionary *)data {
-    NSMutableDictionary *mdata = [data mutableCopy];
-    mdata[@"user"] = [FIRAuth auth].currentUser.displayName;
-    NSURL *photoURL = [FIRAuth auth].currentUser.photoURL;
-    if (photoURL) {
-        mdata[MessageFieldsphotoURL] = [photoURL absoluteString];
-    }
-    
-    //get current time
-    NSDate * now = [NSDate date];
-    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
-    [outputFormatter setDateFormat:@"dd.MM.yyyy HH:mm:ss"];
-    NSString *newDateString = [outputFormatter stringFromDate:now];
-    
-    mdata[@"time"] = newDateString;
-    
-    
-    // Push data to Firebase Database
-    [[[[[_ref child:@"groups"] child: _currentGroup] child:@"messages"] childByAutoId] setValue:mdata];
-}
-
 # pragma mark - Image Picker
-
-- (IBAction)didTapAddPhoto:(id)sender {
-    UIImagePickerController * picker = [[UIImagePickerController alloc] init];
-    picker.delegate = self;
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-    } else {
-        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    }
-    
-    [self presentViewController:picker animated:YES completion:NULL];
-}
 
 - (void)imagePickerController:(UIImagePickerController *)picker
 didFinishPickingMediaWithInfo:(NSDictionary *)info {
@@ -311,17 +256,22 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
-- (IBAction)signOut:(UIButton *)sender {
-    /*
-     FIRAuth *firebaseAuth = [FIRAuth auth];
-     NSError *signOutError;
-     BOOL status = [firebaseAuth signOut:&signOutError];
-     if (!status) {
-     NSLog(@"Error signing out: %@", signOutError);
-     return;
-     }
-     */
+#pragma mark - UI Event Handling
+
+- (IBAction)back:(UIButton *)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)didTapAddPhoto:(id)sender {
+    UIImagePickerController * picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    } else {
+        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    }
+    
+    [self presentViewController:picker animated:YES completion:NULL];
 }
 
 - (void)showAlert:(NSString *)title message:(NSString *)message {
@@ -333,8 +283,42 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     });
 }
 
+#pragma mark - TextView Handling
 
+// UITextViewDelegate protocol methods
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self sendMessage:@{MessageFieldstext: textField.text}];
+    textField.text = @"";
+    [self.view endEditing:YES];
+    return YES;
+}
 
+- (void)sendMessage:(NSDictionary *)data {
+    NSMutableDictionary *mdata = [data mutableCopy];
+    mdata[@"user"] = [FIRAuth auth].currentUser.displayName;
+    NSURL *photoURL = [FIRAuth auth].currentUser.photoURL;
+    if (photoURL) {
+        mdata[MessageFieldsphotoURL] = [photoURL absoluteString];
+    }
+    
+    //get current time
+    NSDate * now = [NSDate date];
+    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+    [outputFormatter setDateFormat:@"dd.MM.yyyy HH:mm:ss"];
+    NSString *newDateString = [outputFormatter stringFromDate:now];
+    
+    mdata[@"time"] = newDateString;
+    
+    
+    // Push data to Firebase Database
+    [[[[[_ref child:@"groups"] child: _currentGroup] child:@"messages"] childByAutoId] setValue:mdata];
+}
+
+- (IBAction)didSendMessage:(UIButton *)sender {
+    [self textFieldShouldReturn:_textField];
+}
+
+#pragma mark - Keyboard Handling
 
 - (void)keyboardWasShown:(NSNotification*)aNotification
 {
@@ -390,7 +374,6 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 {
     [self.textField resignFirstResponder];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
 }
 
 

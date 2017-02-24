@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		107960851C6130EF003DB6CC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 107960841C6130EF003DB6CC /* main.m */; };
 		107960881C6130EF003DB6CC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 107960871C6130EF003DB6CC /* AppDelegate.m */; };
-		1079608B1C6130EF003DB6CC /* FCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1079608A1C6130EF003DB6CC /* FCViewController.m */; };
+		1079608B1C6130EF003DB6CC /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1079608A1C6130EF003DB6CC /* ChatViewController.m */; };
 		107960A91C6131B6003DB6CC /* Test.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 107960A81C6131B6003DB6CC /* Test.storyboard */; };
 		107960AE1C613207003DB6CC /* MeasurementHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 107960AD1C613207003DB6CC /* MeasurementHelper.m */; };
 		107960B11C61321D003DB6CC /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 107960B01C61321D003DB6CC /* Constants.m */; };
@@ -38,8 +38,8 @@
 		107960841C6130EF003DB6CC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		107960861C6130EF003DB6CC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		107960871C6130EF003DB6CC /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		107960891C6130EF003DB6CC /* FCViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCViewController.h; sourceTree = "<group>"; };
-		1079608A1C6130EF003DB6CC /* FCViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FCViewController.m; sourceTree = "<group>"; };
+		107960891C6130EF003DB6CC /* ChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
+		1079608A1C6130EF003DB6CC /* ChatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
 		107960A81C6131B6003DB6CC /* Test.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Test.storyboard; sourceTree = "<group>"; };
 		107960AA1C6131E4003DB6CC /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		107960AC1C613207003DB6CC /* MeasurementHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeasurementHelper.h; sourceTree = "<group>"; };
@@ -109,8 +109,8 @@
 			children = (
 				107960861C6130EF003DB6CC /* AppDelegate.h */,
 				107960871C6130EF003DB6CC /* AppDelegate.m */,
-				107960891C6130EF003DB6CC /* FCViewController.h */,
-				1079608A1C6130EF003DB6CC /* FCViewController.m */,
+				107960891C6130EF003DB6CC /* ChatViewController.h */,
+				1079608A1C6130EF003DB6CC /* ChatViewController.m */,
 				96E2AAB21E5C3DDD0079E975 /* Contact.h */,
 				96E2AAB31E5C3DDD0079E975 /* Contact.m */,
 				107960AC1C613207003DB6CC /* MeasurementHelper.h */,
@@ -319,7 +319,7 @@
 				107960B11C61321D003DB6CC /* Constants.m in Sources */,
 				96E2AAB11E5C3C210079E975 /* ContactsTableViewController.m in Sources */,
 				107960AE1C613207003DB6CC /* MeasurementHelper.m in Sources */,
-				1079608B1C6130EF003DB6CC /* FCViewController.m in Sources */,
+				1079608B1C6130EF003DB6CC /* ChatViewController.m in Sources */,
 				107960881C6130EF003DB6CC /* AppDelegate.m in Sources */,
 				107960B61C613263003DB6CC /* SignInViewController.m in Sources */,
 				107960851C6130EF003DB6CC /* main.m in Sources */,
