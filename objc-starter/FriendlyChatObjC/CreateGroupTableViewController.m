@@ -100,7 +100,11 @@
     //set Admin-rights to the creator of the group
     //[DatabaseSingelton addUserToGroup: newGroupID withUserId:user.uid];
     
+    
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    
+    [dict setObject:[NSNumber numberWithBool:false] forKey:user.uid];
+
     for (Contact *tmpUser in database._contactsForGroup) {
         
         [dict setObject:[NSNumber numberWithBool:false] forKey:tmpUser.userId];
