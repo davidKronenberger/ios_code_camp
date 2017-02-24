@@ -52,6 +52,7 @@ __weak ContactsTableViewController *weakViewController;
     
     _ref = [[FIRDatabase database] reference];
     
+    
     weakViewController.ref =_ref;
     
     //get current user
@@ -97,8 +98,7 @@ __weak ContactsTableViewController *weakViewController;
         
     }];
     
-    
-    // -------------Listener for users-------------
+    // -------------eventtypechildadded Listener for users-------------
     
         _refHandle = [[_ref child:@"users"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
             
@@ -117,8 +117,26 @@ __weak ContactsTableViewController *weakViewController;
             
             [_allUsers addObject:@{@"id" : userId, @"username" : username, @"email" : email}];
             
-            
         }];
+    // -------------onchange Listener for users-------------
+        _refHandle = [[_ref child:@"users"] observeEventType:FIRDataEventTypeChildChanged withBlock:^(FIRDataSnapshot *snapshot) {
+            [self changeUserOnReceive:snapshot isRemoveUser:false];
+        }];
+    
+    _refHandle = [[_ref child:@"users"] observeEventType:FIRDataEventTypeChildRemoved withBlock:^(FIRDataSnapshot *snapshot) {
+        [self changeUserOnReceive:snapshot isRemoveUser:true];
+    }];
+    
+    
+    // -------------onchange Listener for groups-------------
+    _refHandle = [[_ref child:@"groups"] observeEventType:FIRDataEventTypeChildChanged withBlock:^(FIRDataSnapshot *snapshot) {
+        [self changeGroupOnReceive:snapshot isRemoveGroup:false];
+    }];
+    
+    _refHandle = [[_ref child:@"groups"] observeEventType:FIRDataEventTypeChildRemoved withBlock:^(FIRDataSnapshot *snapshot) {
+        [self changeGroupOnReceive:snapshot isRemoveGroup:true];
+    }];
+    
     
     
     
@@ -126,12 +144,68 @@ __weak ContactsTableViewController *weakViewController;
     
     self._contactsTableView.delegate = self;
     self._contactsTableView.dataSource = self;
-    
     [self._contactsTableView setNeedsDisplay];
 }
 
+
+- (void) changeUserOnReceive: (FIRDataSnapshot *) snapshot isRemoveUser:(BOOL) remove{
+    NSMutableDictionary *changedDict = [NSMutableDictionary new];
+    NSDictionary *oldDict = [NSDictionary new];
+    
+    for (NSDictionary* tmpdict in _allUsers){
+        if([tmpdict[@"id"] isEqualToString:snapshot.key]){
+            
+            oldDict = tmpdict;
+            [changedDict setObject:snapshot.key forKey:@"id"];
+            
+            for (FIRDataSnapshot *snapChild in snapshot.children) {
+                [changedDict setObject:snapChild.value forKey:snapChild.key];
+            }
+        }
+    }
+    if (changedDict[@"id"]){
+        if(remove){
+            [_allUsers removeObjectAtIndex:[_allUsers indexOfObject:oldDict]];
+        }else{
+           [_allUsers replaceObjectAtIndex:[_allUsers indexOfObject:oldDict] withObject:changedDict];
+        }
+    }
+}
+
+- (void) changeGroupOnReceive: (FIRDataSnapshot *) snapshot isRemoveGroup: (BOOL) remove {
+    
+    NSMutableDictionary *changedDict = [NSMutableDictionary new];
+    NSDictionary *oldDict = [NSDictionary new];
+    
+    for (NSDictionary* tmpdict in _myGroups){
+        if([tmpdict[@"id"] isEqualToString:snapshot.key]){
+            
+            oldDict = tmpdict;
+            
+            [changedDict setObject:snapshot.key forKey:@"id"];
+            
+            for (FIRDataSnapshot *snapChild in snapshot.children) {
+                [changedDict setObject:snapChild.value forKey:snapChild.key];
+            }
+        }
+    }
+    if (changedDict[@"id"]){
+        if(remove){
+            [_myGroups removeObjectAtIndex:[_myGroups indexOfObject:oldDict]];
+        }else{
+           [_myGroups replaceObjectAtIndex:[_myGroups indexOfObject:oldDict] withObject:changedDict];
+        }
+    }
+}
+
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
+}
+
+
+- (void) addUserToGroup: (NSDictionary *) userDict withGroupID: (NSString *) groupID{
+    [self addUserToGroup:userDict withGroupID:groupID withRights:@"default"];
 }
 
 
@@ -142,14 +216,47 @@ __weak ContactsTableViewController *weakViewController;
 
 - (void) createGroup :(NSString *) name{
     NSString *newGroupID = [[_ref child:@"groups"] childByAutoId].key;
-    
     [[[_ref child:@"groups"] child:newGroupID] setValue:@{@"created": [self getCurrentTime], @"name":name}];
-    
     FIRUser *user = [FIRAuth auth].currentUser;
-    
     NSDictionary *userDict = @{@"id" : user.uid, @"username" : user.displayName, @"email" : user.email};
-    
     [self addUserToGroup:userDict withGroupID:newGroupID withRights:@"Admin"];
+}
+
+
+- (void) deleteGroup: (NSString *) groupID {
+    if ([self userIsGroupAdmin:groupID]){
+        [[[_ref child:@"groups"] child:groupID] removeValue];
+    }
+}
+
+- (BOOL) userIsGroupAdmin:(NSString *) groupID{
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id == %@", groupID ];
+    NSDictionary *selectedGroup  = [_myGroups filteredArrayUsingPredicate:predicate][0];
+    NSDictionary *users = selectedGroup[@"users"];
+    NSString *rights = users[[FIRAuth auth].currentUser.uid][@"rights"];
+    
+    if ([rights isEqualToString:@"Admin"]) {
+        return true;
+    }
+    
+    return false;
+}
+
+- (void) removeUserFromGroup: (NSString *) userID withGroupID:(NSString *)groupID{
+    if ([self userIsGroupAdmin:groupID]){
+        [[[[[_ref child:@"groups"] child:groupID] child:@"user"] child:userID] removeValue];
+    }
+}
+
+- (NSDictionary *) getUsersFromGroup: (NSString *) groupID{
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id == %@", groupID ];
+    NSDictionary *selectedGroup  = [_myGroups filteredArrayUsingPredicate:predicate][0];
+    return selectedGroup[@"users"];
+}
+
+
+- (void) editUserRightsInGroup: (NSString *) groupID withUserID:(NSString *) userID withRights:(NSString *) rights {
+    
 }
 
 
@@ -186,10 +293,16 @@ __weak ContactsTableViewController *weakViewController;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
+    
     for(Contact *contact in weakViewController._tmpContacts) {
         for(NSDictionary *dict in weakViewController._myContacts) {
             if([contact.email isEqualToString:dict[@"email"]]){
                 [weakViewController._contacts addObject:contact];
+                for(NSDictionary *tmpGroup in _myGroups){
+                    NSLog(@"%@", contact.email);
+                    NSLog(@"%@",[self getIdFromEmail:contact.email]);
+                }
+                
                 break;
             }
         }
