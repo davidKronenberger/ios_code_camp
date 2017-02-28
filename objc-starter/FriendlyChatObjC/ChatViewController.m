@@ -46,7 +46,6 @@ FIRInviteDelegate> {
 @property (strong, nonatomic) FIRStorageReference *storageRef;
 @property (nonatomic, strong) FIRRemoteConfig *remoteConfig;
 
-//@property (nonatomic, strong) NSString *currentGroup; //always update current group
 
 @end
 
@@ -56,7 +55,6 @@ FIRInviteDelegate> {
     [super viewDidLoad];
     
     _messages = [[NSMutableArray alloc] init];
-    
     _clientTable.rowHeight = UITableViewAutomaticDimension;
     _clientTable.estimatedRowHeight = 140;
     
@@ -82,15 +80,16 @@ FIRInviteDelegate> {
 }
 
 - (void)sendMessageToGroup:(NSString *)message withGroupId:(NSString *)groupdId{
-    
+    //1. get the current user of this app
     FIRUser *user = [FIRAuth auth].currentUser;
     
-    //get current time
+    //2. get current time
     NSDate * now = [NSDate date];
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
     [outputFormatter setDateFormat:@"HH:mm:ss"];
     NSString *newDateString = [outputFormatter stringFromDate:now];
     
+    //3. set everything together
     [[[[[_ref child:@"groups"] child:groupdId] child:@"messages"] childByAutoId] setValue:@{@"text": message, @"user": user.displayName, @"time": newDateString}];
 }
 
@@ -125,18 +124,14 @@ FIRInviteDelegate> {
     if ([name isEqualToString: [FIRAuth auth].currentUser.displayName]){
         // Dependent on the fact, that the message is from the current user. We show the message cell own.
         cell = (MessageCellTableViewCell *)[_clientTable dequeueReusableCellWithIdentifier:@"MessageCellOwn" forIndexPath:indexPath];
-        
         // This color is for the border of the image view. This will only be used, if the message contains an image.
         cell.imageUploadView.layer.borderColor = [[UIColor whiteColor] CGColor];
     } else {
-        
         // Dependent on the fact, that the message is from another user. We show the message cell other.
         cell = (MessageCellTableViewCell *)[_clientTable dequeueReusableCellWithIdentifier:@"MessageCellOther" forIndexPath:indexPath];
-        
         // This color is for the border of the image view. This will only be used, if the message contains an image.
         cell.imageUploadView.layer.borderColor = [[UIColor blackColor] CGColor];
     }
-    
     // If the message contains an image.
     if (imageURL) {
         // We load the image only if it has the prefix gs://. This means it is from firebase.
@@ -252,6 +247,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    //when in the process of selecting images to share in chat and the user hits cancel button
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
@@ -262,6 +258,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 }
 
 - (IBAction)didTapAddPhoto:(id)sender {
+    //when the user hits the button for sharing photos in chat this is called
     UIImagePickerController * picker = [[UIImagePickerController alloc] init];
     picker.delegate = self;
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
@@ -319,15 +316,18 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 #pragma mark - Keyboard Handling
 
 - (void)keyboardWasShown:(NSNotification*)aNotification {
+    //when the keyboard is being displayed the rest of the view has to adjust so the inputtextfield is not
+    //hidden behind the keyboard
     NSDictionary* info = [aNotification userInfo];
+    //get the keyboardsize
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     
-    
-    const int movementDistance = kbSize.height; // tweak as needed
-    const float movementDuration = 0.3f; // tweak as needed
-    
+    //set the distance
+    const int movementDistance = kbSize.height;
+    const float movementDuration = 0.3f;
     int movement = -movementDistance;
     
+    //adjust the view
     [UIView beginAnimations: @"anim" context: nil];
     [UIView setAnimationBeginsFromCurrentState: YES];
     [UIView setAnimationDuration: movementDuration];
@@ -338,14 +338,18 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 
 
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification {
+    //when the textfield loses his first responder and the keyboard is hiding the view has to adjust again
+    //since it was changed on KeyboardWasShown
     NSDictionary* info = [aNotification userInfo];
+    //get the keyboardsize
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     
-    const int movementDistance = kbSize.height; // tweak as needed
-    const float movementDuration = 0.3f; // tweak as needed
-    
+    //get the distance
+    const int movementDistance = kbSize.height;
+    const float movementDuration = 0.3f;
     int movement = movementDistance;
     
+    //adjust the view
     [UIView beginAnimations: @"anim" context: nil];
     [UIView setAnimationBeginsFromCurrentState: YES];
     [UIView setAnimationDuration: movementDuration];

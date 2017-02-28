@@ -44,6 +44,7 @@
 }
 
 - (void)signIn:(GIDSignIn *)signIn
+//SignIn with the Googleaccount
 didSignInForUser:(GIDGoogleUser *)user
      withError:(NSError *)error {
     if (error == nil) {

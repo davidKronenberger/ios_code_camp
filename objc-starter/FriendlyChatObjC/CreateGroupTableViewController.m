@@ -44,6 +44,7 @@
 #pragma mark - Table view data source
 
 - (void) addBorderToTextView {
+    //displays a border to the view for better visuality
     self.groupNameTextField.layer.cornerRadius=8.0f;
     self.groupNameTextField.layer.masksToBounds=YES;
     self.groupNameTextField.layer.borderColor=[[UIColor lightGrayColor] CGColor];
@@ -63,12 +64,13 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ContactCell"];
     
+    //load the contact and display the data into the tableview cell
     Contact *contact = (database._contacts)[indexPath.row];
     cell.textLabel.text = contact.name;
     cell.detailTextLabel.text = contact.email;
     cell.imageView.image = (UIImage *)contact.image;
     
-    
+    //modify the colors of each cell for better visibility
     const CGFloat *colors = CGColorGetComponents([tableView.backgroundColor CGColor]);
     
     if (indexPath.row % 2 == 1) {
@@ -81,6 +83,8 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    //if a user selected a contact for adding to the group this part is called
+    //load the requested contact and set him up for the groupchat
     Contact *contact = nil;
     contact = [database._contacts objectAtIndex:indexPath.row];
     
@@ -90,6 +94,8 @@
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    //if a user made a mistake by selecting the wrong user and wants to deselect him this part is called
+    //get the selected user and remove him from the new to build groupchat
     Contact *contact = nil;
     contact = [database._contacts objectAtIndex:indexPath.row];
     
@@ -110,7 +116,6 @@
     //set Admin-rights to the creator of the group
     //[DatabaseSingelton addUserToGroup: newGroupID withUserId:user.uid];
     
-    
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     
     [dict setObject:[NSNumber numberWithBool:false] forKey:user.uid];
@@ -130,14 +135,14 @@
 #pragma mark - Button Handling
 
 - (IBAction)CreateGroupButtonPressed:(id)sender {
+    //check if there are selected users for creating a new group.
     if (sizeof(database._contactsForGroup) > 0) {
         NSString *groupID = [self createGroup:self.groupNameTextField.text];
-        
-        
     }
 }
 
 - (IBAction)AbortButtonPressed:(id)sender {
+    //if the user decides to cancel the process of creating a group this part is called
     database._contactsForGroup = [[NSMutableArray alloc] init];
     
     [self dismissViewControllerAnimated:YES completion:nil];
