@@ -16,13 +16,17 @@
 
 #import "AppDelegate.h"
 #import "ContactsTableViewController.h"
+#import "DatabaseSingelton.h"
+
 
 @import Firebase;
 @import GoogleSignIn;
 
+
 @implementation AppDelegate
 {
-    NSMutableArray *_contacts;
+    // Singleton instance of database.
+    DatabaseSingelton *database;
 }
 
 - (BOOL)application:(nonnull UIApplication *)application
@@ -68,6 +72,9 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [FIRApp configure];
     [GIDSignIn sharedInstance].clientID = [FIRApp defaultApp].options.clientID;
     [GIDSignIn sharedInstance].delegate = self;
+    
+    // init DatabaseSingelton 
+    database = [DatabaseSingelton sharedDatabase];
     return YES;
 }
 

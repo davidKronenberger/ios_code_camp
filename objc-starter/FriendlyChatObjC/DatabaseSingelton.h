@@ -24,6 +24,7 @@
 + (id)sharedDatabase;
 + (void) addUserToGroup: (NSString *) groupId withUserId: (NSString *) userId;
 + (void) addUserToGroup: (NSString *) groupId withUsers: (NSMutableDictionary *) userId;
++ (void) updateUser:(NSString *) userID withUsername: (NSString *) username withEmail: (NSString *) email withPhotoURL: (NSURL *) photourl;
 + (NSString *) getCurrentTime;
 
 @end

@@ -15,8 +15,8 @@
 //
 
 #import "Constants.h"
-#import "MeasurementHelper.h"
 #import "SignInViewController.h"
+#import "DatabaseSingelton.h"
 
 @import Firebase;
 
@@ -26,16 +26,34 @@
 @end
 
 @implementation SignInViewController
-
+{
+    BOOL loggedIn;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    // set up flag -> user is not logged in yet
+    loggedIn = false;
+    
+    // connection the controller with the GIDSignIn object, listening on UI events.
     [GIDSignIn sharedInstance].uiDelegate = self;
-    [[GIDSignIn sharedInstance] signInSilently];
     self.handle = [[FIRAuth auth]
                    addAuthStateDidChangeListener:^(FIRAuth *_Nonnull auth, FIRUser *_Nullable user) {
                        if (user) {
-                           [MeasurementHelper sendLoginEvent];
-                           [self performSegueWithIdentifier:SeguesSignInToFp sender:nil];
+                           //get current user
+                           FIRUser *user = [FIRAuth auth].currentUser;
+                           
+                           [DatabaseSingelton updateUser:user.uid withUsername: user.displayName withEmail: user.email withPhotoURL: user.photoURL];
+                           if(!loggedIn){
+                               // set up flag, user is succesfully logged in
+                               loggedIn = true;
+                               
+
+                               
+                               [self performSegueWithIdentifier:SeguesSignInToFp sender:nil];
+                           }
+                       } else {
+                           loggedIn = false;
                        }
                    }];
 }

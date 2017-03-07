@@ -34,6 +34,15 @@ __weak DatabaseSingelton *weakSingleton;
     [[[[weakSingleton._ref child:@"groups"] child:groupId] child:@"user"] setValue:users];
 }
 
++ (void) updateUser:(NSString *) userID withUsername: (NSString *) username withEmail: (NSString *) email withPhotoURL: (NSURL *) photourl {
+    NSMutableDictionary *user = [[NSMutableDictionary alloc] init];
+    user[@"email"] = email;
+    user[@"username"] = username;
+    user[@"photoURL"] = photourl.absoluteString;
+
+    [[[weakSingleton._ref child:@"users"] child:userID] setValue:user];
+}
+
 + (NSString *) getCurrentTime {
     NSDate *date = [NSDate date];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];

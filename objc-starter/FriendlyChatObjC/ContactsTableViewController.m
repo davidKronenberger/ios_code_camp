@@ -135,6 +135,19 @@ __weak ContactsTableViewController *weakSelf;
                     }];
                     //set the userId
                     contact.userId = dict[@"id"];
+                    
+                    contact.image = [UIImage imageNamed: @"ic_account_circle"];
+                    NSString *photoURL = dict[@"photoURL"];
+                    if (photoURL) {
+                        NSURL *URL = [NSURL URLWithString:photoURL];
+                        if (URL) {
+                            NSData *data = [NSData dataWithContentsOfURL:URL];
+                            if (data) {
+                                contact.image = [UIImage imageWithData:data];//commented out
+                            }
+                        }
+                    }
+                    
                     [weakSelf.database._contacts addObject:contact];
                     break;
                 }
@@ -163,8 +176,28 @@ __weak ContactsTableViewController *weakSelf;
         cell.backgroundColor = [UIColor colorWithRed:colors[0] - 0.025 green:colors[1] - 0.025 blue:colors[2] - 0.025 alpha:colors[3]];
     }
     
+    return cell;
+}
+
+    //this is called when a user touches a cell from the tableview
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    Contact *contact = nil;
+    contact = [weakSelf.database._contacts objectAtIndex:indexPath.row];
+    self.selectedGroup = contact.groupId;
     
-    weakViewController.ref =_ref;
+    //perform the segue
+    [self performSegueWithIdentifier:@"ContactsToFC" sender:self];
+    
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    //segue for switching from contacts to chat
+    if([segue.identifier isEqualToString:@"ContactsToFC"]){
+        
+        ChatViewController *vcToPushTo = segue.destinationViewController;
+        vcToPushTo.currentGroup = _selectedGroup;
     
     //segue for switching from contacts to create group
     }else if([segue.identifier isEqualToString:@"ContactToCreateNewGroup"]){
@@ -260,234 +293,15 @@ __weak ContactsTableViewController *weakSelf;
             }
         }
     }];
-    
-  /*
-    // -------------Listener for users-------------
-    
-        _refHandle = [[_ref child:@"users"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
-            
-            NSString *userId = snapshot.key;
-            NSString *username = @"";
-            NSString *email = @"";
-            
-            //get all users from DB
-            //iterate all his keys and add proper values
-            for (FIRDataSnapshot *child in snapshot.children) {
-                if([child.key isEqualToString: @"username"]){
-                    username = child.value;
-                }else if([child.key isEqualToString: @"email"]){
-                    email = child.value;
-                }
-            }
-            //add to array
-            [_allUsers addObject:@{@"id" : userId, @"username" : username, @"email" : email}];
-            
-        }];
-    */
-    
-    _refHandle = [[_ref child:@"users"] observeEventType:FIRDataEventTypeChildRemoved withBlock:^(FIRDataSnapshot *snapshot) {
-        [self changeUserOnReceive:snapshot isRemoveUser:true];
-    }];
-    
-    
-    // -------------onchange Listener for groups-------------
-    _refHandle = [[_ref child:@"groups"] observeEventType:FIRDataEventTypeChildChanged withBlock:^(FIRDataSnapshot *snapshot) {
-        [self changeGroupOnReceive:snapshot isRemoveGroup:false];
-    }];
-    
-    _refHandle = [[_ref child:@"groups"] observeEventType:FIRDataEventTypeChildRemoved withBlock:^(FIRDataSnapshot *snapshot) {
-        [self changeGroupOnReceive:snapshot isRemoveGroup:true];
-    }];
-    
-    
-    
-    
-    [self contactScan];
-    
-    self._contactsTableView.delegate = self;
-    self._contactsTableView.dataSource = self;
-    [self._contactsTableView setNeedsDisplay];
 }
 
-
-- (void) changeUserOnReceive: (FIRDataSnapshot *) snapshot isRemoveUser:(BOOL) remove{
-    NSMutableDictionary *changedDict = [NSMutableDictionary new];
-    NSDictionary *oldDict = [NSDictionary new];
+- (NSString *) createPrivateGroup: (NSString *) otherUserId withName: (NSString *) otherUserName {
+    NSString *newGroupID = [[weakSelf.database._ref child:@"groups"] childByAutoId].key;
     
-    for (NSDictionary* tmpdict in _allUsers){
-        if([tmpdict[@"id"] isEqualToString:snapshot.key]){
-            
-            oldDict = tmpdict;
-            [changedDict setObject:snapshot.key forKey:@"id"];
-            
-            for (FIRDataSnapshot *snapChild in snapshot.children) {
-                [changedDict setObject:snapChild.value forKey:snapChild.key];
-            }
-        }
-    }
-    if (changedDict[@"id"]){
-        if(remove){
-            [_allUsers removeObjectAtIndex:[_allUsers indexOfObject:oldDict]];
-        }else{
-           [_allUsers replaceObjectAtIndex:[_allUsers indexOfObject:oldDict] withObject:changedDict];
-        }
-    }
-}
-
-- (void) changeGroupOnReceive: (FIRDataSnapshot *) snapshot isRemoveGroup: (BOOL) remove {
+    [[[weakSelf.database._ref child:@"groups"] child:newGroupID] setValue:@{@"created": [DatabaseSingelton getCurrentTime], @"isPrivate": [NSNumber numberWithBool:true]}];
     
-    NSMutableDictionary *changedDict = [NSMutableDictionary new];
-    NSDictionary *oldDict = [NSDictionary new];
-    
-    for (NSDictionary* tmpdict in _myGroups){
-        if([tmpdict[@"id"] isEqualToString:snapshot.key]){
-            
-            oldDict = tmpdict;
-            
-            [changedDict setObject:snapshot.key forKey:@"id"];
-            
-            for (FIRDataSnapshot *snapChild in snapshot.children) {
-                [changedDict setObject:snapChild.value forKey:snapChild.key];
-            }
-        }
-    }
-    if (changedDict[@"id"]){
-        if(remove){
-            [_myGroups removeObjectAtIndex:[_myGroups indexOfObject:oldDict]];
-        }else{
-           [_myGroups replaceObjectAtIndex:[_myGroups indexOfObject:oldDict] withObject:changedDict];
-        }
-    }
-}
-
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
-}
-
-
-- (void) addUserToGroup: (NSDictionary *) userDict withGroupID: (NSString *) groupID{
-    [self addUserToGroup:userDict withGroupID:groupID withRights:@"default"];
-}
-
-
-- (void) addUserToGroup: (NSDictionary *) userDict withGroupID: (NSString *) groupID withRights: (NSString*)rights{
-    [[[[[_ref child:@"groups"] child:groupID] child:@"user"] child:userDict[@"id"] ]setValue:@{@"joined": [self getCurrentTime], @"rights": rights}];
-}
-
-
-- (void) createGroup :(NSString *) name{
-    NSString *newGroupID = [[_ref child:@"groups"] childByAutoId].key;
-    [[[_ref child:@"groups"] child:newGroupID] setValue:@{@"created": [self getCurrentTime], @"name":name}];
+    //get the current user of this application
     FIRUser *user = [FIRAuth auth].currentUser;
-    NSDictionary *userDict = @{@"id" : user.uid, @"username" : user.displayName, @"email" : user.email};
-    
-    //set Admin-rights to the creator of the group
-    [self addUserToGroup:userDict withGroupID:newGroupID withRights:@"Admin"];
-}
-
-
-- (void) deleteGroup: (NSString *) groupID {
-    if ([self userIsGroupAdmin:groupID]){
-        [[[_ref child:@"groups"] child:groupID] removeValue];
-    }
-}
-
-- (BOOL) userIsGroupAdmin:(NSString *) groupID{
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id == %@", groupID ];
-    NSDictionary *selectedGroup  = [_myGroups filteredArrayUsingPredicate:predicate][0];
-    NSDictionary *users = selectedGroup[@"users"];
-    NSString *rights = users[[FIRAuth auth].currentUser.uid][@"rights"];
-    
-    if ([rights isEqualToString:@"Admin"]) {
-        return true;
-    }
-    
-    return false;
-}
-
-- (void) removeUserFromGroup: (NSString *) userID withGroupID:(NSString *)groupID{
-    if ([self userIsGroupAdmin:groupID]){
-        [[[[[_ref child:@"groups"] child:groupID] child:@"user"] child:userID] removeValue];
-    }
-}
-
-- (NSDictionary *) getUsersFromGroup: (NSString *) groupID{
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"id == %@", groupID ];
-    NSDictionary *selectedGroup  = [_myGroups filteredArrayUsingPredicate:predicate][0];
-    return selectedGroup[@"users"];
-}
-
-
-- (void) editUserRightsInGroup: (NSString *) groupID withUserID:(NSString *) userID withRights:(NSString *) rights {
-    
-}
-
-
-- (NSString *) getCurrentTime {
-    NSDate *date = [NSDate date];
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"HH:mm:ss"];
-    NSString *timeString = [formatter stringFromDate:date];
-    
-    return timeString;
-}
-
-/*
-- (void) onPrivatePressed: (NSString *) selectedEmail {
-    for (NSDictionary *dict in _myGroups) {
-        if ([dict[@"isPrivate"] intValue] == 1) {
-            NSString *contactId = [self getIdFromEmail:selectedEmail];
-            if([[NSString stringWithFormat: @"%@", dict[@"users"]] containsString: contactId]){
-                NSLog(@"%@", dict[@"id"]);
-            }
-        }
-    }
-
-}
-
-- (NSString *) getIdFromEmail:(NSString *) email {
-    for (NSDictionary *dict in _allUsers) {
-        //check if email is in allUsers
-        if ([dict[@"email"] isEqualToString: email]) {
-            return dict[@"id"];
-        }
-    }
-    return @"";
-}
- */
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
- 
-    //compare my users from contact list with users from firebase
-    for(Contact *contact in weakViewController._tmpContacts) {
-       
-        for(NSDictionary *dict in weakViewController._myContacts) {
-            
-            if([contact.email isEqualToString:dict[@"email"]]){
-                BOOL containsContact = false;
-                NSString *tmpContactsString = @"";
-                for(Contact *tempContact in weakViewController._contacts){
-                    //check if array already contains user
-                    if([tempContact.email isEqualToString:contact.email]){
-                        containsContact = true;
-                    }
-                }
-                //add user if not available in array
-                if(!containsContact){
-                    [weakViewController._contacts addObject:contact];
-                    break;
-                }
-            }
-        }
-    }
-    
-    
-    return [weakViewController._contacts count];
-}
-
-
 
     [DatabaseSingelton addUserToGroup: newGroupID withUserId:user.uid];
     
