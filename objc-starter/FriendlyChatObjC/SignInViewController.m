@@ -40,15 +40,15 @@
     self.handle = [[FIRAuth auth]
                    addAuthStateDidChangeListener:^(FIRAuth *_Nonnull auth, FIRUser *_Nullable user) {
                        if (user) {
-                           //get current user
-                           FIRUser *user = [FIRAuth auth].currentUser;
-                           
-                           [DatabaseSingelton updateUser:user.uid withUsername: user.displayName withEmail: user.email withPhotoURL: user.photoURL];
                            if(!loggedIn){
                                // set up flag, user is succesfully logged in
                                loggedIn = true;
                                
-
+                               // get current user
+                               FIRUser *user = [FIRAuth auth].currentUser;
+                               
+                               // set/update user to database
+                               [DatabaseSingelton updateUser:user.uid withUsername: user.displayName withEmail: user.email withPhotoURL: user.photoURL];
                                
                                [self performSegueWithIdentifier:SeguesSignInToFp sender:nil];
                            }

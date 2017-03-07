@@ -136,9 +136,9 @@ __weak ContactsTableViewController *weakSelf;
                     //set the userId
                     contact.userId = dict[@"id"];
                     
-                    contact.image = [UIImage imageNamed: @"ic_account_circle"];
+                    contact.image = [UIImage imageNamed: @"nouser.jpg"];
                     NSString *photoURL = dict[@"photoURL"];
-                    if (photoURL) {
+                    if (![photoURL isEqualToString:@""]) {
                         NSURL *URL = [NSURL URLWithString:photoURL];
                         if (URL) {
                             NSData *data = [NSData dataWithContentsOfURL:URL];
@@ -211,9 +211,6 @@ __weak ContactsTableViewController *weakSelf;
 - (void)getGroups {
     //get current user
     FIRUser *user = [FIRAuth auth].currentUser;
-    //add user to DB
-    [[[weakSelf.database._ref child:@"users"] child:user.uid]
-     setValue:@{@"username": user.displayName, @"email": user.email}];
     
     //------Register listener for groups of current user
     _refHandle = [[weakSelf.database._ref child:@"groups"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
@@ -344,16 +341,19 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
                 
                 NSString *username = @"";
                 NSString *email = @"";
+                NSString *photoURL = @"";
                 
                 for (FIRDataSnapshot *child in snapshot.children) {
                     if([child.key isEqualToString: @"username"]){
                         username = child.value;
                     }else if([child.key isEqualToString: @"email"]){
                         email = child.value;
+                    }else if([child.key isEqualToString: @"photoURL"]){
+                        photoURL = child.value;
                     }
                 }
                 
-                [weakSelf._myContacts addObject:@{@"id": snapshot.key, @"username": username, @"email": email}];
+                [weakSelf._myContacts addObject:@{@"id": snapshot.key, @"username": username, @"email": email, @"photoURL":photoURL}];
                 //reload the table with contacts of current user
                 [weakSelf._contactsTableView reloadData];
             }];
@@ -369,7 +369,7 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
         NSError* contactError;
         CNContactStore* addressBook = [[CNContactStore alloc]init];
         [addressBook containersMatchingPredicate:[CNContainer predicateForContainersWithIdentifiers: @[addressBook.defaultContainerIdentifier]] error:&contactError];
-        NSArray * keysToFetch =@[CNContactPhoneNumbersKey, CNContactFamilyNameKey, CNContactGivenNameKey, CNContactImageDataKey, CNContactImageDataAvailableKey, CNContactEmailAddressesKey];
+        NSArray * keysToFetch =@[CNContactPhoneNumbersKey, CNContactFamilyNameKey, CNContactGivenNameKey, CNContactEmailAddressesKey];
         
         
         CNContactFetchRequest * request = [[CNContactFetchRequest alloc]initWithKeysToFetch:keysToFetch];
@@ -389,13 +389,6 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
     NSMutableArray * phone = [[contact.phoneNumbers valueForKey:@"value"] valueForKey:@"digits"];
     NSMutableArray * email = [contact.emailAddresses valueForKey:@"value"];
     
-    //if there is no picture to be found take the default one
-    UIImage * image;
-    if(contact.imageDataAvailable){
-        image = [UIImage imageWithData:(NSData *) contact.imageData];
-    } else {
-        image = [UIImage imageNamed:@"nouser.jpg"];
-    }
     
     //create a new contact
     Contact *ct = [[Contact alloc] init];
@@ -434,7 +427,6 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
         } else {
             ct.number = @"Keine Nummer gefunden.";
         }
-        ct.image = image;
         
         [weakSelf._tmpContacts addObject:ct];
     }
