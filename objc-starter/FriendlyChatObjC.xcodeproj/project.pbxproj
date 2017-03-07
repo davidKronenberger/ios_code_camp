@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		107960851C6130EF003DB6CC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 107960841C6130EF003DB6CC /* main.m */; };
 		107960881C6130EF003DB6CC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 107960871C6130EF003DB6CC /* AppDelegate.m */; };
-		1079608B1C6130EF003DB6CC /* FCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1079608A1C6130EF003DB6CC /* FCViewController.m */; };
+		1079608B1C6130EF003DB6CC /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1079608A1C6130EF003DB6CC /* ChatViewController.m */; };
 		107960A91C6131B6003DB6CC /* Test.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 107960A81C6131B6003DB6CC /* Test.storyboard */; };
 		107960AE1C613207003DB6CC /* MeasurementHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 107960AD1C613207003DB6CC /* MeasurementHelper.m */; };
 		107960B11C61321D003DB6CC /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 107960B01C61321D003DB6CC /* Constants.m */; };
@@ -30,6 +30,9 @@
 		96E2AAB11E5C3C210079E975 /* ContactsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E2AAB01E5C3C210079E975 /* ContactsTableViewController.m */; };
 		96E2AAB41E5C3DDD0079E975 /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E2AAB31E5C3DDD0079E975 /* Contact.m */; };
 		96E2AAB61E5C43C70079E975 /* nouser.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 96E2AAB51E5C43C70079E975 /* nouser.jpg */; };
+		96F610771E6036EB007ED0E1 /* CreateGroupTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F610761E6036EB007ED0E1 /* CreateGroupTableViewController.m */; };
+		96F610791E604265007ED0E1 /* DatabaseSingelton.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F610781E604265007ED0E1 /* DatabaseSingelton.m */; };
+		96F6107E1E605849007ED0E1 /* add_picture.png in Resources */ = {isa = PBXBuildFile; fileRef = 96F6107D1E605849007ED0E1 /* add_picture.png */; };
 		96FB59AB1E5ED82100489AD0 /* white_final.png in Resources */ = {isa = PBXBuildFile; fileRef = 96FB59AA1E5ED82100489AD0 /* white_final.png */; };
 /* End PBXBuildFile section */
 
@@ -38,8 +41,8 @@
 		107960841C6130EF003DB6CC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		107960861C6130EF003DB6CC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		107960871C6130EF003DB6CC /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		107960891C6130EF003DB6CC /* FCViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FCViewController.h; sourceTree = "<group>"; };
-		1079608A1C6130EF003DB6CC /* FCViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FCViewController.m; sourceTree = "<group>"; };
+		107960891C6130EF003DB6CC /* ChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
+		1079608A1C6130EF003DB6CC /* ChatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
 		107960A81C6131B6003DB6CC /* Test.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Test.storyboard; sourceTree = "<group>"; };
 		107960AA1C6131E4003DB6CC /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		107960AC1C613207003DB6CC /* MeasurementHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeasurementHelper.h; sourceTree = "<group>"; };
@@ -68,6 +71,11 @@
 		96E2AAB21E5C3DDD0079E975 /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
 		96E2AAB31E5C3DDD0079E975 /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
 		96E2AAB51E5C43C70079E975 /* nouser.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = nouser.jpg; path = ../nouser.jpg; sourceTree = "<group>"; };
+		96F610751E6036C9007ED0E1 /* CreateGroupTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CreateGroupTableViewController.h; sourceTree = "<group>"; };
+		96F610761E6036EB007ED0E1 /* CreateGroupTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateGroupTableViewController.m; sourceTree = "<group>"; };
+		96F610781E604265007ED0E1 /* DatabaseSingelton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseSingelton.m; sourceTree = "<group>"; };
+		96F6107A1E60427B007ED0E1 /* DatabaseSingelton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DatabaseSingelton.h; sourceTree = "<group>"; };
+		96F6107D1E605849007ED0E1 /* add_picture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add_picture.png; sourceTree = "<group>"; };
 		96FB59AA1E5ED82100489AD0 /* white_final.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = white_final.png; sourceTree = "<group>"; };
 		9ED8D1017B9927C5A7CCA356 /* Pods-FriendlyChatObjC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FriendlyChatObjC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FriendlyChatObjC/Pods-FriendlyChatObjC.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -109,8 +117,8 @@
 			children = (
 				107960861C6130EF003DB6CC /* AppDelegate.h */,
 				107960871C6130EF003DB6CC /* AppDelegate.m */,
-				107960891C6130EF003DB6CC /* FCViewController.h */,
-				1079608A1C6130EF003DB6CC /* FCViewController.m */,
+				107960891C6130EF003DB6CC /* ChatViewController.h */,
+				1079608A1C6130EF003DB6CC /* ChatViewController.m */,
 				96E2AAB21E5C3DDD0079E975 /* Contact.h */,
 				96E2AAB31E5C3DDD0079E975 /* Contact.m */,
 				107960AC1C613207003DB6CC /* MeasurementHelper.h */,
@@ -124,6 +132,10 @@
 				96E2AAB01E5C3C210079E975 /* ContactsTableViewController.m */,
 				9675F6811E5C9107006AF776 /* MessageCellTableViewCell.h */,
 				9675F6821E5C9107006AF776 /* MessageCellTableViewCell.m */,
+				96F610751E6036C9007ED0E1 /* CreateGroupTableViewController.h */,
+				96F610761E6036EB007ED0E1 /* CreateGroupTableViewController.m */,
+				96F610781E604265007ED0E1 /* DatabaseSingelton.m */,
+				96F6107A1E60427B007ED0E1 /* DatabaseSingelton.h */,
 			);
 			path = FriendlyChatObjC;
 			sourceTree = "<group>";
@@ -152,6 +164,7 @@
 		10AF4CCC1DD238C00096D192 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				96F6107D1E605849007ED0E1 /* add_picture.png */,
 				96E22D991E5F326A000CA3D6 /* wallpaper6.jpg */,
 				96E22D911E5EE7C1000CA3D6 /* shiny.png */,
 				96FB59AA1E5ED82100489AD0 /* white_final.png */,
@@ -250,6 +263,7 @@
 				96E2AAB61E5C43C70079E975 /* nouser.jpg in Resources */,
 				10AF4CD31DD238C00096D192 /* Images.xcassets in Resources */,
 				96E22D921E5EE7C1000CA3D6 /* shiny.png in Resources */,
+				96F6107E1E605849007ED0E1 /* add_picture.png in Resources */,
 				107960A91C6131B6003DB6CC /* Test.storyboard in Resources */,
 				961F222C1E5D99B100255841 /* white_bubble.png in Resources */,
 				10AF4CD11DD238C00096D192 /* logo1024.png in Resources */,
@@ -319,9 +333,11 @@
 				107960B11C61321D003DB6CC /* Constants.m in Sources */,
 				96E2AAB11E5C3C210079E975 /* ContactsTableViewController.m in Sources */,
 				107960AE1C613207003DB6CC /* MeasurementHelper.m in Sources */,
-				1079608B1C6130EF003DB6CC /* FCViewController.m in Sources */,
+				1079608B1C6130EF003DB6CC /* ChatViewController.m in Sources */,
+				96F610791E604265007ED0E1 /* DatabaseSingelton.m in Sources */,
 				107960881C6130EF003DB6CC /* AppDelegate.m in Sources */,
 				107960B61C613263003DB6CC /* SignInViewController.m in Sources */,
+				96F610771E6036EB007ED0E1 /* CreateGroupTableViewController.m in Sources */,
 				107960851C6130EF003DB6CC /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

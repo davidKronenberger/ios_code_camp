@@ -1,0 +1,96 @@
+\documentclass[envcountsect]{beamer}
+
+\mode<presentation>
+{
+    \usetheme{Ilmenau}
+
+    \setbeamercovered{transparent}
+    \setbeamertemplate{theorems}[numbered]
+    \setbeamertemplate{bibliography item}[text]
+
+    %this adds the frame number on the bottom right side of the footer
+    \expandafter\def\expandafter\insertshorttitle\expandafter{%
+      \insertshorttitle\hfill%
+      \insertframenumber\,/\,\inserttotalframenumber}
+}
+
+%underline emph
+\renewcommand{\emph}[1]{\textbf{#1}}
+
+%package for german umlaute
+\usepackage[german]{babel}
+\usepackage[utf8]{inputenc} 
+
+%packages for math symbols
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{textcomp}
+
+%package for using 
+\usepackage{graphicx}
+
+%package for proof and other theorem environments
+\usepackage{amsthm}
+
+%this package provides a pendant to "itemize" with better spacing - use compactitem
+\usepackage{paralist}
+
+%supports some nice characters with mathscr
+\usepackage{mathrsfs}
+
+%enables better support for tables
+\usepackage{array}
+\usepackage{multirow}
+
+% various theorems, numbered by section
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[theorem]{Lemma}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{conj}[theorem]{Conjecture}
+\newtheorem{cor}[theorem]{Corollary}
+\newtheorem{defi}[theorem]{Definition}
+\newtheorem{exam}[theorem]{Example}
+
+
+\newenvironment{remark}[1][Remark]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+\newcolumntype{C}[1]{>{\parbox[c][#1][c]{0cm}{}}l<{}}
+%some own commands
+\newcommand{\familyOf}[1]{\mathscr{L}(\text{#1})}
+
+\title{Nice to Have}
+
+\author{Cordian ???, Sascha ???, David Kronenberger, Andreas Leiker}
+\date{\today\vspace*{\fill}}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Outline}
+\tableofcontents
+\end{frame}
+
+\input{introduction.tex}
+\input{implementation.tex}
+\input{problems.tex}
+\input{result.tex}
+
+\section*{End}
+
+\begin{frame}
+\frametitle{End}
+
+\begin{center}
+Danke für Ihre Aufmerksamkeit!
+\end{center}
+\end{frame}
+
+\bibliographystyle{unsrt}
+\bibliography{bibliography}
+
+\end{document}

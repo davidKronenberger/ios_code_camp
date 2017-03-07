@@ -16,7 +16,7 @@
 
 @import UIKit;
 
-@interface FCViewController : UIViewController
+@interface ChatViewController : UIViewController
 
 @property (nonatomic) NSString *currentGroup;
 

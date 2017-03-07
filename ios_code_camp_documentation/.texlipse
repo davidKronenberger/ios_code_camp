@@ -1,0 +1,14 @@
+#TeXlipse project settings
+#Wed Mar 01 08:56:20 CET 2017
+markTmpDer=true
+builderNum=2
+outputDir=
+makeIndSty=
+bibrefDir=
+outputFormat=pdf
+tempDir=tmp
+mainTexFile=main.tex
+outputFile=iOS_Code_Camp_Documentation.pdf
+langSpell=en
+markDer=true
+srcDir=

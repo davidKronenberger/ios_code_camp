@@ -1,0 +1,126 @@
+\documentclass[12pt,a4paper]{scrartcl}
+
+%underline emph
+\renewcommand{\emph}[1]{\textbf{#1}}
+
+%package for german umlaute
+\usepackage[german]{babel}
+\usepackage[utf8]{inputenc}
+
+%packages for math symbols
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{textcomp}
+
+%package for using 
+\usepackage{graphicx}
+
+%package for proof and other theorem environments
+\usepackage{amsthm}
+
+%this package provides a pendant to "itemize" with better spacing - use compactitem
+\usepackage{paralist}
+
+%supports some nice characters with mathscr
+\usepackage{mathrsfs}
+
+%enables better support for tables
+\usepackage{array}
+\usepackage{multirow}
+
+% various theorems, numbered by section
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\newenvironment{remark}[1][Remark]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+\newcolumntype{C}[1]{>{\parbox[c][#1][c]{0cm}{}}c<{}}
+%some own commands
+\newcommand{\familyOf}[1]{\mathscr{L}(\text{#1})}
+
+%set of own commands
+%\newcommand{\hcat}{\rotatebox{90}{$\ominus$}}
+\newcommand{\hcat}{
+  \mathchoice{\rotatebox{90}{$\displaystyle\ominus$}}
+             {\rotatebox{90}{$\ominus$}}
+             {\rotatebox{90}{$\scriptstyle\ominus$}}
+             {\rotatebox{90}{$\scriptscriptstyle\ominus$}}}
+\newcommand{\vcat}{
+  \mathchoice{\raisebox{1pt}{$\displaystyle\ominus$}}
+             {\raisebox{1pt}{$\ominus$}}
+             {\raisebox{0.5pt}{$\scriptstyle\ominus$}}
+             {\raisebox{0.2pt}{$\scriptscriptstyle\ominus$}}}
+\newcommand{\plusinbox}{
+  \setlength\fboxsep{0pt}
+  \setlength{\fboxrule}{0.00001pt} 
+  \text{ \framebox[8pt]{+} }
+  \setlength\fboxsep{3pt}
+  \setlength{\fboxrule}{0.4pt} 
+}
+\newcommand{\mirroredL}{
+\resizebox{0.31cm}{!}{\tiny\begin{tabular}[b]{C{0.4cm}|C{0.4cm}|}
+\cline{2-2} 
+&\tabularnewline
+\hline 
+\multicolumn{1}{|c|}{}&\tabularnewline
+\hline 
+\end{tabular}}\normalsize}
+%document information
+\title{Nice To Have}
+
+\author{Sascha ???, Cordian ???, Andreas Leiker, David Kronenberger}
+
+\makeatletter
+\def\maketitle{%
+
+\begin{center}
+\textbf{\textsf{\Huge \@title}}\\
+\vspace{2cm}
+{\Large von\\
+\@author\\
+\vspace{2.5cm}
+Dipl.-Inf. Daniel Wilhelm, Betreuer}\\
+\vspace{2.5cm}
+Diese Dokumentation\\
+dient ausschließlich zur\\
+Bewertung des Kurses\\
+Codecamp Context-Awareness 2\\
+\vspace{2cm}
+UNIVERSITÄT VON KASSEL\\
+Hessen, Deutschland\\
+\vspace{1cm}
+\@date
+\end{center}
+}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\pagebreak
+
+\input{declaration.tex}
+
+\pagebreak
+
+\tableofcontents
+\thispagestyle{empty}
+\pagebreak
+
+\setcounter{page}{1}
+\input{introduction.tex}
+
+\input{implementation.tex}
+
+\input{conclusion.tex}
+
+\bibliographystyle{unsrt}
+\bibliography{bibliography}
+
+\end{document}
