@@ -25,6 +25,12 @@ __weak DatabaseSingelton *weakSingleton;
     return sharedDatabase;
 }
 
++ (void)clearCache {
+    weakSingleton._contactsAddressBook = [[NSMutableArray alloc] init];
+    weakSingleton._contactsAddressBookUsingApp = [[NSMutableArray alloc] init];
+    weakSingleton._contactsForNewGroup = [[NSMutableArray alloc] init];
+}
+
 + (void) addUserToGroup: (NSString *) groupId withUserId: (NSString *) userId {
     [[[[[weakSingleton._ref child:@"groups"] child:groupId] child:@"users"] child:userId] setValue:[NSNumber numberWithBool:false]];
 }
@@ -77,10 +83,7 @@ __weak DatabaseSingelton *weakSingleton;
     if (self = [super init]) {
         weakSingleton = self;
         
-        self._contactsAddressBook = [[NSMutableArray alloc] init];
-        self._contactsAddressBookUsingApp = [[NSMutableArray alloc] init];
-        
-        self._contactsForNewGroup = [[NSMutableArray alloc] init];
+        [DatabaseSingelton clearCache];
         
         self._ref = [[FIRDatabase database] reference];
     }

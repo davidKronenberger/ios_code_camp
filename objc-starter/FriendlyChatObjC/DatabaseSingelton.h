@@ -30,4 +30,6 @@
 + (void)addContactToContactsAddressBookUsingApp:(NSString *) uid withMail:(NSString *)email withPhotoURL: (NSString *)photoURL;
 + (NSString *) getCurrentTime;
 
++ (void) clearCache;
+
 @end

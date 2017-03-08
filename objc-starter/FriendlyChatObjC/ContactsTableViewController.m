@@ -51,10 +51,13 @@ __weak ContactsTableViewController *weakSelf;
     weakSelf._contactsTableView.dataSource = weakSelf;
     
     [weakSelf._contactsTableView setNeedsDisplay];
+
 }
 
 - (void)initProperties {
     weakSelf._contactsForTableView = [[NSMutableArray alloc] init];
+    [DatabaseSingelton clearCache];
+    
 }
 
 #pragma mark - Table view data source
