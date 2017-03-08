@@ -88,7 +88,7 @@
     Contact *contact = nil;
     contact = [database._contactsAddressBookUsingApp objectAtIndex:indexPath.row];
     
-    [database._contactsAddressBookUsingApp addObject:contact];
+    [database._contactsForNewGroup addObject:contact];
     
     [self.groupNameTextField resignFirstResponder];
 }
@@ -106,30 +106,19 @@
 
 #pragma mark - Create Group Handling
 
-- (NSString *) createGroup :(NSString *) name {
+- (void) createGroup :(NSString *) name {
     NSString *newGroupID = [[database._ref child:@"groups"] childByAutoId].key;
     
-    [[[database._ref child:@"groups"] child:newGroupID] setValue:@{@"created": [DatabaseSingelton getCurrentTime], @"name":name}];
+    [[[database._ref child:@"groups"] child:newGroupID] setValue:@{@"created": [DatabaseSingelton getCurrentTime], @"name":name, @"isPrivate": [NSNumber numberWithBool:false]}];
     
-    FIRUser *user = [FIRAuth auth].currentUser;
+    FIRUser *appUser = [FIRAuth auth].currentUser;
     
-    //set Admin-rights to the creator of the group
-    //[DatabaseSingelton addUserToGroup: newGroupID withUserId:user.uid];
+    [DatabaseSingelton addUserToGroup: newGroupID withUserId:appUser.uid];
     
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    
-    [dict setObject:[NSNumber numberWithBool:false] forKey:user.uid];
-
     for (Contact *tmpUser in database._contactsForNewGroup) {
-        
-        [dict setObject:[NSNumber numberWithBool:false] forKey:tmpUser.userId];
+        [DatabaseSingelton addUserToGroup:newGroupID withUserId:tmpUser.userId];
     }
     
-    [DatabaseSingelton addUsersToGroup:newGroupID withUsers:dict];
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
-    
-    return newGroupID;
 }
 
 #pragma mark - Button Handling
@@ -137,7 +126,8 @@
 - (IBAction)CreateGroupButtonPressed:(id)sender {
     //check if there are selected users for creating a new group.
     if (sizeof(database._contactsForNewGroup) > 0) {
-        NSString *groupID = [self createGroup:self.groupNameTextField.text];
+        [self createGroup:self.groupNameTextField.text];
+        [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 

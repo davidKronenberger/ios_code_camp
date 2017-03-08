@@ -140,7 +140,7 @@ __weak ContactsTableViewController *weakSelf;
             } else if([child.key isEqualToString: @"users"]) {
                 users = child;
             } else if ([child.key isEqualToString: @"isPrivate"]) {
-                groupIsPrivate = child.value;
+                groupIsPrivate = [child.value boolValue];
             }
         }
         
