@@ -16,6 +16,7 @@
 @property (nonatomic, copy) NSString *number;
 @property (nonatomic, copy) NSObject *image;
 @property (nonatomic, copy) NSString *email;
+@property (nonatomic) BOOL isPrivate;
 
 
 @end

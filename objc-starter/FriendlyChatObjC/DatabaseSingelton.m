@@ -7,10 +7,9 @@
 //
 
 #import "DatabaseSingelton.h"
+#import "Contact.h"
 
 @implementation DatabaseSingelton
-
-@synthesize _contacts;
 
 // Create weak self instance. Its for accessing in whole singleton.
 __weak DatabaseSingelton *weakSingleton;
@@ -27,11 +26,11 @@ __weak DatabaseSingelton *weakSingleton;
 }
 
 + (void) addUserToGroup: (NSString *) groupId withUserId: (NSString *) userId {
-    [[[[weakSingleton._ref child:@"groups"] child:groupId] child:@"user"] setValue:@{userId: [NSNumber numberWithBool:false]}];
+    [[[[[weakSingleton._ref child:@"groups"] child:groupId] child:@"users"] child:userId] setValue:[NSNumber numberWithBool:false]];
 }
 
-+ (void) addUserToGroup: (NSString *) groupId withUsers: (NSMutableDictionary *) users {
-    [[[[weakSingleton._ref child:@"groups"] child:groupId] child:@"user"] setValue:users];
++ (void) addUsersToGroup: (NSString *) groupId withUsers: (NSMutableDictionary *) userIds {
+    [[[[weakSingleton._ref child:@"groups"] child:groupId] child:@"users"] setValue:userIds];
 }
 
 + (void) updateUser:(NSString *) userID withUsername: (NSString *) username withEmail: (NSString *) email withPhotoURL: (NSURL *) photourl {
@@ -41,6 +40,28 @@ __weak DatabaseSingelton *weakSingleton;
     user[@"photoURL"] = photourl.absoluteString;
 
     [[[weakSingleton._ref child:@"users"] child:userID] setValue:user];
+}
+
++(void)addContactToContactsAddressBookUsingApp:(NSString *) uid withMail:(NSString *)email withPhotoURL: (NSString *)photoURL {
+    for (Contact *contact in weakSingleton._contactsAddressBook) {
+        if ([contact.email isEqualToString:email]) {
+            contact.userId = uid;
+            
+            contact.image = [UIImage imageNamed: @"nouser.jpg"];
+            
+            if (![photoURL isEqualToString:@""]) {
+                NSURL *URL = [NSURL URLWithString:photoURL];
+                if (URL) {
+                    NSData *data = [NSData dataWithContentsOfURL:URL];
+                    if (data) {
+                        contact.image = [UIImage imageWithData:data];
+                    }
+                }
+            }
+            
+            [weakSingleton._contactsAddressBookUsingApp addObject:contact];
+        }
+    }
 }
 
 + (NSString *) getCurrentTime {
@@ -55,8 +76,12 @@ __weak DatabaseSingelton *weakSingleton;
 - (id)init {
     if (self = [super init]) {
         weakSingleton = self;
-        self._contacts = [[NSMutableArray alloc] init];
-        self._contactsForGroup = [[NSMutableArray alloc] init];
+        
+        self._contactsAddressBook = [[NSMutableArray alloc] init];
+        self._contactsAddressBookUsingApp = [[NSMutableArray alloc] init];
+        
+        self._contactsForNewGroup = [[NSMutableArray alloc] init];
+        
         self._ref = [[FIRDatabase database] reference];
     }
     return self;

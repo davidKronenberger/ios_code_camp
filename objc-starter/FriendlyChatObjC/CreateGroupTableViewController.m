@@ -58,14 +58,14 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // We have for each contact one row.
-    return [database._contacts count];
+    return [database._contactsAddressBookUsingApp count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ContactCell"];
     
     //load the contact and display the data into the tableview cell
-    Contact *contact = (database._contacts)[indexPath.row];
+    Contact *contact = (database._contactsAddressBookUsingApp)[indexPath.row];
     cell.textLabel.text = contact.name;
     cell.detailTextLabel.text = contact.email;
     cell.imageView.image = (UIImage *)contact.image;
@@ -86,9 +86,9 @@
     //if a user selected a contact for adding to the group this part is called
     //load the requested contact and set him up for the groupchat
     Contact *contact = nil;
-    contact = [database._contacts objectAtIndex:indexPath.row];
+    contact = [database._contactsAddressBookUsingApp objectAtIndex:indexPath.row];
     
-    [database._contactsForGroup addObject:contact];
+    [database._contactsAddressBookUsingApp addObject:contact];
     
     [self.groupNameTextField resignFirstResponder];
 }
@@ -97,9 +97,9 @@
     //if a user made a mistake by selecting the wrong user and wants to deselect him this part is called
     //get the selected user and remove him from the new to build groupchat
     Contact *contact = nil;
-    contact = [database._contacts objectAtIndex:indexPath.row];
+    contact = [database._contactsAddressBookUsingApp objectAtIndex:indexPath.row];
     
-    [database._contactsForGroup removeObject:contact];
+    [database._contactsForNewGroup removeObject:contact];
     
     [self.groupNameTextField resignFirstResponder];
 }
@@ -120,12 +120,12 @@
     
     [dict setObject:[NSNumber numberWithBool:false] forKey:user.uid];
 
-    for (Contact *tmpUser in database._contactsForGroup) {
+    for (Contact *tmpUser in database._contactsForNewGroup) {
         
         [dict setObject:[NSNumber numberWithBool:false] forKey:tmpUser.userId];
     }
     
-    [DatabaseSingelton addUserToGroup:newGroupID withUsers:dict];
+    [DatabaseSingelton addUsersToGroup:newGroupID withUsers:dict];
     
     [self dismissViewControllerAnimated:YES completion:nil];
     
@@ -136,14 +136,14 @@
 
 - (IBAction)CreateGroupButtonPressed:(id)sender {
     //check if there are selected users for creating a new group.
-    if (sizeof(database._contactsForGroup) > 0) {
+    if (sizeof(database._contactsForNewGroup) > 0) {
         NSString *groupID = [self createGroup:self.groupNameTextField.text];
     }
 }
 
 - (IBAction)AbortButtonPressed:(id)sender {
     //if the user decides to cancel the process of creating a group this part is called
-    database._contactsForGroup = [[NSMutableArray alloc] init];
+    database._contactsForNewGroup = [[NSMutableArray alloc] init];
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }
