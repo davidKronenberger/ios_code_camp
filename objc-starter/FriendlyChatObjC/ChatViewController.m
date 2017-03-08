@@ -86,7 +86,7 @@ FIRInviteDelegate> {
     //2. get current time
     NSDate * now = [NSDate date];
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
-    [outputFormatter setDateFormat:@"HH:mm:ss"];
+    [outputFormatter setDateFormat:@"dd.MM.YYYY HH:mm:ss"];
     NSString *newDateString = [outputFormatter stringFromDate:now];
     
     //3. set everything together
@@ -282,10 +282,13 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 #pragma mark - TextView Handling
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self sendMessage:@{MessageFieldstext: textField.text}];
-    textField.text = @"";
-    [self.view endEditing:YES];
-    return YES;
+    if ([textField.text length] > 0) {
+        [self sendMessage:@{MessageFieldstext: textField.text}];
+        textField.text = @"";
+        [self.view endEditing:YES];
+        return YES;
+    }
+    return NO;
 }
 
 - (void)sendMessage:(NSDictionary *)data {
