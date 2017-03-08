@@ -20,8 +20,10 @@
 
 extern NSString *const NotificationKeysSignedIn;
 
-extern NSString *const SeguesSignInToFp;
-extern NSString *const SeguesFpToSignIn;
+extern NSString *const SeguesSignInToContacts;
+extern NSString *const SeguesContactsToSignIn;
+extern NSString *const SeguesContactsToCreateNewGroup;
+extern NSString *const SeguesContactsToChat;
 
 extern NSString *const MessageFieldsname;
 extern NSString *const MessageFieldstext;

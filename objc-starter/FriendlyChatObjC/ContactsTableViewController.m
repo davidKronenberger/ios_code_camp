@@ -11,6 +11,8 @@
 #import "ChatViewController.h"
 #import "DatabaseSingelton.h"
 
+#import "Constants.h"
+
 @import Firebase;
 @import GoogleMobileAds;
 
@@ -22,10 +24,6 @@
 @property (strong, nonatomic) NSMutableArray<Contact *> *_contactsForTableView;
 // Singleton instance of database.
 @property (strong, nonatomic) DatabaseSingelton *database;
-
-// !!!!!!!!!!PLEASE COMMENT THESE TWO PROPERTIES!!!!!!!!!
-@property (strong, nonatomic) NSString *selectedGroup;
-
 @end
 
 // Create weak self instance. Its for accessing in whole view controller;
@@ -94,27 +92,10 @@ __weak ContactsTableViewController *weakSelf;
 
 //this is called when a user touches a cell from the tableview
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    Contact *contact = nil;
-    contact = [weakSelf._contactsForTableView objectAtIndex:indexPath.row];
-    self.selectedGroup = contact.groupId;
+    weakSelf.database._selectedContact = [weakSelf._contactsForTableView objectAtIndex:indexPath.row];
     
     //perform the segue
-    [self performSegueWithIdentifier:@"ContactsToFC" sender:self];
-    
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    //segue for switching from contacts to chat
-    if([segue.identifier isEqualToString:@"ContactsToFC"]){
-        
-        ChatViewController *vcToPushTo = segue.destinationViewController;
-        vcToPushTo.currentGroup = _selectedGroup;
-        
-        //segue for switching from contacts to create group
-    }else if([segue.identifier isEqualToString:@"ContactToCreateNewGroup"]){
-        
-    }
-    
+    [self performSegueWithIdentifier:SeguesContactsToChat sender:self];
 }
 
 #pragma mark - Group Handling
@@ -349,8 +330,6 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
     }
 }
 
-
-
 - (void)parseContactWithContact :(CNContact* )contact {
     
     //Get all information of the contact
@@ -418,6 +397,6 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
 
 - (IBAction)NewGroupButtonPressed:(id)sender {
     //this is called when the user hits the new group button
-    [self performSegueWithIdentifier:@"ContactToCreateNewGroup" sender:self];
+    [self performSegueWithIdentifier:SeguesContactsToCreateNewGroup sender:self];
 }
 @end

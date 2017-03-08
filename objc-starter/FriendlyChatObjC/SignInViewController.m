@@ -50,7 +50,7 @@
                                // set/update user to database
                                [DatabaseSingelton updateUser:user.uid withUsername: user.displayName withEmail: user.email withPhotoURL: user.photoURL];
                                
-                               [self performSegueWithIdentifier:SeguesSignInToFp sender:nil];
+                               [self performSegueWithIdentifier:SeguesSignInToContacts sender:nil];
                            }
                        } else {
                            loggedIn = false;

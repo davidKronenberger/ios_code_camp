@@ -20,8 +20,10 @@
 
 NSString *const NotificationKeysSignedIn = @"onSignInCompleted";
 
-NSString *const SeguesSignInToFp = @"SignInToFP";
-NSString *const SeguesFpToSignIn = @"FPToSignIn";
+NSString *const SeguesSignInToContacts = @"SignInToContacts";
+NSString *const SeguesContactsToSignIn = @"ContactsToSignIn";
+NSString *const SeguesContactsToCreateNewGroup = @"ContactsToCreateNewGroup";
+NSString *const SeguesContactsToChat = @"ContactsToChat";
 
 NSString *const MessageFieldsname = @"name";
 NSString *const MessageFieldstext = @"text";

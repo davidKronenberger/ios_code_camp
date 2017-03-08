@@ -18,7 +18,5 @@
 
 @interface ChatViewController : UIViewController
 
-@property (nonatomic) NSString *currentGroup;
-
 @end
 

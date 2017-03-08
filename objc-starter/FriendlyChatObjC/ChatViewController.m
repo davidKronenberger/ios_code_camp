@@ -17,6 +17,7 @@
 #import "Constants.h"
 #import "ChatViewController.h"
 #import "MessageCellTableViewCell.h"
+#import "DatabaseSingelton.h"
 
 @import Photos;
 
@@ -35,6 +36,7 @@ UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDele
 FIRInviteDelegate> {
     FIRDatabaseHandle _refHandle;
 }
+@property (weak, nonatomic) IBOutlet UILabel *headerLabel;
 
 @property(nonatomic, weak) IBOutlet UITextField *textField;
 @property(nonatomic, weak) IBOutlet UIButton *sendButton;
@@ -45,6 +47,7 @@ FIRInviteDelegate> {
 @property (strong, nonatomic) NSMutableArray<FIRDataSnapshot *> *messages;
 @property (strong, nonatomic) FIRStorageReference *storageRef;
 @property (nonatomic, strong) FIRRemoteConfig *remoteConfig;
+@property (nonatomic, strong) DatabaseSingelton *database;
 
 
 @end
@@ -54,9 +57,13 @@ FIRInviteDelegate> {
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.database = [DatabaseSingelton sharedDatabase];
+    
     _messages = [[NSMutableArray alloc] init];
     _clientTable.rowHeight = UITableViewAutomaticDimension;
     _clientTable.estimatedRowHeight = 140;
+    
+    [self.headerLabel setText:self.database._selectedContact.name];
     
     [self configureDatabase];
     [self configureStorage];
@@ -72,7 +79,7 @@ FIRInviteDelegate> {
     _ref = [[FIRDatabase database] reference];
     
     // -------------Listener for messages in current group-------------
-    _refHandle = [[[[_ref child:@"groups"] child: _currentGroup] child:@"messages"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
+    _refHandle = [[[[_ref child:@"groups"] child:self.database._selectedContact.groupId] child:@"messages"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
         [_messages addObject:snapshot];
         [_clientTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_messages.count-1 inSection:0]] withRowAnimation: UITableViewRowAnimationAutomatic];
         [_clientTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
@@ -309,7 +316,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
     
     // Push data to Firebase Database
-    [[[[[_ref child:@"groups"] child: _currentGroup] child:@"messages"] childByAutoId] setValue:mdata];
+    [[[[[_ref child:@"groups"] child: self.database._selectedContact.groupId] child:@"messages"] childByAutoId] setValue:mdata];
 }
 
 - (IBAction)didSendMessage:(UIButton *)sender {

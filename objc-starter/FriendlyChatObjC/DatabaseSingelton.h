@@ -7,6 +7,7 @@
 //
 
 #import <foundation/Foundation.h>
+#import "Contact.h"
 
 @import Firebase;
 
@@ -21,6 +22,7 @@
 // A list of contacts that build a new group.
 @property (strong, nonatomic) NSMutableArray *_contactsForNewGroup;
 
+@property (strong, nonatomic) Contact *_selectedContact;
 @property (strong, nonatomic) FIRDatabaseReference *_ref;
 
 + (id)sharedDatabase;
