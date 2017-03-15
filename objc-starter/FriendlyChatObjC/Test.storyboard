@@ -152,7 +152,7 @@
                     </view>
                     <connections>
                         <outlet property="_contactsTableView" destination="zoe-ZY-Pox" id="AoB-Om-pSK"/>
-                        <segue destination="uMT-A3-F60" kind="show" identifier="ContactsToChat" id="XfF-Su-6Lr"/>
+                        <segue destination="uMT-A3-F60" kind="show" identifier="ContactsToChat" action="showDetailViewController:sender:" id="XfF-Su-6Lr"/>
                         <segue destination="42z-Ou-onT" kind="show" identifier="ContactsToCreateNewGroup" id="P7G-TJ-UYh"/>
                     </connections>
                 </viewController>

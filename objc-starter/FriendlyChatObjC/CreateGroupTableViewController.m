@@ -109,23 +109,25 @@
 - (void) createGroup :(NSString *) name {
     NSString *newGroupID = [[database._ref child:@"groups"] childByAutoId].key;
     
-    [[[database._ref child:@"groups"] child:newGroupID] setValue:@{@"created": [DatabaseSingelton getCurrentTime], @"name":name, @"isPrivate": [NSNumber numberWithBool:false]}];
-    
     FIRUser *appUser = [FIRAuth auth].currentUser;
     
-    [DatabaseSingelton addUserToGroup: newGroupID withUserId:appUser.uid];
+    // add any selected users to the dict and push them to the new created group
+    NSMutableDictionary *users = [[NSMutableDictionary alloc] init];
+    
+    [users setObject:[NSNumber numberWithBool:false] forKey:appUser.uid];
     
     for (Contact *tmpUser in database._contactsForNewGroup) {
-        [DatabaseSingelton addUserToGroup:newGroupID withUserId:tmpUser.userId];
+        [users setObject:[NSNumber numberWithBool:false] forKey:tmpUser.userId];
     }
     
+    [[[database._ref child:@"groups"] child:newGroupID] setValue:@{@"created": [DatabaseSingelton getCurrentTime], @"name":name, @"isPrivate": [NSNumber numberWithBool:false], @"users":users}];
 }
 
 #pragma mark - Button Handling
 
 - (IBAction)CreateGroupButtonPressed:(id)sender {
     //check if there are selected users for creating a new group.
-    if (sizeof(database._contactsForNewGroup) > 0) {
+    if (sizeof(database._contactsForNewGroup) > 0 && [self.groupNameTextField.text length] > 0) {
         [self createGroup:self.groupNameTextField.text];
         [self dismissViewControllerAnimated:YES completion:nil];
     }

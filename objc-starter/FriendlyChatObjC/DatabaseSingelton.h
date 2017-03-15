@@ -21,6 +21,10 @@
 @property (strong, nonatomic) NSMutableArray *_contactsAddressBook;
 // A list of contacts that build a new group.
 @property (strong, nonatomic) NSMutableArray *_contactsForNewGroup;
+// This array includes all groups where the user is participating.
+@property (strong, nonatomic) NSMutableArray *_contactsForTableView;
+// A list of ref handlers
+@property (strong, nonatomic) NSMutableArray *_refHandlers;
 
 @property (strong, nonatomic) Contact *_selectedContact;
 @property (strong, nonatomic) FIRDatabaseReference *_ref;
@@ -29,8 +33,11 @@
 + (void) addUserToGroup: (NSString *) groupId withUserId: (NSString *) userId;
 + (void) addUsersToGroup: (NSString *) groupId withUsers: (NSMutableDictionary *) userIds;
 + (void) updateUser:(NSString *) userID withUsername: (NSString *) username withEmail: (NSString *) email withPhotoURL: (NSURL *) photourl;
-+ (void)addContactToContactsAddressBookUsingApp:(NSString *) uid withMail:(NSString *)email withPhotoURL: (NSString *)photoURL;
++ (void) addContactToContactsAddressBookUsingApp:(NSString *) uid withMail:(NSString *)email withPhotoURL: (NSString *)photoURL;
 + (NSString *) getCurrentTime;
++ (BOOL) refHandlerAllreadyExists:(NSString *) refHandle;
++ (void) addRefHandler: (NSString *) refHandle;
+
 
 + (void) clearCache;
 

@@ -79,11 +79,32 @@ __weak DatabaseSingelton *weakSingleton;
     return timeString;
 }
 
++ (BOOL) refHandlerAllreadyExists:(NSString *) refHandle {
+    for (NSString * handler in weakSingleton._refHandlers) {
+        if ([handler isEqualToString:refHandle]) {
+            return true;
+        }
+    }
+    
+    return false;
+}
+
++ (void) addRefHandler: (NSString *) refHandle {
+    if (![DatabaseSingelton refHandlerAllreadyExists:refHandle]) {
+        [weakSingleton._refHandlers addObject:refHandle];
+    }
+}
+
 - (id)init {
     if (self = [super init]) {
         weakSingleton = self;
         
-        [DatabaseSingelton clearCache];
+        weakSingleton._contactsAddressBook = [[NSMutableArray alloc] init];
+        weakSingleton._contactsAddressBookUsingApp = [[NSMutableArray alloc] init];
+        weakSingleton._contactsForNewGroup = [[NSMutableArray alloc] init];
+        weakSingleton._contactsForTableView = [[NSMutableArray alloc] init];
+        
+        weakSingleton._refHandlers = [[NSMutableArray alloc] init];
         
         self._ref = [[FIRDatabase database] reference];
     }

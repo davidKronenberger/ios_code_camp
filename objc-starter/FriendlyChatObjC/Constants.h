@@ -30,4 +30,6 @@ extern NSString *const MessageFieldstext;
 extern NSString *const MessageFieldsphotoURL;
 extern NSString *const MessageFieldsimageURL;
 
+extern NSString *const RefHandlerGroupAdded;
+
 @end

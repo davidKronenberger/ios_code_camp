@@ -20,18 +20,19 @@
 
 // The table view with all contacts and groups.
 @property (weak, nonatomic) IBOutlet UITableView *_contactsTableView;
-// This array includes all groups that where the user is participating.
-@property (strong, nonatomic) NSMutableArray<Contact *> *_contactsForTableView;
 // Singleton instance of database.
 @property (strong, nonatomic) DatabaseSingelton *database;
+
 @end
 
 // Create weak self instance. Its for accessing in whole view controller;
 __weak ContactsTableViewController *weakSelf;
 
+
+
 @implementation ContactsTableViewController {
     // !!!!!!!!!!PLEASE COMMENT OR RENAME!!!!!!!!!
-    FIRDatabaseHandle _refHandle;
+    
 }
 
 - (void) viewDidLoad {
@@ -39,41 +40,44 @@ __weak ContactsTableViewController *weakSelf;
     
     weakSelf = self;
     
-    weakSelf.database = [DatabaseSingelton sharedDatabase];
-    
+    // Init all properties.
     [weakSelf initProperties];
     
+    //
     [weakSelf contactScan];
     
     weakSelf._contactsTableView.delegate = weakSelf;
     weakSelf._contactsTableView.dataSource = weakSelf;
     
     [weakSelf._contactsTableView setNeedsDisplay];
+    
+}
 
+- (void) dealloc {
+    [[weakSelf.database._ref child:@"groups"] removeAllObservers];
+    [DatabaseSingelton clearCache];
 }
 
 - (void)initProperties {
-    weakSelf._contactsForTableView = [[NSMutableArray alloc] init];
-    [DatabaseSingelton clearCache];
-    
+    weakSelf.database = [DatabaseSingelton sharedDatabase];
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    // We have just one section.
+    // Currently we have just one section.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [weakSelf._contactsForTableView count];
+    return [weakSelf.database._contactsForTableView count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ContactCell"];
     
     //load all needed data into the tableView cell
-    Contact *contact = (weakSelf._contactsForTableView)[indexPath.row];
+    Contact *contact = (weakSelf.database._contactsForTableView)[indexPath.row];
     cell.textLabel.text = contact.name;
     cell.detailTextLabel.text = contact.email;
     cell.imageView.image = (UIImage *)contact.image;
@@ -92,7 +96,7 @@ __weak ContactsTableViewController *weakSelf;
 
 //this is called when a user touches a cell from the tableview
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    weakSelf.database._selectedContact = [weakSelf._contactsForTableView objectAtIndex:indexPath.row];
+    weakSelf.database._selectedContact = [weakSelf.database._contactsForTableView objectAtIndex:indexPath.row];
     
     //perform the segue
     [self performSegueWithIdentifier:SeguesContactsToChat sender:self];
@@ -104,78 +108,86 @@ __weak ContactsTableViewController *weakSelf;
     //get current user
     FIRUser *appUser = [FIRAuth auth].currentUser;
     
-    //------Register listener for groups of current user
-    _refHandle = [[weakSelf.database._ref child:@"groups"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *group) {
-        
-        NSString *groupId = group.key;
-        NSString *groupName = @"unknown";
-        BOOL groupIsPrivate = false;
-        
-        FIRDataSnapshot *users = [[FIRDataSnapshot alloc] init];
-        //get all groups of current user
-        //iterate all his keys and add proper values
-        
-        for (FIRDataSnapshot *child in group.children) {
-            if ([child.key isEqualToString: @"name"]) {
-                groupName = child.value;
-            } else if([child.key isEqualToString: @"users"]) {
-                users = child;
-            } else if ([child.key isEqualToString: @"isPrivate"]) {
-                groupIsPrivate = [child.value boolValue];
-            }
-        }
-        
-        BOOL userIsInGroup = false;
-        
-        for (FIRDataSnapshot *user in users.children) {
-            if ([user.key isEqualToString: appUser.uid]){
-                userIsInGroup = true;
-                break;
-            }
-        }
-        
-        //if current user is in this group
-        if(userIsInGroup) {
+    
+    // The following two lines are necassary because of a bug in firebase. The removeallobserver function does not work. Sooo....
+    // Check first if the ref handler still exists.
+    if (![DatabaseSingelton refHandlerAllreadyExists:RefHandlerGroupAdded]) {
+        // If we are the first time here, add this ref handler to our list of refhandlers and further working...
+        [DatabaseSingelton addRefHandler:RefHandlerGroupAdded];
+
+        //------Register listener for groups of current user
+        [[weakSelf.database._ref child:@"groups"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *group) {
             
-            //if the chat is a private chat (2 persons only chat) set the uid
-            if (groupIsPrivate){
-                NSString* otherUserId = @"";
-                
-                for(FIRDataSnapshot *user in users.children) {
-                    if(![user.key containsString:appUser.uid]){
-                        otherUserId = user.key;
-                        break;
-                    }
+            NSString *groupId = group.key;
+            NSString *groupName = @"unknown";
+            BOOL groupIsPrivate = false;
+            
+            FIRDataSnapshot *users = [[FIRDataSnapshot alloc] init];
+            //get all groups of current user
+            //iterate all his keys and add proper values
+            
+            for (FIRDataSnapshot *child in group.children) {
+                if ([child.key isEqualToString: @"name"]) {
+                    groupName = child.value;
+                } else if([child.key isEqualToString: @"users"]) {
+                    users = child;
+                } else if ([child.key isEqualToString: @"isPrivate"]) {
+                    groupIsPrivate = [child.value boolValue];
                 }
-                
-                for (Contact *contact in weakSelf.database._contactsAddressBookUsingApp) {
-                    if ([contact.userId isEqualToString: otherUserId]){
-                        contact.groupId = groupId;
-                        contact.isPrivate = true;
-                        [weakSelf._contactsForTableView addObject:contact];
-                        break;
-                    }
-                }
-            } else {
-                //if chat is not private it must be a groupchat (more than 2 people)
-                //1. create an local contact for every group found
-                Contact *ct = [[Contact alloc] init];
-                
-                UIImage * image = [UIImage imageNamed:@"nouser.jpg"];
-                ct.image = image;
-                ct.name = groupName;
-                ct.number = @"Keine Nummer gefunden.";
-                ct.email = @"keinemail@gmail.com";
-                ct.groupId = groupId;
-                ct.isPrivate = false;
-                
-                //2. push contact to ui.
-                [weakSelf._contactsForTableView addObject:ct];
             }
             
-            [weakSelf._contactsTableView reloadData];
-        }
-    }];
+            BOOL userIsInGroup = false;
+            
+            for (FIRDataSnapshot *user in users.children) {
+                if ([user.key isEqualToString: appUser.uid]){
+                    userIsInGroup = true;
+                    break;
+                }
+            }
+            
+            //if current user is in this group
+            if(userIsInGroup) {
+                
+                //if the chat is a private chat (2 persons only chat) set the uid
+                if (groupIsPrivate){
+                    NSString* otherUserId = @"";
+                    
+                    for(FIRDataSnapshot *user in users.children) {
+                        if(![user.key containsString:appUser.uid]){
+                            otherUserId = user.key;
+                            break;
+                        }
+                    }
+                    
+                    for (Contact *contact in weakSelf.database._contactsAddressBookUsingApp) {
+                        if ([contact.userId isEqualToString: otherUserId]){
+                            contact.groupId = groupId;
+                            contact.isPrivate = true;
+                            [weakSelf.database._contactsForTableView addObject:contact];
+                            break;
+                        }
+                    }
+                } else {
+                    //if chat is not private it must be a groupchat (more than 2 people)
+                    //1. create an local contact for every group found
+                    Contact *contact = [[Contact alloc] init];
+                    
+                    UIImage * image = [UIImage imageNamed:@"nouser.jpg"];
+                    contact.image = image;
+                    contact.name = groupName;
+                    contact.number = @"Keine Nummer gefunden.";
+                    contact.email = @"keinemail@gmail.com";
+                    contact.groupId = groupId;
+                    contact.isPrivate = false;
+                    
+                    //2. push contact to ui.
+                    [weakSelf.database._contactsForTableView addObject:contact];
+                }
+                
+                [weakSelf._contactsTableView reloadData];
+            }
+        }];
+    }
 }
 
 - (void) createPrivateGroup: (NSString *) otherUserId {
@@ -186,10 +198,13 @@ __weak ContactsTableViewController *weakSelf;
         if (![weakSelf checkIfPrivateGroupExists:appUser.uid withConcurrent:otherUserId inGroups:groups]) {
             NSString *newGroupID = [[weakSelf.database._ref child:@"groups"] childByAutoId].key;
             
-            [[[weakSelf.database._ref child:@"groups"] child:newGroupID] setValue:@{@"created": [DatabaseSingelton getCurrentTime], @"isPrivate": [NSNumber numberWithBool:true]}];
+            // add any selected users to the dict and push them to the new created group
+            NSMutableDictionary *users = [[NSMutableDictionary alloc] init];
+            [users setObject:[NSNumber numberWithBool:false] forKey:otherUserId];
+            [users setObject:[NSNumber numberWithBool:false] forKey:appUser.uid];
             
-            [DatabaseSingelton addUserToGroup: newGroupID withUserId:appUser.uid];
-            [DatabaseSingelton addUserToGroup: newGroupID withUserId:otherUserId];
+            [[[weakSelf.database._ref child:@"groups"] child:newGroupID] setValue:@{@"created": [DatabaseSingelton getCurrentTime], @"isPrivate": [NSNumber numberWithBool:true], @"users":users}];
+            
         }
     }];
 }
@@ -268,13 +283,13 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
     // At this point we want to check which contact uses this app too.
     if (contactsFound) {
         
-        //iterate all users of current user in his local directory
+        // Iterate through all contacts of current user in his local directory.
         for (Contact *contact in weakSelf.database._contactsAddressBook) {
             
             // We have to increase this counter for each contact to prove if it is in the database.
             counterForContactsInAddressbook++;
             
-            //get all users of current user in db
+            // Check if the user is in db.
             [[[[weakSelf.database._ref child:@"users"] queryOrderedByChild:@"email"] queryEqualToValue:contact.email] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot *users) {
                 // If we have found this email in the database, it means that the user with this email uses although this app.
                 if (users.exists) {
@@ -303,8 +318,6 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
                 // Check if all contacts, to prove if there are in the database, are proven.
                 counterForContactsInAddressbook --;
                 if (counterForContactsInAddressbook == 0) {
-                    
-                    
                     // After getting all contacts we check the groups of the current user.
                     [weakSelf getGroups];
                 }

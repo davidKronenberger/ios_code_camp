@@ -30,4 +30,5 @@ NSString *const MessageFieldstext = @"text";
 NSString *const MessageFieldsphotoURL = @"photoURL";
 NSString *const MessageFieldsimageURL = @"imageURL";
 
+NSString *const RefHandlerGroupAdded = @"groupAddedHandler";
 @end
