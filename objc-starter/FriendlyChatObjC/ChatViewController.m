@@ -50,6 +50,7 @@ FIRInviteDelegate> {
 @property (nonatomic, strong) DatabaseSingelton *database;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomViewOffset;
+@property (nonatomic) int keyboardHeight;
 
 @end
 
@@ -170,7 +171,7 @@ FIRInviteDelegate> {
     } else {
         // There is no image data, so we remove the image view from the parent container.
         cell.imageUploadView.image  = nil;
-
+        
         cell.imageHeight.constant = 60000;
         
         // Set the message text to the uiview.
@@ -240,6 +241,10 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
                                         putFile:imageFile metadata:nil
                                         completion:^(FIRStorageMetadata *metadata, NSError *error) {
                                             if (error) {
+                                                if (error.code == -13013) {
+                                                    [self sendMessage:@{MessageFieldsimageURL:@"https://appjoy.org/wp-content/uploads/2016/06/firebase-storage-logo.png"}];
+                                                }
+                                                
                                                 NSLog(@"Error uploading: %@", error);
                                                 return;
                                             }
@@ -326,7 +331,6 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
     mdata[@"time"] = newDateString;
     
-    
     // Push data to Firebase Database
     [[[[[_ref child:@"groups"] child: self.database._selectedContact.groupId] child:@"messages"] childByAutoId] setValue:mdata];
 }
@@ -338,16 +342,9 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 #pragma mark - Keyboard Handling
 
 - (void)keyboardWasShown:(NSNotification*)aNotification {
-    //when the keyboard is being displayed the rest of the view has to adjust so the inputtextfield is not
-    //hidden behind the keyboard
-    NSDictionary* info = [aNotification userInfo];
-    //get the keyboardsize
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    [self getKeyboardHeight:aNotification];
     
-    //set the distance
-    const int movementDistance = kbSize.height;
-    
-    self.bottomViewOffset.constant = self.bottomViewOffset.constant + movementDistance;
+    self.bottomViewOffset.constant = self.bottomViewOffset.constant + self.keyboardHeight;
     
     [self.clientTable layoutIfNeeded];
     
@@ -357,18 +354,21 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     }
 }
 
+- (void) getKeyboardHeight:(NSNotification *)aNotification {
+    if (!self.keyboardHeight) {
+        //when the keyboard is being displayed the rest of the view has to adjust so the inputtextfield is not
+        //hidden behind the keyboard
+        NSDictionary* info = [aNotification userInfo];
+        //get the keyboardsize
+        CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+        
+        //set the distance
+        self.keyboardHeight = kbSize.height;
+    }
+}
 
 - (void)keyboardWillBeHidden:(NSNotification*)aNotification {
-    //when the textfield loses his first responder and the keyboard is hiding the view has to adjust again
-    //since it was changed on KeyboardWasShown
-    NSDictionary* info = [aNotification userInfo];
-    //get the keyboardsize
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    
-    //get the distance
-    const int movementDistance = kbSize.height;
-    
-    self.bottomViewOffset.constant = self.bottomViewOffset.constant - movementDistance;
+    self.bottomViewOffset.constant = self.bottomViewOffset.constant - self.keyboardHeight;
     
     [self.clientTable layoutIfNeeded];
 }
