@@ -83,8 +83,13 @@ FIRInviteDelegate> {
     // -------------Listener for messages in current group-------------
     _refHandle = [[[[_ref child:@"groups"] child:self.database._selectedContact.groupId] child:@"messages"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
         [_messages addObject:snapshot];
-        [_clientTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_messages.count-1 inSection:0]] withRowAnimation: UITableViewRowAnimationAutomatic];
-        [_clientTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    
+        [_clientTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_messages.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+
+        // Delay execution of scroll to bottom , because the insertion of a new message in the tableview needs a bit of time...
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0), dispatch_get_main_queue(), ^{
+            [_clientTable scrollToRowAtIndexPath:[NSIndexPath indexPathForItem:_messages.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+        });
     }];
 }
 
@@ -172,7 +177,7 @@ FIRInviteDelegate> {
         // There is no image data, so we remove the image view from the parent container.
         cell.imageUploadView.image  = nil;
         
-        cell.imageHeight.constant = 60000;
+        cell.imageHeight.constant = 999999;
         
         // Set the message text to the uiview.
         NSString *text = message[MessageFieldstext];
