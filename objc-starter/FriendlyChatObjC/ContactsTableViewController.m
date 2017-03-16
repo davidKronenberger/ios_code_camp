@@ -10,6 +10,7 @@
 #import <Contacts/Contacts.h>
 #import "ChatViewController.h"
 #import "DatabaseSingelton.h"
+#import "ContactTableViewCell.h"
 
 #import "Constants.h"
 
@@ -46,6 +47,9 @@ __weak ContactsTableViewController *weakSelf;
     //
     [weakSelf contactScan];
     
+    
+    weakSelf._contactsTableView.rowHeight = UITableViewAutomaticDimension;
+    weakSelf._contactsTableView.estimatedRowHeight = 140;
     weakSelf._contactsTableView.delegate = weakSelf;
     weakSelf._contactsTableView.dataSource = weakSelf;
     
@@ -74,13 +78,20 @@ __weak ContactsTableViewController *weakSelf;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ContactCell"];
+    ContactTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ContactCell"];
     
     //load all needed data into the tableView cell
     Contact *contact = (weakSelf.database._contactsForTableView)[indexPath.row];
-    cell.textLabel.text = contact.name;
-    cell.detailTextLabel.text = contact.email;
-    cell.imageView.image = (UIImage *)contact.image;
+    cell.name.text = contact.name;
+    cell.lastMessage.text = contact.email;
+    cell.avatar.image = (UIImage *)contact.image;
+    
+    //Turn the Imageview into a circle with the help of invisible borders.
+    cell.avatar.layer.cornerRadius = cell.avatar.frame.size.height /2;
+    cell.avatar.layer.masksToBounds = YES;
+    cell.avatar.layer.borderWidth = 0;
+    cell.avatar.layer.borderColor = [[UIColor blackColor] CGColor];
+    
     
     //modify the colors of each cell for better visibility
     const CGFloat *colors = CGColorGetComponents([tableView.backgroundColor CGColor]);
