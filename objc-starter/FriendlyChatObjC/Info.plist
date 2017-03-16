@@ -46,11 +46,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Take and upload photos to Firebase Storage</string>
+	<string>$(PRODUCT_NAME) Take and upload photos to Firebase Storage</string>
 	<key>NSContactsUsageDescription</key>
-	<string>Used for Firebase Invites</string>
+	<string>$(PRODUCT_NAME) Used for Firebase Invites</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Upload photo to Firebase Storage</string>
+	<string>$(PRODUCT_NAME) Upload photo to Firebase Storage</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

@@ -49,6 +49,7 @@ FIRInviteDelegate> {
 @property (nonatomic, strong) FIRRemoteConfig *remoteConfig;
 @property (nonatomic, strong) DatabaseSingelton *database;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomViewOffset;
 
 @end
 
@@ -60,8 +61,8 @@ FIRInviteDelegate> {
     self.database = [DatabaseSingelton sharedDatabase];
     
     _messages = [[NSMutableArray alloc] init];
-    _clientTable.rowHeight = UITableViewAutomaticDimension;
-    _clientTable.estimatedRowHeight = 140;
+    
+    [self initTableView];
     
     [self.headerLabel setText:self.database._selectedContact.name];
     
@@ -133,14 +134,23 @@ FIRInviteDelegate> {
         cell = (MessageCellTableViewCell *)[_clientTable dequeueReusableCellWithIdentifier:@"MessageCellOwn" forIndexPath:indexPath];
         // This color is for the border of the image view. This will only be used, if the message contains an image.
         cell.imageUploadView.layer.borderColor = [[UIColor whiteColor] CGColor];
+        [cell.message setTextColor:[UIColor colorWithWhite:1.0f alpha:1.0f]];
     } else {
         // Dependent on the fact, that the message is from another user. We show the message cell other.
         cell = (MessageCellTableViewCell *)[_clientTable dequeueReusableCellWithIdentifier:@"MessageCellOther" forIndexPath:indexPath];
         // This color is for the border of the image view. This will only be used, if the message contains an image.
         cell.imageUploadView.layer.borderColor = [[UIColor blackColor] CGColor];
+        [cell.message setTextColor:[UIColor colorWithWhite:0.0f alpha:1.0f]];
     }
+    
     // If the message contains an image.
     if (imageURL) {
+        cell.message.text = @"oimoei coweicmwoc jweoci ewockew ociw cowe ceowic ewoci weociew coewi cewoi eoeiw cewoi ewcoi weoic ewowei ewoic ewoeiw  <oinvori erovimrevoimrevo oimre";
+        [cell.message setTextColor:[UIColor colorWithWhite:1.0f alpha:0.0f]];
+        
+        cell.imageHeight.constant = 100;
+        
+        cell.imageUploadView.image = [UIImage imageNamed: @"wallpaper2.jpg"];
         // We load the image only if it has the prefix gs://. This means it is from firebase.
         if ([imageURL hasPrefix:@"gs://"]) {
             [[[FIRStorage storage] referenceForURL:imageURL] dataWithMaxSize:INT64_MAX
@@ -159,7 +169,9 @@ FIRInviteDelegate> {
         }
     } else {
         // There is no image data, so we remove the image view from the parent container.
-        [cell.imageUploadView removeFromSuperview];
+        cell.imageUploadView.image  = nil;
+
+        cell.imageHeight.constant = 60000;
         
         // Set the message text to the uiview.
         NSString *text = message[MessageFieldstext];
@@ -190,12 +202,14 @@ FIRInviteDelegate> {
     cell.avatar.layer.borderColor = [[UIColor blackColor] CGColor];
     
     //Turn the Imageview into a circle with the help of invisible borders.
-    cell.imageUploadView.layer.cornerRadius = cell.imageUploadView.frame.size.height /2;
+    cell.imageUploadView.layer.cornerRadius = 40;
     cell.imageUploadView.layer.masksToBounds = YES;
     
     // We want to show the border only if there are image data.
     if (cell.imageUploadView.image) {
         cell.imageUploadView.layer.borderWidth = 1;
+    } else {
+        cell.imageUploadView.layer.borderWidth = 0;
     }
     
     // We want that the cell background is allthough transparant like the table view background.
@@ -292,8 +306,6 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     if ([textField.text length] > 0) {
         [self sendMessage:@{MessageFieldstext: textField.text}];
         textField.text = @"";
-        [self.view endEditing:YES];
-        return YES;
     }
     return NO;
 }
@@ -334,16 +346,15 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
     //set the distance
     const int movementDistance = kbSize.height;
-    const float movementDuration = 0.3f;
-    int movement = -movementDistance;
     
-    //adjust the view
-    [UIView beginAnimations: @"anim" context: nil];
-    [UIView setAnimationBeginsFromCurrentState: YES];
-    [UIView setAnimationDuration: movementDuration];
-    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
-    [UIView commitAnimations];
+    self.bottomViewOffset.constant = self.bottomViewOffset.constant + movementDistance;
     
+    [self.clientTable layoutIfNeeded];
+    
+    if ([self.messages count] > 0) {
+        NSIndexPath *indexPathOfLastCell = [NSIndexPath indexPathForRow:[self.messages count] - 1 inSection:0];
+        [self.clientTable scrollToRowAtIndexPath:indexPathOfLastCell atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    }
 }
 
 
@@ -356,16 +367,10 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
     //get the distance
     const int movementDistance = kbSize.height;
-    const float movementDuration = 0.3f;
-    int movement = movementDistance;
     
-    //adjust the view
-    [UIView beginAnimations: @"anim" context: nil];
-    [UIView setAnimationBeginsFromCurrentState: YES];
-    [UIView setAnimationDuration: movementDuration];
-    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
-    [UIView commitAnimations];
+    self.bottomViewOffset.constant = self.bottomViewOffset.constant - movementDistance;
     
+    [self.clientTable layoutIfNeeded];
 }
 
 - (void)registerForKeyboardNotifications {
@@ -384,6 +389,19 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+- (void) initTableView {
+    self.clientTable.rowHeight = UITableViewAutomaticDimension;
+    self.clientTable.estimatedRowHeight = 140;
+    
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tableViewTapped)];
+    singleTap.numberOfTapsRequired = 1;
+    [self.clientTable setUserInteractionEnabled:YES];
+    [self.clientTable addGestureRecognizer:singleTap];
+}
+
+- (void) tableViewTapped {
+    [self.textField resignFirstResponder];
+}
 
 
 @end

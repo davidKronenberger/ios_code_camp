@@ -87,25 +87,25 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0tX-YI-GWN" id="wud-Wz-mOx">
-                                            <rect key="frame" x="0.0" y="0.0" width="342" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="342" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ypv-E7-75E">
-                                                    <rect key="frame" x="73" y="4" width="34" height="21"/>
+                                                    <rect key="frame" x="74" y="5" width="33.5" height="20.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="TSa-a1-V3T">
-                                                    <rect key="frame" x="73" y="25" width="44" height="15"/>
+                                                    <rect key="frame" x="74" y="25.5" width="44" height="14.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="nouser.jpg" id="dLr-XC-Z3s">
-                                                    <rect key="frame" x="15" y="0.0" width="43" height="43"/>
+                                                    <rect key="frame" x="15" y="0.0" width="44" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </imageView>
                                             </subviews>
@@ -289,7 +289,7 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="STK-FK-gn5" userLabel="TextField">
                                 <rect key="frame" x="46" y="625" width="263" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="continue"/>
                                 <connections>
                                     <outlet property="delegate" destination="uMT-A3-F60" id="5FI-zi-SaF"/>
                                 </connections>
@@ -352,7 +352,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="oWT-xm-aai">
-                                                            <rect key="frame" x="70" y="36" width="181" height="82"/>
+                                                            <rect key="frame" x="70" y="60" width="181" height="58"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" relation="lessThanOrEqual" priority="999" constant="100" id="ahT-aA-FAi"/>
                                                             </constraints>
@@ -379,7 +379,7 @@
                                                         <constraint firstItem="pZ7-pY-eil" firstAttribute="top" secondItem="UDc-S9-Rrt" secondAttribute="top" id="AXt-Tr-Ynh"/>
                                                         <constraint firstItem="mb8-xv-2HI" firstAttribute="leading" secondItem="az5-kQ-IfV" secondAttribute="trailing" constant="3" id="C7E-U9-Dn3"/>
                                                         <constraint firstAttribute="bottom" secondItem="UDc-S9-Rrt" secondAttribute="bottom" constant="16" id="E9r-yl-fZY"/>
-                                                        <constraint firstItem="oWT-xm-aai" firstAttribute="top" secondItem="qmj-me-yZ1" secondAttribute="top" constant="16" id="FmR-sY-fv9"/>
+                                                        <constraint firstItem="oWT-xm-aai" firstAttribute="top" secondItem="qmj-me-yZ1" secondAttribute="top" constant="40" id="FmR-sY-fv9"/>
                                                         <constraint firstItem="qmj-me-yZ1" firstAttribute="trailing" secondItem="B1y-p4-gld" secondAttribute="trailing" constant="116" id="GkQ-io-jHn"/>
                                                         <constraint firstItem="qmj-me-yZ1" firstAttribute="top" relation="lessThanOrEqual" secondItem="B1y-p4-gld" secondAttribute="top" constant="-40" id="Ka6-kx-aWV"/>
                                                         <constraint firstItem="oWT-xm-aai" firstAttribute="trailing" secondItem="qmj-me-yZ1" secondAttribute="trailing" constant="-108" id="O3M-Ho-xWh"/>
@@ -410,7 +410,8 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="avatar" destination="UDc-S9-Rrt" id="lVg-hX-0DN"/>
-                                            <outlet property="imageUploadView" destination="oWT-xm-aai" id="BLx-VD-Jtq"/>
+                                            <outlet property="imageHeight" destination="ahT-aA-FAi" id="Wxo-x8-MQL"/>
+                                            <outlet property="imageUploadView" destination="oWT-xm-aai" id="6WA-PL-jgc"/>
                                             <outlet property="message" destination="B1y-p4-gld" id="Pq9-YW-XBl"/>
                                             <outlet property="sentAt" destination="mb8-xv-2HI" id="OsK-et-Y8m"/>
                                             <outlet property="sentBy" destination="az5-kQ-IfV" id="qxj-NU-w6M"/>
@@ -427,11 +428,11 @@
                                                     <rect key="frame" x="8" y="8" width="359" height="134"/>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="white_final.png" translatesAutoresizingMaskIntoConstraints="NO" id="Pc1-0o-2Mg">
-                                                            <rect key="frame" x="0.0" y="2" width="313" height="132"/>
+                                                            <rect key="frame" x="0.0" y="-22" width="313" height="156"/>
                                                             <rect key="contentStretch" x="0.75" y="0.5" width="0.0" height="0.0"/>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="wordWrap" numberOfLines="0" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KJW-Og-oUD">
-                                                            <rect key="frame" x="116" y="42" width="173" height="68"/>
+                                                            <rect key="frame" x="116" y="18" width="173" height="92"/>
                                                             <string key="text">Sehr interessante Nachricht. Sehr lnag vorallem. Man kann sich kaum vorstellen wie lang die Nachricht eigentlich ist. Sie ist immer genau so lang, dass sie in Diese Speech bubble passt. oder ist es eventuell anders herum. Also passt sich etwa die Speech bubble der Text Größe an. Manno mann das wäre ja verrückt.</string>
                                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -454,13 +455,13 @@
                                                             <rect key="frame" x="0.0" y="30" width="90" height="90"/>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e1i-mG-sTg">
-                                                            <rect key="frame" x="116" y="22" width="28" height="12"/>
+                                                            <rect key="frame" x="116" y="-2" width="28" height="12"/>
                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="10"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="He6-R2-a6W">
-                                                            <rect key="frame" x="147" y="22" width="27" height="12"/>
+                                                            <rect key="frame" x="147" y="-2" width="27" height="12"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
@@ -477,7 +478,7 @@
                                                         <constraint firstItem="KJW-Og-oUD" firstAttribute="leading" secondItem="xJ5-5p-fSE" secondAttribute="leading" constant="116" id="95h-Mm-ttd"/>
                                                         <constraint firstItem="N1B-GS-Fbw" firstAttribute="trailing" secondItem="Ias-R6-22s" secondAttribute="trailing" id="FpZ-jX-tP3"/>
                                                         <constraint firstItem="Pc1-0o-2Mg" firstAttribute="trailing" secondItem="KJW-Og-oUD" secondAttribute="trailing" constant="24" id="GH4-Jz-qKa"/>
-                                                        <constraint firstItem="QLM-xc-9eI" firstAttribute="top" secondItem="Pc1-0o-2Mg" secondAttribute="top" constant="16" id="JUY-Mf-ebb"/>
+                                                        <constraint firstItem="QLM-xc-9eI" firstAttribute="top" secondItem="Pc1-0o-2Mg" secondAttribute="top" constant="40" id="JUY-Mf-ebb"/>
                                                         <constraint firstAttribute="bottom" secondItem="KJW-Og-oUD" secondAttribute="bottom" constant="24" id="L6f-kJ-jbq"/>
                                                         <constraint firstItem="Pc1-0o-2Mg" firstAttribute="top" relation="lessThanOrEqual" secondItem="KJW-Og-oUD" secondAttribute="top" constant="-40" id="Qee-M0-Nqf"/>
                                                         <constraint firstItem="e1i-mG-sTg" firstAttribute="leading" secondItem="KJW-Og-oUD" secondAttribute="leading" id="S7d-JH-tCp"/>
@@ -503,7 +504,8 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="avatar" destination="Ias-R6-22s" id="FXg-s4-r8E"/>
-                                            <outlet property="imageUploadView" destination="QLM-xc-9eI" id="jzt-Aw-Es9"/>
+                                            <outlet property="imageHeight" destination="PxX-Rd-kwf" id="qja-D1-Ktn"/>
+                                            <outlet property="imageUploadView" destination="QLM-xc-9eI" id="iMV-ih-nVJ"/>
                                             <outlet property="message" destination="KJW-Og-oUD" id="Oq0-Jo-2ze"/>
                                             <outlet property="sentAt" destination="He6-R2-a6W" id="5yI-OY-1Ls"/>
                                             <outlet property="sentBy" destination="e1i-mG-sTg" id="qXG-bL-rYv"/>
@@ -554,6 +556,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="bottomViewOffset" destination="bLt-MX-wY3" id="tsd-iM-Pr1"/>
                         <outlet property="clientTable" destination="DHD-HU-kCB" id="VEb-Fb-vE0"/>
                         <outlet property="headerLabel" destination="CUI-XH-ETH" id="riy-ji-reJ"/>
                         <outlet property="sendButton" destination="wv1-bL-LxQ" id="NjU-mG-4FR"/>

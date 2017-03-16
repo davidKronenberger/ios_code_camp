@@ -17,5 +17,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imageUploadView;
 @property (weak, nonatomic) IBOutlet UILabel *sentBy;
 @property (weak, nonatomic) IBOutlet UILabel *sentAt;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *imageHeight;
 
 @end
