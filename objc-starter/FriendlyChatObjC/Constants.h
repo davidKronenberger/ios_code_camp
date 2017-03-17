@@ -20,8 +20,8 @@
 
 extern NSString *const NotificationKeysSignedIn;
 
-extern NSString *const SeguesSignInToContacts;
-extern NSString *const SeguesContactsToSignIn;
+extern NSString *const SeguesSignInToLoad;
+extern NSString *const SeguesLoadToContacts;
 extern NSString *const SeguesContactsToCreateNewGroup;
 extern NSString *const SeguesContactsToChat;
 

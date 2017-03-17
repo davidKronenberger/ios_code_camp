@@ -37,6 +37,7 @@
 		96FE99EE1E7BD6F7008F9C80 /* ContactTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FE99ED1E7BD6F7008F9C80 /* ContactTableView.m */; };
 		96FE99F91E7BF4CD008F9C80 /* group-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 96FE99F71E7BF4CD008F9C80 /* group-button.png */; };
 		96FE99FA1E7BF4CD008F9C80 /* member-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 96FE99F81E7BF4CD008F9C80 /* member-button.png */; };
+		96FE99FD1E7C12D0008F9C80 /* LoadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FE99FC1E7C12D0008F9C80 /* LoadViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +85,8 @@
 		96FE99ED1E7BD6F7008F9C80 /* ContactTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactTableView.m; sourceTree = "<group>"; };
 		96FE99F71E7BF4CD008F9C80 /* group-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "group-button.png"; sourceTree = "<group>"; };
 		96FE99F81E7BF4CD008F9C80 /* member-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "member-button.png"; sourceTree = "<group>"; };
+		96FE99FB1E7C12D0008F9C80 /* LoadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadViewController.h; sourceTree = "<group>"; };
+		96FE99FC1E7C12D0008F9C80 /* LoadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadViewController.m; sourceTree = "<group>"; };
 		9ED8D1017B9927C5A7CCA356 /* Pods-FriendlyChatObjC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FriendlyChatObjC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FriendlyChatObjC/Pods-FriendlyChatObjC.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -130,6 +133,8 @@
 				96E2AAB31E5C3DDD0079E975 /* Contact.m */,
 				107960B41C613263003DB6CC /* SignInViewController.h */,
 				107960B51C613263003DB6CC /* SignInViewController.m */,
+				96FE99FB1E7C12D0008F9C80 /* LoadViewController.h */,
+				96FE99FC1E7C12D0008F9C80 /* LoadViewController.m */,
 				107960AF1C61321D003DB6CC /* Constants.h */,
 				107960B01C61321D003DB6CC /* Constants.m */,
 				107960831C6130EF003DB6CC /* Supporting Files */,
@@ -343,6 +348,7 @@
 			files = (
 				96E2AAB41E5C3DDD0079E975 /* Contact.m in Sources */,
 				9675F6841E5C9107006AF776 /* MessageCellTableViewCell.m in Sources */,
+				96FE99FD1E7C12D0008F9C80 /* LoadViewController.m in Sources */,
 				962075851E7B20BE007080F8 /* ContactTableViewCell.m in Sources */,
 				107960B11C61321D003DB6CC /* Constants.m in Sources */,
 				96E2AAB11E5C3C210079E975 /* ContactsTableViewController.m in Sources */,

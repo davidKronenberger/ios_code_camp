@@ -11,6 +11,12 @@
 
 @import Firebase;
 
+@protocol DatabaseDelegate <NSObject>
+@optional
+- (void)getNewGroup;
+- (void)getNewMessageForGroupId: (NSString *) groupId;
+@end
+
 @interface DatabaseSingelton : NSObject {
     NSMutableArray *_contacts;
 }
@@ -25,6 +31,8 @@
 @property (strong, nonatomic) NSMutableArray *_contactsForTableView;
 // A list of ref handlers
 @property (strong, nonatomic) NSMutableArray *_refHandlers;
+// Define DatabaseDelegate as delegate
+@property (nonatomic, weak) id <DatabaseDelegate> delegate;
 
 @property (strong, nonatomic) Contact *_selectedContact;
 @property (strong, nonatomic) FIRDatabaseReference *_ref;
@@ -38,6 +46,7 @@
 + (BOOL) refHandlerAllreadyExists:(NSString *) refHandle;
 + (void) addRefHandler: (NSString *) refHandle;
 + (void) updateContact: (Contact *) contact withMessage:(FIRDataSnapshot*) message;
++ (void) startLoading;
 
 
 + (void) clearCache;

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="zxq-GO-nHP">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="zxq-GO-nHP">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -52,12 +52,63 @@
                     </view>
                     <connections>
                         <outlet property="signInButton" destination="zOL-0c-Cx3" id="pba-KS-Z7N"/>
-                        <segue destination="i4w-pc-dZM" kind="show" identifier="SignInToContacts" id="Z8B-7I-txj"/>
+                        <segue destination="PM6-cl-RYp" kind="show" identifier="SignInToLoad" id="74I-Pw-nxW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="txP-jG-AoV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-398" y="55"/>
+            <point key="canvasLocation" x="-1248" y="54"/>
+        </scene>
+        <!--Load View Controller-->
+        <scene sceneID="xMj-s1-Uuv">
+            <objects>
+                <viewController id="PM6-cl-RYp" customClass="LoadViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="G8y-XZ-29h"/>
+                        <viewControllerLayoutGuide type="bottom" id="opY-WK-jL4"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="3qo-Lg-vOz">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="wallpaper6.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="YLl-bL-1HD">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                            </imageView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="va0-km-eRB">
+                                <rect key="frame" x="157" y="318" width="100" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="NMA-Ir-dID"/>
+                                    <constraint firstAttribute="width" constant="100" id="RfO-5d-xfw"/>
+                                </constraints>
+                                <color key="color" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </activityIndicatorView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please wait ..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3MA-sd-Zg5">
+                                <rect key="frame" x="28" y="236" width="358" height="36"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="30"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="va0-km-eRB" firstAttribute="centerY" secondItem="3qo-Lg-vOz" secondAttribute="centerY" id="4qk-j4-uhX"/>
+                            <constraint firstItem="YLl-bL-1HD" firstAttribute="leading" secondItem="3qo-Lg-vOz" secondAttribute="leadingMargin" constant="-20" id="6M9-r1-FXJ"/>
+                            <constraint firstItem="YLl-bL-1HD" firstAttribute="top" secondItem="G8y-XZ-29h" secondAttribute="bottom" constant="-20" id="943-5L-Fvi"/>
+                            <constraint firstItem="opY-WK-jL4" firstAttribute="top" secondItem="YLl-bL-1HD" secondAttribute="bottom" id="9hl-VT-FY3"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="3MA-sd-Zg5" secondAttribute="trailing" constant="8" id="Dvl-M8-J0a"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="YLl-bL-1HD" secondAttribute="trailing" constant="-20" id="WyN-ds-q8q"/>
+                            <constraint firstItem="va0-km-eRB" firstAttribute="centerX" secondItem="3qo-Lg-vOz" secondAttribute="centerX" id="ZXN-Yj-FJT"/>
+                            <constraint firstItem="3MA-sd-Zg5" firstAttribute="leading" secondItem="3qo-Lg-vOz" secondAttribute="leadingMargin" constant="8" id="s23-w0-5gI"/>
+                            <constraint firstItem="3MA-sd-Zg5" firstAttribute="top" secondItem="G8y-XZ-29h" secondAttribute="bottom" constant="216" id="sqE-Ve-TrM"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <segue destination="i4w-pc-dZM" kind="show" identifier="LoadToContacts" id="Jsv-br-jMa"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QOQ-J1-2ue" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-375" y="54"/>
         </scene>
         <!--Contacts Table View Controller-->
         <scene sceneID="ctK-bN-MpB">
@@ -186,7 +237,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="_contactsTableView" destination="zoe-ZY-Pox" id="XtN-wn-xOW"/>
+                        <outlet property="_contactsTableView" destination="zoe-ZY-Pox" id="pZg-Ig-w9M"/>
                         <segue destination="uMT-A3-F60" kind="show" identifier="ContactsToChat" action="showDetailViewController:sender:" id="XfF-Su-6Lr"/>
                         <segue destination="42z-Ou-onT" kind="show" identifier="ContactsToCreateNewGroup" id="P7G-TJ-UYh"/>
                     </connections>
