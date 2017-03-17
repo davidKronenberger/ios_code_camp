@@ -53,7 +53,7 @@ __weak DatabaseSingelton *weakSingleton;
         if ([contact.email isEqualToString:email]) {
             contact.userId = uid;
             
-            contact.image = [UIImage imageNamed: @"nouser.jpg"];
+            contact.image = [UIImage imageNamed: @"member-button.png"];
             
             if (![photoURL isEqualToString:@""]) {
                 NSURL *URL = [NSURL URLWithString:photoURL];

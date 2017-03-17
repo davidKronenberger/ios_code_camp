@@ -143,11 +143,11 @@ void(^didDeselectRowAtIndexpathCotacts)(NSIndexPath *) = ^(NSIndexPath * indexPa
                     //1. create an local contact for every group found
                     Contact *contact = [[Contact alloc] init];
                     
-                    UIImage * image = [UIImage imageNamed:@"nouser.jpg"];
+                    UIImage * image = [UIImage imageNamed:@"group-button.png"];
                     contact.image = image;
                     contact.name = groupName;
-                    contact.number = @"Keine Nummer gefunden.";
-                    contact.email = @"keinemail@gmail.com";
+                    contact.number = @"";
+                    contact.email = @"";
                     contact.groupId = groupId;
                     contact.isPrivate = false;
                     
