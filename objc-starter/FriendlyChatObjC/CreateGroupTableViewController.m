@@ -50,7 +50,6 @@ __weak CreateGroupTableViewController *weakSelfCreateGroup;
 #pragma mark - textfield should return
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    //[self checkCreateGroupPossible];
     [textField resignFirstResponder];
     return YES;
 }
