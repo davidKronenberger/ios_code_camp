@@ -95,6 +95,15 @@ __weak DatabaseSingelton *weakSingleton;
     }
 }
 
+
++ (void) updateContact: (Contact *) contact withMessage:(FIRDataSnapshot*) message{
+    for (Contact *tmpContact in weakSingleton._contactsForTableView) {
+        if ([tmpContact.userId isEqualToString:contact.userId]){
+            [tmpContact.messages addObject:(NSString *)message.value[@"text"]];
+        }
+    }
+}
+
 - (id)init {
     if (self = [super init]) {
         weakSingleton = self;

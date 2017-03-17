@@ -81,9 +81,11 @@ FIRInviteDelegate> {
     _ref = [[FIRDatabase database] reference];
     
     // -------------Listener for messages in current group-------------
-    _refHandle = [[[[_ref child:@"groups"] child:self.database._selectedContact.groupId] child:@"messages"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
-        [_messages addObject:snapshot];
-    
+    _refHandle = [[[[_ref child:@"groups"] child:self.database._selectedContact.groupId] child:@"messages"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *message) {
+        [_messages addObject:message];
+        
+        [DatabaseSingelton updateContact:self.database._selectedContact withMessage:message];
+        
         [_clientTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_messages.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
 
         // Delay execution of scroll to bottom , because the insertion of a new message in the tableview needs a bit of time...

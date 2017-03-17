@@ -42,7 +42,7 @@
     //load all needed data into the tableView cell
     Contact *contact = (self._contactsForTableView)[indexPath.row];
     cell.name.text = contact.name;
-    cell.lastMessage.text = contact.email;
+    cell.lastMessage.text = [contact.messages lastObject];
     cell.avatar.image = (UIImage *)contact.image;
     
     //Turn the Imageview into a circle with the help of invisible borders.
