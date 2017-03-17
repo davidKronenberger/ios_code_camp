@@ -10,7 +10,7 @@
 #import <Contacts/Contacts.h>
 #import "ChatViewController.h"
 #import "DatabaseSingelton.h"
-#import "ContactTableViewCell.h"
+#import "ContactTableView.h"
 
 #import "Constants.h"
 
@@ -20,7 +20,7 @@
 @interface ContactsTableViewController ()
 
 // The table view with all contacts and groups.
-@property (weak, nonatomic) IBOutlet UITableView *_contactsTableView;
+@property (weak, nonatomic) IBOutlet ContactTableView *_contactsTableView;
 // Singleton instance of database.
 @property (strong, nonatomic) DatabaseSingelton *database;
 
@@ -28,8 +28,6 @@
 
 // Create weak self instance. Its for accessing in whole view controller;
 __weak ContactsTableViewController *weakSelf;
-
-
 
 @implementation ContactsTableViewController {
     // !!!!!!!!!!PLEASE COMMENT OR RENAME!!!!!!!!!
@@ -47,14 +45,10 @@ __weak ContactsTableViewController *weakSelf;
     //
     [weakSelf contactScan];
     
+    weakSelf._contactsTableView._contactsForTableView = weakSelf.database._contactsForTableView;
     
-    weakSelf._contactsTableView.rowHeight = UITableViewAutomaticDimension;
-    weakSelf._contactsTableView.estimatedRowHeight = 140;
-    weakSelf._contactsTableView.delegate = weakSelf;
-    weakSelf._contactsTableView.dataSource = weakSelf;
-    
-    [weakSelf._contactsTableView setNeedsDisplay];
-    
+    weakSelf._contactsTableView.didSelectRowAtIndexPath = didSelectRowAtIndexpathContacts;
+    weakSelf._contactsTableView.didDeselectRowAtIndexPath = didDeselectRowAtIndexpathCotacts;
 }
 
 - (void) dealloc {
@@ -66,52 +60,18 @@ __weak ContactsTableViewController *weakSelf;
     weakSelf.database = [DatabaseSingelton sharedDatabase];
 }
 
-#pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    // Currently we have just one section.
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [weakSelf.database._contactsForTableView count];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    ContactTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ContactCell"];
+void(^didSelectRowAtIndexpathContacts)(NSIndexPath *) = ^(NSIndexPath * indexPath) {
+    weakSelf.database._selectedContact = [weakSelf._contactsTableView._contactsForTableView objectAtIndex:indexPath.row];
     
-    //load all needed data into the tableView cell
-    Contact *contact = (weakSelf.database._contactsForTableView)[indexPath.row];
-    cell.name.text = contact.name;
-    cell.lastMessage.text = contact.email;
-    cell.avatar.image = (UIImage *)contact.image;
-    
-    //Turn the Imageview into a circle with the help of invisible borders.
-    cell.avatar.layer.cornerRadius = cell.avatar.frame.size.height /2;
-    cell.avatar.layer.masksToBounds = YES;
-    cell.avatar.layer.borderWidth = 0;
-    cell.avatar.layer.borderColor = [[UIColor blackColor] CGColor];
-    
-    
-    //modify the colors of each cell for better visibility
-    const CGFloat *colors = CGColorGetComponents([tableView.backgroundColor CGColor]);
-    
-    if (indexPath.row % 2 == 1) {
-        cell.backgroundColor = [UIColor colorWithRed:colors[0] - 0.05 green:colors[1] - 0.05 blue:colors[2] - 0.05 alpha:colors[3]];
-    } else {
-        cell.backgroundColor = [UIColor colorWithRed:colors[0] - 0.025 green:colors[1] - 0.025 blue:colors[2] - 0.025 alpha:colors[3]];
-    }
-    
-    return cell;
-}
-
-//this is called when a user touches a cell from the tableview
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    weakSelf.database._selectedContact = [weakSelf.database._contactsForTableView objectAtIndex:indexPath.row];
+    [weakSelf._contactsTableView deselectRowAtIndexPath:indexPath animated:YES];
     
     //perform the segue
-    [self performSegueWithIdentifier:SeguesContactsToChat sender:self];
-}
+    [weakSelf performSegueWithIdentifier:SeguesContactsToChat sender:weakSelf];
+};
+
+void(^didDeselectRowAtIndexpathCotacts)(NSIndexPath *) = ^(NSIndexPath * indexPath) {
+    // Nothing to do here.
+};
 
 #pragma mark - Group Handling
 
@@ -195,6 +155,7 @@ __weak ContactsTableViewController *weakSelf;
                     [weakSelf.database._contactsForTableView addObject:contact];
                 }
                 
+                weakSelf._contactsTableView._contactsForTableView = weakSelf.database._contactsForTableView;
                 [weakSelf._contactsTableView reloadData];
             }
         }];

@@ -34,6 +34,7 @@
 		96F610791E604265007ED0E1 /* DatabaseSingelton.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F610781E604265007ED0E1 /* DatabaseSingelton.m */; };
 		96F6107E1E605849007ED0E1 /* add_picture.png in Resources */ = {isa = PBXBuildFile; fileRef = 96F6107D1E605849007ED0E1 /* add_picture.png */; };
 		96FB59AB1E5ED82100489AD0 /* white_final.png in Resources */ = {isa = PBXBuildFile; fileRef = 96FB59AA1E5ED82100489AD0 /* white_final.png */; };
+		96FE99EE1E7BD6F7008F9C80 /* ContactTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FE99ED1E7BD6F7008F9C80 /* ContactTableView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -77,6 +78,8 @@
 		96F6107A1E60427B007ED0E1 /* DatabaseSingelton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DatabaseSingelton.h; sourceTree = "<group>"; };
 		96F6107D1E605849007ED0E1 /* add_picture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add_picture.png; sourceTree = "<group>"; };
 		96FB59AA1E5ED82100489AD0 /* white_final.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = white_final.png; sourceTree = "<group>"; };
+		96FE99EC1E7BD6F7008F9C80 /* ContactTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactTableView.h; sourceTree = "<group>"; };
+		96FE99ED1E7BD6F7008F9C80 /* ContactTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactTableView.m; sourceTree = "<group>"; };
 		9ED8D1017B9927C5A7CCA356 /* Pods-FriendlyChatObjC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FriendlyChatObjC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FriendlyChatObjC/Pods-FriendlyChatObjC.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -132,6 +135,8 @@
 				9675F6821E5C9107006AF776 /* MessageCellTableViewCell.m */,
 				962075831E7B20BE007080F8 /* ContactTableViewCell.h */,
 				962075841E7B20BE007080F8 /* ContactTableViewCell.m */,
+				96FE99EC1E7BD6F7008F9C80 /* ContactTableView.h */,
+				96FE99ED1E7BD6F7008F9C80 /* ContactTableView.m */,
 				96F610751E6036C9007ED0E1 /* CreateGroupTableViewController.h */,
 				96F610761E6036EB007ED0E1 /* CreateGroupTableViewController.m */,
 				96F610781E604265007ED0E1 /* DatabaseSingelton.m */,
@@ -336,6 +341,7 @@
 				1079608B1C6130EF003DB6CC /* ChatViewController.m in Sources */,
 				96F610791E604265007ED0E1 /* DatabaseSingelton.m in Sources */,
 				107960881C6130EF003DB6CC /* AppDelegate.m in Sources */,
+				96FE99EE1E7BD6F7008F9C80 /* ContactTableView.m in Sources */,
 				107960B61C613263003DB6CC /* SignInViewController.m in Sources */,
 				96F610771E6036EB007ED0E1 /* CreateGroupTableViewController.m in Sources */,
 				107960851C6130EF003DB6CC /* main.m in Sources */,
