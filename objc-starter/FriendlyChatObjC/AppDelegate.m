@@ -18,44 +18,50 @@
 #import "ContactsTableViewController.h"
 #import "DatabaseSingelton.h"
 
-
 @import Firebase;
 @import GoogleSignIn;
 
-
-@implementation AppDelegate
-{
+@implementation AppDelegate {
     // Singleton instance of database.
     DatabaseSingelton *database;
 }
 
-- (BOOL)application:(nonnull UIApplication *)application
-            openURL:(nonnull NSURL *)url
-            options:(nonnull NSDictionary<NSString *, id> *)options {
-    return [self application:application
-                     openURL:url
-                     options:options];
-}
-
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation {
+// This will be called from firebase for logging in with google in browser.
+- (BOOL) application: (nonnull UIApplication *)                application
+             openURL: (nonnull NSURL *)                        url
+             options: (nonnull NSDictionary<NSString *, id> *) options {
+    
     return [[GIDSignIn sharedInstance] handleURL:url
-                               sourceApplication:sourceApplication
-                                      annotation:annotation];
+                               sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+                                      annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
 }
 
-- (void)signIn:(GIDSignIn *)signIn
-//SignIn with the Googleaccount
-didSignInForUser:(GIDGoogleUser *)user
-     withError:(NSError *)error {
+// (This is only for running this app on iOS 8 and older) This will be called from firebase for logging in with google in browser.
+- (BOOL) application: (UIApplication *) application
+             openURL: (NSURL *)         url
+   sourceApplication: (NSString *)      sourceApplication
+          annotation: (id)              annotation {
+    
+    return [[GIDSignIn sharedInstance] handleURL: url
+                               sourceApplication: sourceApplication
+                                      annotation: annotation];
+}
+
+// Handles the google sign in.
+- (void)   signIn: (GIDSignIn *)     signIn
+ didSignInForUser: (GIDGoogleUser *) user
+        withError: (NSError *)       error {
+    
+    //SignIn with the Googleaccount
     if (error == nil) {
+        // Get the google authentification.
         GIDAuthentication *authentication = user.authentication;
-        FIRAuthCredential *credential =
-        [FIRGoogleAuthProvider credentialWithIDToken:authentication.idToken
-                                         accessToken:authentication.accessToken];
-        [[FIRAuth auth] signInWithCredential:credential completion:^(FIRUser * _Nullable user, NSError * _Nullable error) {
+        // And on dependent on them the credentials for firebase.
+        FIRAuthCredential *credential = [FIRGoogleAuthProvider credentialWithIDToken: authentication.idToken
+                                                                         accessToken: authentication.accessToken];
+        // And now sign in to our app.
+        [[FIRAuth auth] signInWithCredential: credential
+                                  completion: ^(FIRUser * _Nullable user, NSError * _Nullable error) {
             if (error) {
                 NSLog(@"Error %@", error.localizedDescription);
             }
@@ -65,15 +71,16 @@ didSignInForUser:(GIDGoogleUser *)user
     }
 }
 
-- (BOOL)application:(UIApplication *)application
-didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
+// Configure firebase and set sign in delegates.
+- (BOOL)           application: (UIApplication *) application
+ didFinishLaunchingWithOptions: (NSDictionary *)  launchOptions {
     [FIRApp configure];
     [GIDSignIn sharedInstance].clientID = [FIRApp defaultApp].options.clientID;
     [GIDSignIn sharedInstance].delegate = self;
     
-    // init DatabaseSingelton 
+    // Init DatabaseSingelton that it can be used in whole app.
     database = [DatabaseSingelton sharedDatabase];
+    
     return YES;
 }
 

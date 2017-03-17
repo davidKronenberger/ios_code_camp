@@ -21,26 +21,28 @@
 @import Firebase;
 
 @interface SignInViewController ()
-@property(weak, nonatomic) IBOutlet GIDSignInButton *signInButton;
-@property(strong, nonatomic) FIRAuthStateDidChangeListenerHandle handle;
+
+@property (weak, nonatomic) IBOutlet GIDSignInButton *signInButton;
+@property (strong, nonatomic) FIRAuthStateDidChangeListenerHandle handle;
+
 @end
 
-@implementation SignInViewController
-{
+@implementation SignInViewController {
     BOOL loggedIn;
 }
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // set up flag -> user is not logged in yet
+    // Set up flag -> user is not logged in yet.
     loggedIn = false;
     
-    // connection the controller with the GIDSignIn object, listening on UI events.
+    // Connect the controller with the GIDSignIn object, listening on UI events.
     [GIDSignIn sharedInstance].uiDelegate = self;
-    self.handle = [[FIRAuth auth]
-                   addAuthStateDidChangeListener:^(FIRAuth *_Nonnull auth, FIRUser *_Nullable user) {
+    
+    self.handle = [[FIRAuth auth] addAuthStateDidChangeListener: ^(FIRAuth *_Nonnull auth, FIRUser *_Nullable user) {
                        if (user) {
-                           if(!loggedIn){
+                           if (!loggedIn) {
                                // set up flag, user is succesfully logged in
                                loggedIn = true;
                                
@@ -48,9 +50,14 @@
                                FIRUser *user = [FIRAuth auth].currentUser;
                                
                                // set/update user to database
-                               [DatabaseSingelton updateUser:user.uid withUsername: user.displayName withEmail: user.email withPhotoURL: user.photoURL];
+                               [DatabaseSingelton updateUser: user.uid
+                                                withUsername: user.displayName
+                                                   withEmail: user.email
+                                                withPhotoURL: user.photoURL];
                                
-                               [self performSegueWithIdentifier:SeguesSignInToContacts sender:nil];
+                               // Change view controller.
+                               [self performSegueWithIdentifier: SeguesSignInToContacts
+                                                         sender: nil];
                            }
                        } else {
                            loggedIn = false;
@@ -59,7 +66,7 @@
 }
 
 - (void)dealloc {
-    [[FIRAuth auth] removeAuthStateDidChangeListener:_handle];
+    [[FIRAuth auth] removeAuthStateDidChangeListener: self.handle];
 }
 
 @end
