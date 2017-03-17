@@ -56,7 +56,7 @@
                                                 withPhotoURL: user.photoURL];
                                
                                // Change view controller.
-                               [self performSegueWithIdentifier: SeguesSignInToContacts
+                               [self performSegueWithIdentifier: SeguesSignInToLoad
                                                          sender: nil];
                            }
                        } else {
