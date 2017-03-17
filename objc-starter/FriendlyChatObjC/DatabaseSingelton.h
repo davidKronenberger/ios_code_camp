@@ -37,6 +37,7 @@
 + (NSString *) getCurrentTime;
 + (BOOL) refHandlerAllreadyExists:(NSString *) refHandle;
 + (void) addRefHandler: (NSString *) refHandle;
++ (void) updateContact: (Contact *) contact withMessage:(FIRDataSnapshot*) message;
 
 
 + (void) clearCache;

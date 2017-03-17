@@ -51,6 +51,11 @@ __weak ContactsTableViewController *weakSelf;
     weakSelf._contactsTableView.didDeselectRowAtIndexPath = didDeselectRowAtIndexpathCotacts;
 }
 
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [weakSelf._contactsTableView reloadData];
+}
+
 - (void) dealloc {
     [[weakSelf.database._ref child:@"groups"] removeAllObservers];
     [DatabaseSingelton clearCache];
@@ -142,7 +147,6 @@ void(^didDeselectRowAtIndexpathCotacts)(NSIndexPath *) = ^(NSIndexPath * indexPa
                     //if chat is not private it must be a groupchat (more than 2 people)
                     //1. create an local contact for every group found
                     Contact *contact = [[Contact alloc] init];
-                    
                     UIImage * image = [UIImage imageNamed:@"group-button.png"];
                     contact.image = image;
                     contact.name = groupName;
