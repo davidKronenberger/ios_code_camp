@@ -34,8 +34,7 @@
             options:(nonnull NSDictionary<NSString *, id> *)options {
     return [self application:application
                      openURL:url
-           sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
-                  annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
+                     options:options];
 }
 
 - (BOOL)application:(UIApplication *)application
