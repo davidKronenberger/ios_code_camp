@@ -17,7 +17,7 @@
 @import GoogleMobileAds;
 
 
-@interface CreateGroupTableViewController ()
+@interface CreateGroupTableViewController () <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet ContactTableView *_contactsTableView;
 @property (weak, nonatomic) IBOutlet UITextField *groupNameTextField;
 
@@ -39,10 +39,20 @@ __weak CreateGroupTableViewController *weakSelfCreateGroup;
     
     [weakSelfCreateGroup addBorderToTextView];
     
+    weakSelfCreateGroup.groupNameTextField.delegate = weakSelfCreateGroup;
+    
     weakSelfCreateGroup._contactsTableView._contactsForTableView = weakSelfCreateGroup.database._contactsAddressBookUsingApp;
     
     weakSelfCreateGroup._contactsTableView.didSelectRowAtIndexPath = didSelectRowAtIndexpathCreateGroup;
     weakSelfCreateGroup._contactsTableView.didDeselectRowAtIndexPath = didDeselectRowAtIndexpathCreateGroup;
+}
+
+#pragma mark - textfield should return
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    //[self checkCreateGroupPossible];
+    [textField resignFirstResponder];
+    return YES;
 }
 
 #pragma mark - Table view data source
@@ -96,14 +106,20 @@ void(^didDeselectRowAtIndexpathCreateGroup)(NSIndexPath *) = ^(NSIndexPath * ind
     [[[weakSelfCreateGroup.database._ref child:@"groups"] child:newGroupID] setValue:@{@"created": [DatabaseSingelton getCurrentTime], @"name":name, @"isPrivate": [NSNumber numberWithBool:false], @"users":users}];
 }
 
+
+-(void) checkCreateGroupPossible {
+    //check if there are selected users for creating a new group.
+    if (weakSelfCreateGroup.database._contactsForNewGroup.count > 0 && [self.groupNameTextField.text length] > 0) {
+        [self createGroup:self.groupNameTextField.text];
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
 #pragma mark - Button Handling
 
 - (IBAction)CreateGroupButtonPressed:(id)sender {
     //check if there are selected users for creating a new group.
-    if (sizeof(weakSelfCreateGroup.database._contactsForNewGroup) > 0 && [self.groupNameTextField.text length] > 0) {
-        [self createGroup:self.groupNameTextField.text];
-        [self dismissViewControllerAnimated:YES completion:nil];
-    }
+    [self checkCreateGroupPossible];
 }
 
 - (IBAction)AbortButtonPressed:(id)sender {
