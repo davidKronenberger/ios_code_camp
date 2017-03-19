@@ -11,44 +11,49 @@
 
 @import Firebase;
 
+// This delegate will be used to tell the listeners when a new message comes in or a new group was created.
 @protocol DatabaseDelegate <NSObject>
 @optional
-- (void)getNewGroup;
-- (void)getNewMessageForGroupId: (NSString *) groupId;
+- (void) getNewGroup;
+- (void) getNewMessage: (FIRDataSnapshot *) message forGroupId: (NSString *) groupId;
 @end
 
-@interface DatabaseSingelton : NSObject {
-    NSMutableArray *_contacts;
-}
+@interface DatabaseSingelton : NSObject
 
 // This object saves all valid contacts of the addressbook on the device, which are also using this app.
-@property (strong, nonatomic) NSMutableArray *_contactsAddressBookUsingApp;
+@property (strong, nonatomic) NSMutableArray * contactsAddressBookUsingApp;
 // This array is used to get all contacts of the addressbook on the device, which have a valid email address. (Currently only gmail addresses are valid.)
-@property (strong, nonatomic) NSMutableArray *_contactsAddressBook;
-// A list of contacts that build a new group.
-@property (strong, nonatomic) NSMutableArray *_contactsForNewGroup;
+@property (strong, nonatomic) NSMutableArray * contactsAddressBook;
 // This array includes all groups where the user is participating.
-@property (strong, nonatomic) NSMutableArray *_contactsForTableView;
+@property (strong, nonatomic) NSMutableArray * groups;
+
 // A list of ref handlers
-@property (strong, nonatomic) NSMutableArray *_refHandlers;
+@property (strong, nonatomic) NSMutableArray * refHandlers;
 // Define DatabaseDelegate as delegate
 @property (nonatomic, weak) id <DatabaseDelegate> delegate;
+// If we select a contact in the groups overview we save it here. It will be used for the chat.
+@property (strong, nonatomic) Contact * selectedContact;
 
-@property (strong, nonatomic) Contact *_selectedContact;
-@property (strong, nonatomic) FIRDatabaseReference *_ref;
+// The firebase reference to get data.
+@property (strong, nonatomic) FIRDatabaseReference * ref;
+// The firebase storage reference for get images.
+@property (nonatomic, strong) FIRStorageReference * storageRef;
 
-+ (id)sharedDatabase;
-+ (void) addUserToGroup: (NSString *) groupId withUserId: (NSString *) userId;
-+ (void) addUsersToGroup: (NSString *) groupId withUsers: (NSMutableDictionary *) userIds;
+// The database singleton getter.
++ (id) sharedDatabase;
+
+// Updates the user in firebase with the given properties.
 + (void) updateUser:(NSString *) userID withUsername: (NSString *) username withEmail: (NSString *) email withPhotoURL: (NSURL *) photourl;
-+ (void) addContactToContactsAddressBookUsingApp:(NSString *) uid withMail:(NSString *)email withPhotoURL: (NSString *)photoURL;
-+ (NSString *) getCurrentTime;
-+ (BOOL) refHandlerAllreadyExists:(NSString *) refHandle;
-+ (void) addRefHandler: (NSString *) refHandle;
-+ (void) updateContact: (Contact *) contact withMessage:(FIRDataSnapshot*) message;
+
+// Creates a group with the specified name and as participants the included contacts.
++ (void) createGroup : (NSString *) name withContacts: (NSMutableArray<Contact *> *) contacts;
+
+// Starts the loading procedure.
 + (void) startLoading;
 
+// Resets the singleton and removes all observers.
++ (void) resetDatabase;
 
-+ (void) clearCache;
+
 
 @end

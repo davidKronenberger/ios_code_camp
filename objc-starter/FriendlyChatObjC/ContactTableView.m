@@ -9,16 +9,17 @@
 #import "ContactTableView.h"
 #import "ContactTableViewCell.h"
 #import "Contact.h"
-#import "DatabaseSingelton.h"
 
 @implementation ContactTableView
 
 - (void) layoutSubviews {
     [super layoutSubviews];
     
+    // Tell the table view the estimated height of a cell.
     self.rowHeight = UITableViewAutomaticDimension;
     self.estimatedRowHeight = 140;
     
+    // The delegate and datasource of the table view is the table view.
     self.delegate = self;
     self.dataSource = self;
     
@@ -27,45 +28,59 @@
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger) numberOfSectionsInTableView: (UITableView *) tableView {
     // Currently we have just one section.
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self._contactsForTableView count];
+- (NSInteger) tableView: (UITableView *) tableView
+  numberOfRowsInSection: (NSInteger) section {
+    return [self.contactsForTableView count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    ContactTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ContactCell"];
+- (UITableViewCell *) tableView: (UITableView *) tableView
+          cellForRowAtIndexPath: (NSIndexPath *) indexPath {
+    // Dequeue cell.
+    ContactTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier: @"ContactCell"];
     
-    //load all needed data into the tableView cell
-    Contact *contact = (self._contactsForTableView)[indexPath.row];
+    // Load all needed data into the table view cell.
+    Contact * contact = (self.contactsForTableView)[indexPath.row];
     cell.name.text = contact.name;
-    cell.lastMessage.text = [contact.messages lastObject];
+    
+    cell.lastMessage.text = [contact getLastMessageText];
     cell.avatar.image = (UIImage *)contact.image;
     
-    //Turn the Imageview into a circle with the help of invisible borders.
-    cell.avatar.layer.cornerRadius = cell.avatar.frame.size.height /2;
+    // Turn the image view into a circle with the help of invisible corners.
+    cell.avatar.layer.cornerRadius = cell.avatar.frame.size.height / 2;
     cell.avatar.layer.masksToBounds = YES;
     cell.avatar.layer.borderWidth = 0;
     cell.avatar.layer.borderColor = [[UIColor blackColor] CGColor];
     
+    // Toggle background color dependent on row index.
     if (indexPath.row % 2 == 1) {
-        cell.backgroundColor = [UIColor colorWithRed:0.85 green:0.95 blue:0.85 alpha:0.5];
+        cell.backgroundColor = [UIColor colorWithRed: 0.85
+                                               green: 0.95
+                                                blue: 0.85
+                                               alpha: 0.5];
     } else {
-        cell.backgroundColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:0.25];
+        cell.backgroundColor = [UIColor colorWithRed: 0.85
+                                               green: 0.95
+                                                blue: 0.85
+                                               alpha: 0.25];
     }
     
     return cell;
 }
 
-//this is called when a user touches a cell from the tableview
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)       tableView: (UITableView *) tableView
+ didSelectRowAtIndexPath: (NSIndexPath *) indexPath {
+    // Tell the controller that implements this tableview that a row is selected.
     self.didSelectRowAtIndexPath(indexPath);
 }
 
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+- (void)         tableView: (UITableView *) tableView
+ didDeselectRowAtIndexPath: (nonnull NSIndexPath *) indexPath {
+    // Tell the controller that implements this tableview that a row is deselected.
     self.didDeselectRowAtIndexPath(indexPath);
 }
 

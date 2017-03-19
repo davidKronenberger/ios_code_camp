@@ -18,18 +18,17 @@
 
 @interface Constants : NSObject
 
-extern NSString *const NotificationKeysSignedIn;
+extern NSString * const SeguesSignInToLoad;
+extern NSString * const SeguesLoadToContacts;
+extern NSString * const SeguesContactsToCreateNewGroup;
+extern NSString * const SeguesContactsToChat;
+extern NSString * const SeguesContactsToSignIn;
 
-extern NSString *const SeguesSignInToLoad;
-extern NSString *const SeguesLoadToContacts;
-extern NSString *const SeguesContactsToCreateNewGroup;
-extern NSString *const SeguesContactsToChat;
+extern NSString * const MessageFieldsname;
+extern NSString * const MessageFieldstext;
+extern NSString * const MessageFieldsphotoURL;
+extern NSString * const MessageFieldsimageURL;
 
-extern NSString *const MessageFieldsname;
-extern NSString *const MessageFieldstext;
-extern NSString *const MessageFieldsphotoURL;
-extern NSString *const MessageFieldsimageURL;
-
-extern NSString *const RefHandlerGroupAdded;
+extern NSString * const RefHandlerGroupAdded;
 
 @end

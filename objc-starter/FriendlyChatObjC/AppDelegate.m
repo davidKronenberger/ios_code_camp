@@ -78,9 +78,6 @@
     [GIDSignIn sharedInstance].clientID = [FIRApp defaultApp].options.clientID;
     [GIDSignIn sharedInstance].delegate = self;
     
-    // Init DatabaseSingelton that it can be used in whole app.
-    database = [DatabaseSingelton sharedDatabase];
-    
     return YES;
 }
 

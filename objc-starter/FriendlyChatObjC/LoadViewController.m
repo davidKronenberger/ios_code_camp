@@ -15,14 +15,14 @@
 @interface LoadViewController () <DatabaseDelegate>
 
 // Singleton instance of database.
-@property (strong, nonatomic) DatabaseSingelton *database;
+@property (strong, nonatomic) DatabaseSingelton * database;
 
 @end
 
 @implementation LoadViewController
 
-// Create weak self instance. Its for accessing in whole view controller;
-__weak LoadViewController *weakSelfLoad;
+// Create weak self instance. It is for accessing in whole view controller;
+__weak LoadViewController * weakSelfLoad;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -31,16 +31,40 @@ __weak LoadViewController *weakSelfLoad;
     weakSelfLoad.database = [DatabaseSingelton sharedDatabase];
     
     weakSelfLoad.database.delegate = self;
+    
+    // After this view is visible we start loading the data.
     [DatabaseSingelton startLoading];
+    
+    [weakSelfLoad addNotificationObserver];
 }
 
+- (void) addNotificationObserver {
+    // Set self to listen for the message "ContactsTableViewControllerDismissed"
+    // and run a method when this message is detected.
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(didDismissContactsTableViewController)
+     name:@"ContactsTableViewControllerDismissed"
+     object:nil];
+}
+
+- (void) dealloc {
+    // Simply unsubscribe from *all* notifications upon being deallocated.
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+#pragma mark - Delegates
+
 - (void) getNewGroup {
-    // Change view controller.
+    // Change to view controller contacts.
     [self performSegueWithIdentifier: SeguesLoadToContacts
                               sender: nil];
 }
 
-
+- (void) didDismissContactsTableViewController {
+    // Dismiss this view controller.
+    [self dismissViewControllerAnimated:NO completion:nil];
+}
 
 
 @end

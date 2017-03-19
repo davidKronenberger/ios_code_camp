@@ -10,13 +10,14 @@
 
 @interface MessageCellTableViewCell : UITableViewCell
 
-@property (weak, nonatomic) IBOutlet UILabel *message;
+// The storyboard views.
+@property (weak, nonatomic) IBOutlet UIImageView * avatar;
+@property (weak, nonatomic) IBOutlet UIImageView * imageUploadView;
+@property (weak, nonatomic) IBOutlet UILabel *     message;
+@property (weak, nonatomic) IBOutlet UILabel *     sentBy;
+@property (weak, nonatomic) IBOutlet UILabel *     sentAt;
 
-@property (weak, nonatomic) IBOutlet UIImageView *avatar;
-
-@property (weak, nonatomic) IBOutlet UIImageView *imageUploadView;
-@property (weak, nonatomic) IBOutlet UILabel *sentBy;
-@property (weak, nonatomic) IBOutlet UILabel *sentAt;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *imageHeight;
+// This constraint will be used.
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint * imageHeight;
 
 @end

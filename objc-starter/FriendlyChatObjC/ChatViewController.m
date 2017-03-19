@@ -20,36 +20,29 @@
 #import "DatabaseSingelton.h"
 
 @import Photos;
-
 @import Firebase;
-@import GoogleMobileAds;
 
-/**
- * AdMob ad unit IDs are not currently stored inside the google-services.plist file. Developers
- * using AdMob can store them as custom values in another plist, or simply use constants. Note that
- * these ad units are configured to return only test ads, and should not be used outside this sample.
- */
-static NSString* const kBannerAdUnitID = @"ca-app-pub-3940256099942544/2934735716";
-
-@interface ChatViewController ()<UITableViewDataSource, UITableViewDelegate,
-UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate,
-FIRInviteDelegate> {
+@interface ChatViewController () <UITableViewDataSource,
+                                  UITableViewDelegate,
+                                  UITextFieldDelegate,
+                                  UIImagePickerControllerDelegate,
+                                  UINavigationControllerDelegate,
+                                  FIRInviteDelegate,
+                                  DatabaseDelegate> {
     FIRDatabaseHandle _refHandle;
 }
-@property (weak, nonatomic) IBOutlet UILabel *headerLabel;
 
-@property(nonatomic, weak) IBOutlet UITextField *textField;
-@property(nonatomic, weak) IBOutlet UIButton *sendButton;
+// Storyboard views
+@property (nonatomic, weak) IBOutlet UILabel *     headerLabel;
+@property (nonatomic, weak) IBOutlet UITextField * textField;
+@property (nonatomic, weak) IBOutlet UIButton *    sendButton;
+@property (nonatomic, weak) IBOutlet UITableView * clientTable;
 
-@property(nonatomic, weak) IBOutlet UITableView *clientTable;
+// Storyboard constraints
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint * bottomViewOffset;
 
-@property (strong, nonatomic) FIRDatabaseReference *ref;
-@property (strong, nonatomic) NSMutableArray<FIRDataSnapshot *> *messages;
-@property (strong, nonatomic) FIRStorageReference *storageRef;
-@property (nonatomic, strong) FIRRemoteConfig *remoteConfig;
-@property (nonatomic, strong) DatabaseSingelton *database;
+@property (nonatomic, strong) DatabaseSingelton * database;
 
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomViewOffset;
 @property (nonatomic) int keyboardHeight;
 
 @end
@@ -60,58 +53,47 @@ FIRInviteDelegate> {
     [super viewDidLoad];
     
     self.database = [DatabaseSingelton sharedDatabase];
-    
-    _messages = [[NSMutableArray alloc] init];
+    self.database.delegate = self;
     
     [self initTableView];
     
-    [self.headerLabel setText:self.database._selectedContact.name];
-    
-    [self configureDatabase];
-    [self configureStorage];
+    [self.headerLabel setText:self.database.selectedContact.name];
     
     [self registerForKeyboardNotifications];
 }
 
-- (void)dealloc {
-    [_ref removeAllObservers];
+#pragma mark - Init methods
+
+- (void) initTableView {
+    self.clientTable.rowHeight = UITableViewAutomaticDimension;
+    self.clientTable.estimatedRowHeight = 140;
+    
+    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tableViewTapped)];
+    singleTap.numberOfTapsRequired = 1;
+    [self.clientTable setUserInteractionEnabled:YES];
+    [self.clientTable addGestureRecognizer:singleTap];
 }
 
-- (void)configureDatabase {
-    _ref = [[FIRDatabase database] reference];
+- (void)registerForKeyboardNotifications {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
     
-    // -------------Listener for messages in current group-------------
-    _refHandle = [[[[_ref child:@"groups"] child:self.database._selectedContact.groupId] child:@"messages"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *message) {
-        [_messages addObject:message];
-        
-        [DatabaseSingelton updateContact:self.database._selectedContact withMessage:message];
-        
-        [_clientTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_messages.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+    
+}
 
+- (void) getNewMessage:(FIRDataSnapshot *)message forGroupId:(NSString *) groupId {
+    if ([groupId isEqualToString: self.database.selectedContact.groupId]) {
+        [_clientTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.database.selectedContact.messages.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+        
         // Delay execution of scroll to bottom , because the insertion of a new message in the tableview needs a bit of time...
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0), dispatch_get_main_queue(), ^{
-            [_clientTable scrollToRowAtIndexPath:[NSIndexPath indexPathForItem:_messages.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+            [_clientTable scrollToRowAtIndexPath:[NSIndexPath indexPathForItem:self.database.selectedContact.messages.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
         });
-    }];
-}
-
-- (void)sendMessageToGroup:(NSString *)message withGroupId:(NSString *)groupdId{
-    //1. get the current user of this app
-    FIRUser *user = [FIRAuth auth].currentUser;
-    
-    //2. get current time
-    NSDate * now = [NSDate date];
-    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
-    [outputFormatter setDateFormat:@"dd.MM.YYYY HH:mm:ss"];
-    NSString *newDateString = [outputFormatter stringFromDate:now];
-    
-    //3. set everything together
-    [[[[[_ref child:@"groups"] child:groupdId] child:@"messages"] childByAutoId] setValue:@{@"text": message, @"user": user.displayName, @"time": newDateString}];
-}
-
-- (void)configureStorage {
-    NSString *storageUrl = [FIRApp defaultApp].options.storageBucket;
-    self.storageRef = [[FIRStorage storage] referenceForURL:[NSString stringWithFormat:@"gs://%@", storageUrl]];
+    }
 }
 
 #pragma mark - Table view data source
@@ -122,7 +104,7 @@ FIRInviteDelegate> {
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [_messages count];
+    return [self.database.selectedContact.messages count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
@@ -130,7 +112,7 @@ FIRInviteDelegate> {
     MessageCellTableViewCell *cell = nil;
     
     // Unpack message from Firebase DataSnapshot
-    FIRDataSnapshot *messageSnapshot = _messages[indexPath.row];
+    FIRDataSnapshot *messageSnapshot = self.database.selectedContact.messages[indexPath.row];
     NSDictionary<NSString *, NSString *> *message = messageSnapshot.value;
     NSString *name = message[@"user"];
     NSString *time = message[@"time"];
@@ -153,7 +135,7 @@ FIRInviteDelegate> {
     
     // If the message contains an image.
     if (imageURL) {
-        cell.message.text = @"oimoei coweicmwoc jweoci ewockew ociw cowe ceowic ewoci weociew coewi cewoi eoeiw cewoi ewcoi weoic ewowei ewoic ewoeiw  <oinvori erovimrevoimrevo oimre";
+        cell.message.text = @"Unsere Sprechblasen bzw. die Zellenhöhe im Chat verändert sich abhängig von der Textlänge. Damit das Bild auch vollständig angezeigt wird, setzen wir diese Nachricht ''unsichtbar'' dahinter.";
         [cell.message setTextColor:[UIColor colorWithWhite:1.0f alpha:0.0f]];
         
         cell.imageHeight.constant = 100;
@@ -226,6 +208,15 @@ FIRInviteDelegate> {
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self.textField resignFirstResponder];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void) tableViewTapped {
+    [self.textField resignFirstResponder];
+}
+
 # pragma mark - Image Picker
 
 - (void)imagePickerController:(UIImagePickerController *)picker
@@ -244,7 +235,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
                                                              [FIRAuth auth].currentUser.uid,
                                                              (long long)([[NSDate date] timeIntervalSince1970] * 1000.0),
                                                              [referenceURL lastPathComponent]];
-                                       [[_storageRef child:filePath]
+                                       [[self.database.storageRef child:filePath]
                                         putFile:imageFile metadata:nil
                                         completion:^(FIRStorageMetadata *metadata, NSError *error) {
                                             if (error) {
@@ -255,7 +246,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
                                                 NSLog(@"Error uploading: %@", error);
                                                 return;
                                             }
-                                            [self sendMessage:@{MessageFieldsimageURL:[_storageRef child:metadata.path].description}];
+                                            [self sendMessage:@{MessageFieldsimageURL:[self.database.storageRef child:metadata.path].description}];
                                         }
                                         ];
                                    }];
@@ -268,13 +259,13 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
          (long long)([[NSDate date] timeIntervalSince1970] * 1000.0)];
         FIRStorageMetadata *metadata = [FIRStorageMetadata new];
         metadata.contentType = @"image/jpeg";
-        [[_storageRef child:imagePath] putData:imageData metadata:metadata
+        [[self.database.storageRef child:imagePath] putData:imageData metadata:metadata
                                     completion:^(FIRStorageMetadata * _Nullable metadata, NSError * _Nullable error) {
                                         if (error) {
                                             NSLog(@"Error uploading: %@", error);
                                             return;
                                         }
-                                        [self sendMessage:@{MessageFieldsimageURL:[_storageRef child:metadata.path].description}];
+                                        [self sendMessage:@{MessageFieldsimageURL:[self.database.storageRef child:metadata.path].description}];
                                     }];
     }
 }
@@ -303,15 +294,6 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [self presentViewController:picker animated:YES completion:NULL];
 }
 
-- (void)showAlert:(NSString *)title message:(NSString *)message {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleDestructive handler:nil];
-        [alert addAction:dismissAction];
-        [self presentViewController:alert animated: true completion: nil];
-    });
-}
-
 #pragma mark - TextView Handling
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -322,46 +304,26 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     return NO;
 }
 
-- (void)sendMessage:(NSDictionary *)data {
-    NSMutableDictionary *mdata = [data mutableCopy];
-    mdata[@"user"] = [FIRAuth auth].currentUser.displayName;
-    NSURL *photoURL = [FIRAuth auth].currentUser.photoURL;
-    if (photoURL) {
-        mdata[MessageFieldsphotoURL] = [photoURL absoluteString];
-    }
-    
-    //get current time
-    NSDate * now = [NSDate date];
-    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
-    [outputFormatter setDateFormat:@"dd.MM.yyyy HH:mm:ss"];
-    NSString *newDateString = [outputFormatter stringFromDate:now];
-    
-    mdata[@"time"] = newDateString;
-    
-    // Push data to Firebase Database
-    [[[[[_ref child:@"groups"] child: self.database._selectedContact.groupId] child:@"messages"] childByAutoId] setValue:mdata];
-}
-
 - (IBAction)didSendMessage:(UIButton *)sender {
     [self textFieldShouldReturn:_textField];
 }
 
 #pragma mark - Keyboard Handling
 
-- (void)keyboardWasShown:(NSNotification*)aNotification {
-    [self getKeyboardHeight:aNotification];
+- (void) keyboardWasShown: (NSNotification *) aNotification {
+    [self getKeyboardHeight: aNotification];
     
     self.bottomViewOffset.constant = self.bottomViewOffset.constant + self.keyboardHeight;
     
     [self.clientTable layoutIfNeeded];
     
-    if ([self.messages count] > 0) {
-        NSIndexPath *indexPathOfLastCell = [NSIndexPath indexPathForRow:[self.messages count] - 1 inSection:0];
+    if ([self.database.selectedContact.messages count] > 0) {
+        NSIndexPath *indexPathOfLastCell = [NSIndexPath indexPathForRow:[self.database.selectedContact.messages count] - 1 inSection:0];
         [self.clientTable scrollToRowAtIndexPath:indexPathOfLastCell atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
 }
 
-- (void) getKeyboardHeight:(NSNotification *)aNotification {
+- (void) getKeyboardHeight: (NSNotification *) aNotification {
     if (!self.keyboardHeight) {
         //when the keyboard is being displayed the rest of the view has to adjust so the inputtextfield is not
         //hidden behind the keyboard
@@ -380,34 +342,26 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [self.clientTable layoutIfNeeded];
 }
 
-- (void)registerForKeyboardNotifications {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardDidShowNotification object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillBeHidden:)
-                                                 name:UIKeyboardWillHideNotification object:nil];
-    
-}
+#pragma mark - Helper
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self.textField resignFirstResponder];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-- (void) initTableView {
-    self.clientTable.rowHeight = UITableViewAutomaticDimension;
-    self.clientTable.estimatedRowHeight = 140;
+- (void)sendMessage:(NSDictionary *)data {
+    NSMutableDictionary *mdata = [data mutableCopy];
+    mdata[@"user"] = [FIRAuth auth].currentUser.displayName;
+    NSURL *photoURL = [FIRAuth auth].currentUser.photoURL;
+    if (photoURL) {
+        mdata[MessageFieldsphotoURL] = [photoURL absoluteString];
+    }
     
-    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tableViewTapped)];
-    singleTap.numberOfTapsRequired = 1;
-    [self.clientTable setUserInteractionEnabled:YES];
-    [self.clientTable addGestureRecognizer:singleTap];
-}
-
-- (void) tableViewTapped {
-    [self.textField resignFirstResponder];
+    //get current time
+    NSDate * now = [NSDate date];
+    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+    [outputFormatter setDateFormat:@"dd.MM.yyyy HH:mm:ss"];
+    NSString *newDateString = [outputFormatter stringFromDate:now];
+    
+    mdata[@"time"] = newDateString;
+    
+    // Push data to Firebase Database
+    [[[[[self.database.ref child:@"groups"] child: self.database.selectedContact.groupId] child:@"messages"] childByAutoId] setValue:mdata];
 }
 
 

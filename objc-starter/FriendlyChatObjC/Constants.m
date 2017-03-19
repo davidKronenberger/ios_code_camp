@@ -18,22 +18,17 @@
 
 @implementation Constants
 
-NSString *const NotificationKeysSignedIn = @"onSignInCompleted";
+NSString * const SeguesSignInToLoad             = @"SignInToLoad";
+NSString * const SeguesLoadToContacts           = @"LoadToContacts";
+NSString * const SeguesContactsToCreateNewGroup = @"ContactsToCreateNewGroup";
+NSString * const SeguesContactsToChat           = @"ContactsToChat";
+NSString * const SeguesContactsToSignIn         = @"ContactsToSignIn";
 
-NSString *const SeguesSignInToLoad = @"SignInToLoad";
-NSString *const SeguesLoadToContacts = @"LoadToContacts";
-NSString *const SeguesContactsToCreateNewGroup = @"ContactsToCreateNewGroup";
-NSString *const SeguesContactsToChat = @"ContactsToChat";
+NSString * const MessageFieldsname     = @"name";
+NSString * const MessageFieldstext     = @"text";
+NSString * const MessageFieldsphotoURL = @"photoURL";
+NSString * const MessageFieldsimageURL = @"imageURL";
 
-NSString *const MessageFieldsname = @"name";
-NSString *const MessageFieldstext = @"text";
-NSString *const MessageFieldsphotoURL = @"photoURL";
-NSString *const MessageFieldsimageURL = @"imageURL";
-
-NSString *const RefHandlerGroupAdded = @"groupAddedHandler";
-
-
-
-
+NSString * const RefHandlerGroupAdded = @"groupAddedHandler";
 
 @end

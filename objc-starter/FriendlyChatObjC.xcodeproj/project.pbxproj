@@ -19,10 +19,8 @@
 		10AF4CD41DD238C00096D192 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 10AF4CD01DD238C00096D192 /* LaunchScreen.xib */; };
 		26ACB5D6C6C073FE021D1443 /* libPods-FriendlyChatObjC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AC41C60E0E8F2E76911399C /* libPods-FriendlyChatObjC.a */; };
 		961F222C1E5D99B100255841 /* white_bubble.png in Resources */ = {isa = PBXBuildFile; fileRef = 961F222B1E5D99B100255841 /* white_bubble.png */; };
-		962075851E7B20BE007080F8 /* ContactTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 962075841E7B20BE007080F8 /* ContactTableViewCell.m */; };
 		964307C11E5DD386005144C2 /* wallpaper1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 964307C01E5DD386005144C2 /* wallpaper1.jpg */; };
 		964307C41E5DD752005144C2 /* wallpaper2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 964307C21E5DD752005144C2 /* wallpaper2.jpg */; };
-		9675F6841E5C9107006AF776 /* MessageCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9675F6821E5C9107006AF776 /* MessageCellTableViewCell.m */; };
 		96AD21F91E5D852400762FC8 /* black_bubble.png in Resources */ = {isa = PBXBuildFile; fileRef = 96AD21F81E5D852400762FC8 /* black_bubble.png */; };
 		96E22D921E5EE7C1000CA3D6 /* shiny.png in Resources */ = {isa = PBXBuildFile; fileRef = 96E22D911E5EE7C1000CA3D6 /* shiny.png */; };
 		96E22D9A1E5F326A000CA3D6 /* wallpaper6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 96E22D991E5F326A000CA3D6 /* wallpaper6.jpg */; };
@@ -38,6 +36,8 @@
 		96FE99F91E7BF4CD008F9C80 /* group-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 96FE99F71E7BF4CD008F9C80 /* group-button.png */; };
 		96FE99FA1E7BF4CD008F9C80 /* member-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 96FE99F81E7BF4CD008F9C80 /* member-button.png */; };
 		96FE99FD1E7C12D0008F9C80 /* LoadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FE99FC1E7C12D0008F9C80 /* LoadViewController.m */; };
+		D0187FD51E7EEA20003C42AF /* ContactTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0187FD31E7EEA20003C42AF /* ContactTableViewCell.m */; };
+		D0187FD61E7EEA20003C42AF /* MessageCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0187FD41E7EEA20003C42AF /* MessageCellTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,11 +61,9 @@
 		3AC41C60E0E8F2E76911399C /* libPods-FriendlyChatObjC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FriendlyChatObjC.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		961F222B1E5D99B100255841 /* white_bubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = white_bubble.png; sourceTree = "<group>"; };
 		962075831E7B20BE007080F8 /* ContactTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactTableViewCell.h; sourceTree = "<group>"; };
-		962075841E7B20BE007080F8 /* ContactTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactTableViewCell.m; sourceTree = "<group>"; };
 		964307C01E5DD386005144C2 /* wallpaper1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = wallpaper1.jpg; path = ../../FriendlyChatObjC/wallpaper1.jpg; sourceTree = "<group>"; };
 		964307C21E5DD752005144C2 /* wallpaper2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = wallpaper2.jpg; path = ../../FriendlyChatObjC/wallpaper2.jpg; sourceTree = "<group>"; };
 		9675F6811E5C9107006AF776 /* MessageCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageCellTableViewCell.h; sourceTree = "<group>"; };
-		9675F6821E5C9107006AF776 /* MessageCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageCellTableViewCell.m; sourceTree = "<group>"; };
 		96AD21F81E5D852400762FC8 /* black_bubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = black_bubble.png; sourceTree = "<group>"; };
 		96E22D911E5EE7C1000CA3D6 /* shiny.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shiny.png; sourceTree = "<group>"; };
 		96E22D991E5F326A000CA3D6 /* wallpaper6.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wallpaper6.jpg; sourceTree = "<group>"; };
@@ -88,6 +86,8 @@
 		96FE99FB1E7C12D0008F9C80 /* LoadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadViewController.h; sourceTree = "<group>"; };
 		96FE99FC1E7C12D0008F9C80 /* LoadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadViewController.m; sourceTree = "<group>"; };
 		9ED8D1017B9927C5A7CCA356 /* Pods-FriendlyChatObjC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FriendlyChatObjC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FriendlyChatObjC/Pods-FriendlyChatObjC.debug.xcconfig"; sourceTree = "<group>"; };
+		D0187FD31E7EEA20003C42AF /* ContactTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactTableViewCell.m; sourceTree = "<group>"; };
+		D0187FD41E7EEA20003C42AF /* MessageCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageCellTableViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,9 +141,9 @@
 				96E2AAAF1E5C3C210079E975 /* ContactsTableViewController.h */,
 				96E2AAB01E5C3C210079E975 /* ContactsTableViewController.m */,
 				9675F6811E5C9107006AF776 /* MessageCellTableViewCell.h */,
-				9675F6821E5C9107006AF776 /* MessageCellTableViewCell.m */,
+				D0187FD41E7EEA20003C42AF /* MessageCellTableViewCell.m */,
+				D0187FD31E7EEA20003C42AF /* ContactTableViewCell.m */,
 				962075831E7B20BE007080F8 /* ContactTableViewCell.h */,
-				962075841E7B20BE007080F8 /* ContactTableViewCell.m */,
 				96FE99EC1E7BD6F7008F9C80 /* ContactTableView.h */,
 				96FE99ED1E7BD6F7008F9C80 /* ContactTableView.m */,
 				96F610751E6036C9007ED0E1 /* CreateGroupTableViewController.h */,
@@ -347,18 +347,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				96E2AAB41E5C3DDD0079E975 /* Contact.m in Sources */,
-				9675F6841E5C9107006AF776 /* MessageCellTableViewCell.m in Sources */,
 				96FE99FD1E7C12D0008F9C80 /* LoadViewController.m in Sources */,
-				962075851E7B20BE007080F8 /* ContactTableViewCell.m in Sources */,
 				107960B11C61321D003DB6CC /* Constants.m in Sources */,
 				96E2AAB11E5C3C210079E975 /* ContactsTableViewController.m in Sources */,
 				1079608B1C6130EF003DB6CC /* ChatViewController.m in Sources */,
 				96F610791E604265007ED0E1 /* DatabaseSingelton.m in Sources */,
 				107960881C6130EF003DB6CC /* AppDelegate.m in Sources */,
 				96FE99EE1E7BD6F7008F9C80 /* ContactTableView.m in Sources */,
+				D0187FD51E7EEA20003C42AF /* ContactTableViewCell.m in Sources */,
 				107960B61C613263003DB6CC /* SignInViewController.m in Sources */,
 				96F610771E6036EB007ED0E1 /* CreateGroupTableViewController.m in Sources */,
 				107960851C6130EF003DB6CC /* main.m in Sources */,
+				D0187FD61E7EEA20003C42AF /* MessageCellTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

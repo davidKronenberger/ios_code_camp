@@ -22,7 +22,7 @@
 
 @interface SignInViewController ()
 
-@property (weak, nonatomic) IBOutlet GIDSignInButton *signInButton;
+@property (weak, nonatomic) IBOutlet GIDSignInButton * signInButton;
 @property (strong, nonatomic) FIRAuthStateDidChangeListenerHandle handle;
 
 @end
@@ -31,7 +31,7 @@
     BOOL loggedIn;
 }
 
-- (void)viewDidLoad {
+- (void) viewDidLoad {
     [super viewDidLoad];
     
     // Set up flag -> user is not logged in yet.
@@ -40,16 +40,17 @@
     // Connect the controller with the GIDSignIn object, listening on UI events.
     [GIDSignIn sharedInstance].uiDelegate = self;
     
+    // Add and save authentification state change listener.
     self.handle = [[FIRAuth auth] addAuthStateDidChangeListener: ^(FIRAuth *_Nonnull auth, FIRUser *_Nullable user) {
                        if (user) {
                            if (!loggedIn) {
-                               // set up flag, user is succesfully logged in
+                               // Set up flag, user is succesfully logged in.
                                loggedIn = true;
                                
-                               // get current user
+                               // Get current user.
                                FIRUser *user = [FIRAuth auth].currentUser;
                                
-                               // set/update user to database
+                               // Set/Update user in database.
                                [DatabaseSingelton updateUser: user.uid
                                                 withUsername: user.displayName
                                                    withEmail: user.email
@@ -65,7 +66,8 @@
                    }];
 }
 
-- (void)dealloc {
+// Remove the listener by deallocation this view controller.
+- (void) dealloc {
     [[FIRAuth auth] removeAuthStateDidChangeListener: self.handle];
 }
 
