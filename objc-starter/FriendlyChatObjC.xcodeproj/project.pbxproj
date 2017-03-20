@@ -18,16 +18,12 @@
 		10AF4CD31DD238C00096D192 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 10AF4CCF1DD238C00096D192 /* Images.xcassets */; };
 		10AF4CD41DD238C00096D192 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 10AF4CD01DD238C00096D192 /* LaunchScreen.xib */; };
 		26ACB5D6C6C073FE021D1443 /* libPods-FriendlyChatObjC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AC41C60E0E8F2E76911399C /* libPods-FriendlyChatObjC.a */; };
-		961F222C1E5D99B100255841 /* white_bubble.png in Resources */ = {isa = PBXBuildFile; fileRef = 961F222B1E5D99B100255841 /* white_bubble.png */; };
-		964307C11E5DD386005144C2 /* wallpaper1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 964307C01E5DD386005144C2 /* wallpaper1.jpg */; };
-		964307C41E5DD752005144C2 /* wallpaper2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 964307C21E5DD752005144C2 /* wallpaper2.jpg */; };
 		96AD21F91E5D852400762FC8 /* black_bubble.png in Resources */ = {isa = PBXBuildFile; fileRef = 96AD21F81E5D852400762FC8 /* black_bubble.png */; };
 		96E22D921E5EE7C1000CA3D6 /* shiny.png in Resources */ = {isa = PBXBuildFile; fileRef = 96E22D911E5EE7C1000CA3D6 /* shiny.png */; };
 		96E22D9A1E5F326A000CA3D6 /* wallpaper6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 96E22D991E5F326A000CA3D6 /* wallpaper6.jpg */; };
 		96E2AAAE1E5C363E0079E975 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 96E2AAAD1E5C363E0079E975 /* GoogleService-Info.plist */; };
 		96E2AAB11E5C3C210079E975 /* ContactsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E2AAB01E5C3C210079E975 /* ContactsTableViewController.m */; };
 		96E2AAB41E5C3DDD0079E975 /* Contact.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E2AAB31E5C3DDD0079E975 /* Contact.m */; };
-		96E2AAB61E5C43C70079E975 /* nouser.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 96E2AAB51E5C43C70079E975 /* nouser.jpg */; };
 		96F610771E6036EB007ED0E1 /* CreateGroupTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F610761E6036EB007ED0E1 /* CreateGroupTableViewController.m */; };
 		96F610791E604265007ED0E1 /* DatabaseSingelton.m in Sources */ = {isa = PBXBuildFile; fileRef = 96F610781E604265007ED0E1 /* DatabaseSingelton.m */; };
 		96F6107E1E605849007ED0E1 /* add_picture.png in Resources */ = {isa = PBXBuildFile; fileRef = 96F6107D1E605849007ED0E1 /* add_picture.png */; };
@@ -38,6 +34,7 @@
 		96FE99FD1E7C12D0008F9C80 /* LoadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FE99FC1E7C12D0008F9C80 /* LoadViewController.m */; };
 		D0187FD51E7EEA20003C42AF /* ContactTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0187FD31E7EEA20003C42AF /* ContactTableViewCell.m */; };
 		D0187FD61E7EEA20003C42AF /* MessageCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0187FD41E7EEA20003C42AF /* MessageCellTableViewCell.m */; };
+		D0187FD91E7FD98A003C42AF /* AvatarImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0187FD81E7FD98A003C42AF /* AvatarImageView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,10 +56,7 @@
 		10AF4CD01DD238C00096D192 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		1F87D3FB8E0CFE0F623FC29E /* Pods-FriendlyChatObjC.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FriendlyChatObjC.release.xcconfig"; path = "Pods/Target Support Files/Pods-FriendlyChatObjC/Pods-FriendlyChatObjC.release.xcconfig"; sourceTree = "<group>"; };
 		3AC41C60E0E8F2E76911399C /* libPods-FriendlyChatObjC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FriendlyChatObjC.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		961F222B1E5D99B100255841 /* white_bubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = white_bubble.png; sourceTree = "<group>"; };
 		962075831E7B20BE007080F8 /* ContactTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactTableViewCell.h; sourceTree = "<group>"; };
-		964307C01E5DD386005144C2 /* wallpaper1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = wallpaper1.jpg; path = ../../FriendlyChatObjC/wallpaper1.jpg; sourceTree = "<group>"; };
-		964307C21E5DD752005144C2 /* wallpaper2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = wallpaper2.jpg; path = ../../FriendlyChatObjC/wallpaper2.jpg; sourceTree = "<group>"; };
 		9675F6811E5C9107006AF776 /* MessageCellTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageCellTableViewCell.h; sourceTree = "<group>"; };
 		96AD21F81E5D852400762FC8 /* black_bubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = black_bubble.png; sourceTree = "<group>"; };
 		96E22D911E5EE7C1000CA3D6 /* shiny.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shiny.png; sourceTree = "<group>"; };
@@ -72,7 +66,6 @@
 		96E2AAB01E5C3C210079E975 /* ContactsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactsTableViewController.m; sourceTree = "<group>"; };
 		96E2AAB21E5C3DDD0079E975 /* Contact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contact.h; sourceTree = "<group>"; };
 		96E2AAB31E5C3DDD0079E975 /* Contact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contact.m; sourceTree = "<group>"; };
-		96E2AAB51E5C43C70079E975 /* nouser.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = nouser.jpg; path = ../nouser.jpg; sourceTree = "<group>"; };
 		96F610751E6036C9007ED0E1 /* CreateGroupTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CreateGroupTableViewController.h; sourceTree = "<group>"; };
 		96F610761E6036EB007ED0E1 /* CreateGroupTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateGroupTableViewController.m; sourceTree = "<group>"; };
 		96F610781E604265007ED0E1 /* DatabaseSingelton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseSingelton.m; sourceTree = "<group>"; };
@@ -88,6 +81,8 @@
 		9ED8D1017B9927C5A7CCA356 /* Pods-FriendlyChatObjC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FriendlyChatObjC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FriendlyChatObjC/Pods-FriendlyChatObjC.debug.xcconfig"; sourceTree = "<group>"; };
 		D0187FD31E7EEA20003C42AF /* ContactTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactTableViewCell.m; sourceTree = "<group>"; };
 		D0187FD41E7EEA20003C42AF /* MessageCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageCellTableViewCell.m; sourceTree = "<group>"; };
+		D0187FD71E7FD98A003C42AF /* AvatarImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvatarImageView.h; sourceTree = "<group>"; };
+		D0187FD81E7FD98A003C42AF /* AvatarImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AvatarImageView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,7 +102,7 @@
 			children = (
 				96E2AAAD1E5C363E0079E975 /* GoogleService-Info.plist */,
 				10AF4CCB1DD238C00096D192 /* shared */,
-				107960821C6130EF003DB6CC /* FriendlyChatObjC */,
+				107960821C6130EF003DB6CC /* sources */,
 				107960811C6130EF003DB6CC /* Products */,
 				21CAEF7F49AE69B0C285F029 /* Pods */,
 				DA5615CDA2CA4AA29359B517 /* Frameworks */,
@@ -122,35 +117,17 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		107960821C6130EF003DB6CC /* FriendlyChatObjC */ = {
+		107960821C6130EF003DB6CC /* sources */ = {
 			isa = PBXGroup;
 			children = (
 				107960861C6130EF003DB6CC /* AppDelegate.h */,
 				107960871C6130EF003DB6CC /* AppDelegate.m */,
-				107960891C6130EF003DB6CC /* ChatViewController.h */,
-				1079608A1C6130EF003DB6CC /* ChatViewController.m */,
-				96E2AAB21E5C3DDD0079E975 /* Contact.h */,
-				96E2AAB31E5C3DDD0079E975 /* Contact.m */,
-				107960B41C613263003DB6CC /* SignInViewController.h */,
-				107960B51C613263003DB6CC /* SignInViewController.m */,
-				96FE99FB1E7C12D0008F9C80 /* LoadViewController.h */,
-				96FE99FC1E7C12D0008F9C80 /* LoadViewController.m */,
-				107960AF1C61321D003DB6CC /* Constants.h */,
-				107960B01C61321D003DB6CC /* Constants.m */,
+				D0D09C5C1E8013BE001E1F30 /* Database */,
 				107960831C6130EF003DB6CC /* Supporting Files */,
-				96E2AAAF1E5C3C210079E975 /* ContactsTableViewController.h */,
-				96E2AAB01E5C3C210079E975 /* ContactsTableViewController.m */,
-				9675F6811E5C9107006AF776 /* MessageCellTableViewCell.h */,
-				D0187FD41E7EEA20003C42AF /* MessageCellTableViewCell.m */,
-				D0187FD31E7EEA20003C42AF /* ContactTableViewCell.m */,
-				962075831E7B20BE007080F8 /* ContactTableViewCell.h */,
-				96FE99EC1E7BD6F7008F9C80 /* ContactTableView.h */,
-				96FE99ED1E7BD6F7008F9C80 /* ContactTableView.m */,
-				96F610751E6036C9007ED0E1 /* CreateGroupTableViewController.h */,
-				96F610761E6036EB007ED0E1 /* CreateGroupTableViewController.m */,
-				96F610781E604265007ED0E1 /* DatabaseSingelton.m */,
-				96F6107A1E60427B007ED0E1 /* DatabaseSingelton.h */,
+				D0187FDA1E7FDFB1003C42AF /* View Controllers */,
+				D0D09C591E801356001E1F30 /* Views */,
 			);
+			name = sources;
 			path = FriendlyChatObjC;
 			sourceTree = "<group>";
 		};
@@ -158,8 +135,8 @@
 			isa = PBXGroup;
 			children = (
 				107960AA1C6131E4003DB6CC /* Info.plist */,
-				107960A81C6131B6003DB6CC /* Test.storyboard */,
 				107960841C6130EF003DB6CC /* main.m */,
+				107960A81C6131B6003DB6CC /* Test.storyboard */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -184,11 +161,7 @@
 				96E22D991E5F326A000CA3D6 /* wallpaper6.jpg */,
 				96E22D911E5EE7C1000CA3D6 /* shiny.png */,
 				96FB59AA1E5ED82100489AD0 /* white_final.png */,
-				964307C21E5DD752005144C2 /* wallpaper2.jpg */,
-				964307C01E5DD386005144C2 /* wallpaper1.jpg */,
-				961F222B1E5D99B100255841 /* white_bubble.png */,
 				96AD21F81E5D852400762FC8 /* black_bubble.png */,
-				96E2AAB51E5C43C70079E975 /* nouser.jpg */,
 				10AF4CCD1DD238C00096D192 /* logo1024.png */,
 			);
 			path = assets;
@@ -201,6 +174,67 @@
 				1F87D3FB8E0CFE0F623FC29E /* Pods-FriendlyChatObjC.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		D0187FDA1E7FDFB1003C42AF /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				107960891C6130EF003DB6CC /* ChatViewController.h */,
+				1079608A1C6130EF003DB6CC /* ChatViewController.m */,
+				96E2AAAF1E5C3C210079E975 /* ContactsTableViewController.h */,
+				96E2AAB01E5C3C210079E975 /* ContactsTableViewController.m */,
+				96F610751E6036C9007ED0E1 /* CreateGroupTableViewController.h */,
+				96F610761E6036EB007ED0E1 /* CreateGroupTableViewController.m */,
+				96FE99FB1E7C12D0008F9C80 /* LoadViewController.h */,
+				96FE99FC1E7C12D0008F9C80 /* LoadViewController.m */,
+				107960B41C613263003DB6CC /* SignInViewController.h */,
+				107960B51C613263003DB6CC /* SignInViewController.m */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		D0D09C591E801356001E1F30 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D0187FD71E7FD98A003C42AF /* AvatarImageView.h */,
+				D0187FD81E7FD98A003C42AF /* AvatarImageView.m */,
+				D0D09C5A1E801379001E1F30 /* Table Views */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		D0D09C5A1E801379001E1F30 /* Table Views */ = {
+			isa = PBXGroup;
+			children = (
+				96FE99EC1E7BD6F7008F9C80 /* ContactTableView.h */,
+				96FE99ED1E7BD6F7008F9C80 /* ContactTableView.m */,
+				D0D09C5B1E80138B001E1F30 /* Table View Cells */,
+			);
+			name = "Table Views";
+			sourceTree = "<group>";
+		};
+		D0D09C5B1E80138B001E1F30 /* Table View Cells */ = {
+			isa = PBXGroup;
+			children = (
+				962075831E7B20BE007080F8 /* ContactTableViewCell.h */,
+				D0187FD31E7EEA20003C42AF /* ContactTableViewCell.m */,
+				9675F6811E5C9107006AF776 /* MessageCellTableViewCell.h */,
+				D0187FD41E7EEA20003C42AF /* MessageCellTableViewCell.m */,
+			);
+			name = "Table View Cells";
+			sourceTree = "<group>";
+		};
+		D0D09C5C1E8013BE001E1F30 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				96E2AAB21E5C3DDD0079E975 /* Contact.h */,
+				96E2AAB31E5C3DDD0079E975 /* Contact.m */,
+				107960AF1C61321D003DB6CC /* Constants.h */,
+				107960B01C61321D003DB6CC /* Constants.m */,
+				96F6107A1E60427B007ED0E1 /* DatabaseSingelton.h */,
+				96F610781E604265007ED0E1 /* DatabaseSingelton.m */,
+			);
+			name = Database;
 			sourceTree = "<group>";
 		};
 		DA5615CDA2CA4AA29359B517 /* Frameworks */ = {
@@ -275,18 +309,14 @@
 				96FB59AB1E5ED82100489AD0 /* white_final.png in Resources */,
 				10AF4CD21DD238C00096D192 /* Bladefile in Resources */,
 				96E22D9A1E5F326A000CA3D6 /* wallpaper6.jpg in Resources */,
-				964307C11E5DD386005144C2 /* wallpaper1.jpg in Resources */,
-				96E2AAB61E5C43C70079E975 /* nouser.jpg in Resources */,
 				10AF4CD31DD238C00096D192 /* Images.xcassets in Resources */,
 				96E22D921E5EE7C1000CA3D6 /* shiny.png in Resources */,
 				96F6107E1E605849007ED0E1 /* add_picture.png in Resources */,
 				96FE99F91E7BF4CD008F9C80 /* group-button.png in Resources */,
 				107960A91C6131B6003DB6CC /* Test.storyboard in Resources */,
-				961F222C1E5D99B100255841 /* white_bubble.png in Resources */,
 				10AF4CD11DD238C00096D192 /* logo1024.png in Resources */,
 				96E2AAAE1E5C363E0079E975 /* GoogleService-Info.plist in Resources */,
 				96FE99FA1E7BF4CD008F9C80 /* member-button.png in Resources */,
-				964307C41E5DD752005144C2 /* wallpaper2.jpg in Resources */,
 				96AD21F91E5D852400762FC8 /* black_bubble.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -353,6 +383,7 @@
 				1079608B1C6130EF003DB6CC /* ChatViewController.m in Sources */,
 				96F610791E604265007ED0E1 /* DatabaseSingelton.m in Sources */,
 				107960881C6130EF003DB6CC /* AppDelegate.m in Sources */,
+				D0187FD91E7FD98A003C42AF /* AvatarImageView.m in Sources */,
 				96FE99EE1E7BD6F7008F9C80 /* ContactTableView.m in Sources */,
 				D0187FD51E7EEA20003C42AF /* ContactTableViewCell.m in Sources */,
 				107960B61C613263003DB6CC /* SignInViewController.m in Sources */,

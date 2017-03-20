@@ -144,7 +144,7 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="511-HY-DW8">
                                                     <rect key="frame" x="0.0" y="0.0" width="381" height="70"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QrY-XR-tJe">
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QrY-XR-tJe" customClass="AvatarImageView">
                                                             <rect key="frame" x="5" y="5" width="60" height="60"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="60" id="4VB-XS-qGq"/>
@@ -240,7 +240,6 @@
                         <outlet property="contactsTableView" destination="zoe-ZY-Pox" id="x3A-N6-Q1k"/>
                         <segue destination="uMT-A3-F60" kind="show" identifier="ContactsToChat" action="showDetailViewController:sender:" id="XfF-Su-6Lr"/>
                         <segue destination="42z-Ou-onT" kind="show" identifier="ContactsToCreateNewGroup" id="P7G-TJ-UYh"/>
-                        <segue destination="zxq-GO-nHP" kind="show" identifier="ContactsToSignIn" id="oeY-NF-viV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="j2o-wJ-ca0" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -287,7 +286,7 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JFm-FK-6ji">
                                                     <rect key="frame" x="0.0" y="0.0" width="381" height="70"/>
                                                     <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="A2J-Mv-iHD">
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="A2J-Mv-iHD" customClass="AvatarImageView">
                                                             <rect key="frame" x="5" y="5" width="60" height="60"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="60" id="5N2-GA-7zt"/>
@@ -460,7 +459,7 @@
                                                             <rect key="frame" x="46" y="20" width="352" height="114"/>
                                                             <rect key="contentStretch" x="0.25" y="0.5" width="0.0" height="0.0"/>
                                                         </imageView>
-                                                        <imageView autoresizesSubviews="NO" userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="UDc-S9-Rrt">
+                                                        <imageView autoresizesSubviews="NO" userInteractionEnabled="NO" contentMode="redraw" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="UDc-S9-Rrt" customClass="AvatarImageView">
                                                             <rect key="frame" x="308" y="28" width="90" height="90"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="90" id="AF6-p9-oGK"/>
@@ -560,7 +559,7 @@
                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ias-R6-22s">
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ias-R6-22s" customClass="AvatarImageView">
                                                             <rect key="frame" x="0.0" y="30" width="90" height="90"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="90" id="anK-fX-sd2"/>

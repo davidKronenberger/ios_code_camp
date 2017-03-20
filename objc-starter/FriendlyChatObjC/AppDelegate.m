@@ -17,6 +17,7 @@
 #import "AppDelegate.h"
 #import "ContactsTableViewController.h"
 #import "DatabaseSingelton.h"
+#import "Constants.h"
 
 @import Firebase;
 @import GoogleSignIn;
@@ -52,7 +53,7 @@
  didSignInForUser: (GIDGoogleUser *) user
         withError: (NSError *)       error {
     
-    //SignIn with the Googleaccount
+    // Sign in with the Googleaccount
     if (error == nil) {
         // Get the google authentification.
         GIDAuthentication *authentication = user.authentication;
@@ -63,11 +64,11 @@
         [[FIRAuth auth] signInWithCredential: credential
                                   completion: ^(FIRUser * _Nullable user, NSError * _Nullable error) {
             if (error) {
-                NSLog(@"Error %@", error.localizedDescription);
+                NSLog(@"%@%@", ErrorInfoSignIn, error.localizedDescription);
             }
         }];
     } else {
-        NSLog(@"Error %@", error.localizedDescription);
+        NSLog(@"%@%@", ErrorInfoSignIn, error.localizedDescription);
     }
 }
 

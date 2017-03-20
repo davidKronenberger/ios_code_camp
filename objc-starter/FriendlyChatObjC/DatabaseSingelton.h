@@ -54,6 +54,7 @@
 // Resets the singleton and removes all observers.
 + (void) resetDatabase;
 
-
+// Sends the data as message with the current user as sender, the time when it will be sent and the avatar of the current user to firebase.
++ (void) sendMessage: (NSDictionary *) data;
 
 @end

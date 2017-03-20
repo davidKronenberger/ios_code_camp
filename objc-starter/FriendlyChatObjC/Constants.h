@@ -24,11 +24,48 @@ extern NSString * const SeguesContactsToCreateNewGroup;
 extern NSString * const SeguesContactsToChat;
 extern NSString * const SeguesContactsToSignIn;
 
-extern NSString * const MessageFieldsname;
-extern NSString * const MessageFieldstext;
-extern NSString * const MessageFieldsphotoURL;
-extern NSString * const MessageFieldsimageURL;
+extern NSString * const CellIdentifierContactCell;
+extern NSString * const CellIdentifierMessageCellOwn;
+extern NSString * const CellIdentifierMessageCellOther;
+
+extern NSString * const InvisibleTextBehindImage;
+
+extern NSString * const EventContactsTableViewControllerDismissed;
+
+extern NSString * const DatabaseFieldsGroups;
+extern NSString * const DatabaseFieldsUsers;
+
+extern NSString * const MessageFieldsName;
+extern NSString * const MessageFieldsText;
+extern NSString * const MessageFieldsTime;
+extern NSString * const MessageFieldsUser;
+extern NSString * const MessageFieldsPhotoURL;
+extern NSString * const MessageFieldsImageURL;
+
+extern NSString * const GroupFieldsMessages;
+extern NSString * const GroupFieldsIsPrivate;
+extern NSString * const GroupFieldsUsers;
+extern NSString * const GroupFieldsCreated;
+extern NSString * const GroupFieldsName;
+
+extern NSString * const UserFieldsEmail;
+extern NSString * const UserFieldsPhotoURL;
+extern NSString * const UserFieldsUsername;
+
+extern NSString * const ErrorInfoUploading;
+extern NSString * const ErrorInfoDownloading;
+extern NSString * const ErrorInfoSignIn;
+extern NSString * const ErrorInfoSignOut;
 
 extern NSString * const RefHandlerGroupAdded;
+
+extern NSString * const StoragePrefix;
+
+extern NSString * const DateFormat;
+
+extern NSString * const MemberDefaultImage;
+extern NSString * const GroupDefaultImage;
+
+extern NSString * const FireBaseStorageErrorImage;
 
 @end

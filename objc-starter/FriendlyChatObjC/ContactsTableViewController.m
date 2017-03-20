@@ -9,7 +9,6 @@
 #import "Contact.h"
 #import "DatabaseSingelton.h"
 #import "ContactTableView.h"
-
 #import "Constants.h"
 
 @import Firebase;
@@ -43,7 +42,7 @@ __weak ContactsTableViewController * weakSelf;
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [weakSelf.contactsTableView reloadData];
+    [weakSelf updateTableView];
 }
 
 - (void)initProperties {
@@ -111,19 +110,20 @@ void(^didDeselectRowAtIndexpathCotacts)(NSIndexPath *) = ^(NSIndexPath * indexPa
     
     // If an error occurs while sign out, show the error message.
     if (!status) {
-        NSLog(@"Error signing out: %@", signOutError);
+        NSLog(@"%@%@", ErrorInfoSignOut, signOutError);
         
         return;
     }
     
     // Dismiss this view controller.
-    [weakSelf dismissViewControllerAnimated:NO completion:nil];
+    [weakSelf dismissViewControllerAnimated: NO
+                                 completion: nil];
     
     // This sends a message through the NSNotificationCenter
     // to any listeners for "ContactsTableViewControllerDismissed"
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName:@"ContactsTableViewControllerDismissed"
-     object:nil userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName: EventContactsTableViewControllerDismissed
+                                                        object: nil
+                                                      userInfo: nil];
 }
 
 - (IBAction) newGroupButtonPressed: (id) sender {
