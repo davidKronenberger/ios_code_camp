@@ -42,6 +42,8 @@ __weak ContactsTableViewController * weakSelf;
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    [weakSelf initProperties];
+    
     [weakSelf updateTableView];
 }
 

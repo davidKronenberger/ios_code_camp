@@ -275,7 +275,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0810;
-				ORGANIZATIONNAME = "Nice To Have";
+				ORGANIZATIONNAME = "Ibrahim Ulukaya";
 				TargetAttributes = {
 					1079607F1C6130EF003DB6CC = {
 						CreatedOnToolsVersion = 7.2;
@@ -494,7 +494,7 @@
 				INFOPLIST_FILE = FriendlyChatObjC/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.google.firebase.codelab.NiceToHave;
+				PRODUCT_BUNDLE_IDENTIFIER = com.google.firebase.codelab.FriendlyChatObjC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -512,7 +512,7 @@
 				INFOPLIST_FILE = FriendlyChatObjC/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.google.firebase.codelab.NiceToHave;
+				PRODUCT_BUNDLE_IDENTIFIER = com.google.firebase.codelab.FriendlyChatObjC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
