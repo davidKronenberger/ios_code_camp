@@ -9,6 +9,7 @@
 #import "ContactTableView.h"
 #import "ContactTableViewCell.h"
 #import "Contact.h"
+#import "Constants.h"
 
 @implementation ContactTableView
 
@@ -41,7 +42,7 @@
 - (UITableViewCell *) tableView: (UITableView *) tableView
           cellForRowAtIndexPath: (NSIndexPath *) indexPath {
     // Dequeue cell.
-    ContactTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier: @"ContactCell"];
+    ContactTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier: CellIdentifierContactCell];
     
     // Load all needed data into the table view cell.
     Contact * contact = (self.contactsForTableView)[indexPath.row];

@@ -52,7 +52,8 @@ static DatabaseSingelton * sharedDatabase = nil;
     
     // Initialise storage reference.
     NSString * storageUrl = [FIRApp defaultApp].options.storageBucket;
-    sharedDatabase.storageRef = [[FIRStorage storage] referenceForURL: [NSString stringWithFormat: @"gs://%@", storageUrl]];
+    // Append to storage url the prefix gs://
+    sharedDatabase.storageRef = [[FIRStorage storage] referenceForURL: [NSString stringWithFormat: @"%@%@", StoragePrefix, storageUrl]];
 }
 
 // Resets the singleton and removes all observers.
@@ -75,12 +76,12 @@ static DatabaseSingelton * sharedDatabase = nil;
     NSMutableDictionary * user = [[NSMutableDictionary alloc] init];
     
     // Fill it with data.
-    user[@"email"]    = email;
-    user[@"username"] = username;
-    user[@"photoURL"] = photourl.absoluteString;
+    user[UserFieldsEmail]    = email;
+    user[UserFieldsUsername] = username;
+    user[UserFieldsPhotoURL] = photourl.absoluteString;
     
     // And set it on the user id.
-    [[[sharedDatabase.ref child: @"users"] child: userID] setValue: user];
+    [[[sharedDatabase.ref child: DatabaseFieldsUsers] child: userID] setValue: user];
 }
 
 #pragma mark - Reference Handler Helper
@@ -128,10 +129,10 @@ static DatabaseSingelton * sharedDatabase = nil;
         [sharedDatabase addRefHandler: RefHandlerGroupAdded];
         
         // Register listener for groups of current user
-        [[sharedDatabase.ref child: @"groups"] observeEventType: FIRDataEventTypeChildAdded
-                                                     withBlock: ^(FIRDataSnapshot *group) {
+        [[sharedDatabase.ref child: DatabaseFieldsGroups] observeEventType: FIRDataEventTypeChildAdded
+                                                                 withBlock: ^(FIRDataSnapshot *group) {
             NSString * groupId   = group.key;
-            NSString * groupName = @"unknown";
+            NSString * groupName = @"";
             BOOL groupIsPrivate  = false;
             
             FIRDataSnapshot * messages = [[FIRDataSnapshot alloc] init];
@@ -139,13 +140,13 @@ static DatabaseSingelton * sharedDatabase = nil;
             
             // Iterate through the keys and proper values of the group.
             for (FIRDataSnapshot * child in group.children) {
-                if ([child.key isEqualToString: @"name"]) {
+                if ([child.key isEqualToString: GroupFieldsName]) {
                     groupName = child.value;
-                } else if ([child.key isEqualToString: @"users"]) {
+                } else if ([child.key isEqualToString: GroupFieldsUsers]) {
                     users = child;
-                } else if ([child.key isEqualToString: @"isPrivate"]) {
+                } else if ([child.key isEqualToString: GroupFieldsIsPrivate]) {
                     groupIsPrivate = [child.value boolValue];
-                } else if ([child.key isEqualToString: @"messages"]) {
+                } else if ([child.key isEqualToString: GroupFieldsMessages]) {
                     messages = child;
                 }
             }
@@ -192,7 +193,7 @@ static DatabaseSingelton * sharedDatabase = nil;
                     // Create a contact of this group.
                     Contact * contact = [[Contact alloc] init];
                     
-                    contact.image     = [UIImage imageNamed:@"group-button.png"];
+                    contact.image     = [UIImage imageNamed: GroupDefaultImage];
                     contact.name      = groupName;
                     contact.email     = @"";
                     contact.groupId   = groupId;
@@ -221,7 +222,7 @@ static DatabaseSingelton * sharedDatabase = nil;
 + (void) createGroup: (NSString *) name
         withContacts: (NSMutableArray<Contact *> *) contacts {
     // Create a new group with a random group id.
-    NSString * newGroupID = [[sharedDatabase.ref child: @"groups"] childByAutoId].key;
+    NSString * newGroupID = [[sharedDatabase.ref child: DatabaseFieldsGroups] childByAutoId].key;
     
     // Get the current user as one participant of the new group.
     FIRUser * appUser = [FIRAuth auth].currentUser;
@@ -240,17 +241,17 @@ static DatabaseSingelton * sharedDatabase = nil;
     }
     
     // Add the properties of the new group.
-    [[[sharedDatabase.ref child: @"groups"] child: newGroupID] setValue: @{@"created"   : [sharedDatabase getCurrentTime],
-                                                                           @"name"      : name,
-                                                                           @"isPrivate" : [NSNumber numberWithBool: false],
-                                                                           @"users"     : users}];
+    [[[sharedDatabase.ref child: DatabaseFieldsGroups] child: newGroupID] setValue: @{GroupFieldsCreated   : [sharedDatabase getCurrentTime],
+                                                                                      GroupFieldsName      : name,
+                                                                                      GroupFieldsIsPrivate : [NSNumber numberWithBool: false],
+                                                                                      GroupFieldsUsers     : users}];
 }
 
 // Creates a private group with current user and another contact as participants.
 - (void) createPrivateGroup: (NSString *) otherUserId {
     // Before we create this private group we check firstly that it does not exist. So get all groups.
-    [[sharedDatabase.ref child: @"groups"] observeSingleEventOfType: FIRDataEventTypeValue
-                                                          withBlock: ^(FIRDataSnapshot * groups) {
+    [[sharedDatabase.ref child: DatabaseFieldsGroups] observeSingleEventOfType: FIRDataEventTypeValue
+                                                                     withBlock: ^(FIRDataSnapshot * groups) {
         // Get the current user of this application
         FIRUser *appUser = [FIRAuth auth].currentUser;
         
@@ -261,7 +262,7 @@ static DatabaseSingelton * sharedDatabase = nil;
             // The private group does not exist so add it in firebase.
             
             // Get a new group id.
-            NSString *newGroupID = [[sharedDatabase.ref child:@"groups"] childByAutoId].key;
+            NSString *newGroupID = [[sharedDatabase.ref child: DatabaseFieldsGroups] childByAutoId].key;
             
             // Add any selected user to the dict and push them to the new group.
             NSMutableDictionary *users = [[NSMutableDictionary alloc] init];
@@ -271,9 +272,9 @@ static DatabaseSingelton * sharedDatabase = nil;
                       forKey: appUser.uid];
             
             // Create the group.
-            [[[sharedDatabase.ref child: @"groups"] child: newGroupID] setValue: @{@"created"   : [sharedDatabase getCurrentTime],
-                                                                                   @"isPrivate" : [NSNumber numberWithBool: true],
-                                                                                   @"users"     : users}];
+            [[[sharedDatabase.ref child: DatabaseFieldsGroups] child: newGroupID] setValue: @{GroupFieldsCreated   : [sharedDatabase getCurrentTime],
+                                                                                              GroupFieldsIsPrivate : [NSNumber numberWithBool: true],
+                                                                                              GroupFieldsUsers     : users}];
             
         }
     }];
@@ -291,7 +292,7 @@ static DatabaseSingelton * sharedDatabase = nil;
             
             // Check if current group is private.
             for (FIRDataSnapshot * element in group.children) {
-                if ([element.key isEqualToString: @"isPrivate"]) {
+                if ([element.key isEqualToString: GroupFieldsIsPrivate]) {
                     isPrivate = element.value;
                     
                     break;
@@ -304,7 +305,7 @@ static DatabaseSingelton * sharedDatabase = nil;
                 
                 // Get the participants of the group.
                 for (FIRDataSnapshot * element in group.children) {
-                    if ([element.key isEqualToString: @"users"]) {
+                    if ([element.key isEqualToString: GroupFieldsUsers]) {
                         users = element;
                         break;
                     }
@@ -344,7 +345,7 @@ static DatabaseSingelton * sharedDatabase = nil;
     
     // Format date.
     NSDateFormatter * formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat: @"dd.MM.YYYY HH:mm:ss"];
+    [formatter setDateFormat: DateFormat];
     
     // Return date as string.
     return [formatter stringFromDate: date];
@@ -415,9 +416,9 @@ static DatabaseSingelton * sharedDatabase = nil;
             contact.userId = uid;
             
             // The default avatar icon of a contact.
-            contact.image = [UIImage imageNamed: @"member-button.png"];
+            contact.image = [UIImage imageNamed: MemberDefaultImage];
             
-            // Check if the contact have still an image.
+            // Check if the contact have already an image.
             if (![photoURL isEqualToString: @""]) {
                 NSURL * URL = [NSURL URLWithString: photoURL];
                 
@@ -445,7 +446,7 @@ static DatabaseSingelton * sharedDatabase = nil;
     // Get all information of the contact.
     NSString * firstName   = contact.givenName;
     NSString * lastName    = contact.familyName;
-    NSMutableArray * email = [contact.emailAddresses valueForKey:@"value"];
+    NSMutableArray * email = [contact.emailAddresses valueForKey: @"value"];
     
     // Create a new contact.
     Contact *ct = [[Contact alloc] init];
@@ -493,7 +494,7 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
             counterForContactsInAddressbook++;
             
             // Check if the user is in db.
-            [[[[sharedDatabase.ref child: @"users"] queryOrderedByChild: @"email"] queryEqualToValue: contact.email] observeSingleEventOfType: FIRDataEventTypeValue
+            [[[[sharedDatabase.ref child: DatabaseFieldsUsers] queryOrderedByChild: UserFieldsEmail] queryEqualToValue: contact.email] observeSingleEventOfType: FIRDataEventTypeValue
                                                                                                                                    withBlock: ^(FIRDataSnapshot *users) {
                 // If we have found this email in the database, it means that the user with this email uses although this app.
                 if (users.exists) {
@@ -506,9 +507,9 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
                         userID = user.key;
                         // At this point we came only once. We check now if the user has values for the asked keys.
                         for (FIRDataSnapshot * child in user.children) {
-                            if ([child.key isEqualToString: @"email"]) {
+                            if ([child.key isEqualToString: UserFieldsEmail]) {
                                 email = child.value;
-                            } else if ([child.key isEqualToString: @"photoURL"]) {
+                            } else if ([child.key isEqualToString: UserFieldsPhotoURL]) {
                                 photoURL = child.value;
                             }
                         }
@@ -566,7 +567,7 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
         // If we are the first time here, add this ref handler to our list of refhandlers and further working...
         [sharedDatabase addRefHandler: groupId];
         // -------------Listener for messages in current group-------------
-        [[[[_ref child:@"groups"] child: groupId] child: @"messages"] observeEventType: FIRDataEventTypeChildAdded
+        [[[[_ref child: DatabaseFieldsGroups] child: groupId] child: GroupFieldsMessages] observeEventType: FIRDataEventTypeChildAdded
                                                                              withBlock: ^(FIRDataSnapshot * message) {
                                                                                  if ([sharedDatabase addMessage: message
                                                                                              toGroupWithGroupId: groupId]) {
@@ -588,19 +589,19 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
     NSMutableDictionary * mdata = [data mutableCopy];
     
     // Set the current user as sender of this message.
-    mdata[@"user"] = [FIRAuth auth].currentUser.displayName;
+    mdata[MessageFieldsUser] = [FIRAuth auth].currentUser.displayName;
     
     // Set the photo url to the message if it exists.
     NSURL *photoURL = [FIRAuth auth].currentUser.photoURL;
     if (photoURL) {
-        mdata[MessageFieldsphotoURL] = [photoURL absoluteString];
+        mdata[MessageFieldsPhotoURL] = [photoURL absoluteString];
     }
     
     // Save also the time of the sent message.
-    mdata[@"time"] = [sharedDatabase getCurrentTime];
+    mdata[MessageFieldsTime] = [sharedDatabase getCurrentTime];
     
     // Add this message to the messages in the current selected group.
-    [[[[[sharedDatabase.ref child: @"groups"] child: sharedDatabase.selectedContact.groupId] child: @"messages"] childByAutoId] setValue: mdata];
+    [[[[[sharedDatabase.ref child: DatabaseFieldsGroups] child: sharedDatabase.selectedContact.groupId] child: GroupFieldsMessages] childByAutoId] setValue: mdata];
 }
 
 

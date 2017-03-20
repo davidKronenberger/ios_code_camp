@@ -12,7 +12,7 @@
 
 - (void) layoutSubviews {
     // Turn the Imageview into a circle with the help of invisible corners.
-    self.layer.cornerRadius = self.frame.size.height /2;
+    self.layer.cornerRadius = self.frame.size.height / 2;
     self.layer.masksToBounds = YES;
     self.layer.borderWidth = 0;
     self.layer.borderColor = [[UIColor blackColor] CGColor];

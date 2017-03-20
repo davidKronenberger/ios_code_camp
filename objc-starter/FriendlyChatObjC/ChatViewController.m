@@ -152,16 +152,16 @@
     // Convert to dictionary.
     NSDictionary<NSString *, NSString *> * message = messageSnapshot.value;
     
-    NSString * name     = message[@"user"];
-    NSString * time     = message[@"time"];
-    NSString * imageURL = message[MessageFieldsimageURL];
-    NSString * text     = message[MessageFieldstext];
-    NSString * photoURL = message[MessageFieldsphotoURL];
+    NSString * name     = message[MessageFieldsUser];
+    NSString * time     = message[MessageFieldsTime];
+    NSString * imageURL = message[MessageFieldsImageURL];
+    NSString * text     = message[MessageFieldsText];
+    NSString * photoURL = message[MessageFieldsPhotoURL];
     
     // First of all we have to check who sent this message.
     if ([name isEqualToString: [FIRAuth auth].currentUser.displayName]) {
         // Dependent on the fact, that the message is from the current user. We show the message cell own.
-        cell = (MessageCellTableViewCell *)[self.clientTable dequeueReusableCellWithIdentifier: @"MessageCellOwn"
+        cell = (MessageCellTableViewCell *)[self.clientTable dequeueReusableCellWithIdentifier: CellIdentifierMessageCellOwn
                                                                                   forIndexPath: indexPath];
         
         // This color is for the border of the image view. This will only be used, if the message contains an image.
@@ -170,7 +170,7 @@
                                                       alpha: 1.0f]];
     } else {
         // Dependent on the fact, that the message is from another user. We show the message cell other.
-        cell = (MessageCellTableViewCell *)[self.clientTable dequeueReusableCellWithIdentifier: @"MessageCellOther"
+        cell = (MessageCellTableViewCell *)[self.clientTable dequeueReusableCellWithIdentifier: CellIdentifierMessageCellOther
                                                                                   forIndexPath: indexPath];
         
         // This color is for the border of the image view. This will only be used, if the message contains an image.
@@ -182,7 +182,7 @@
     // If the message contains an image.
     if (imageURL) {
         // Set an invisible text behind the image. Because the text tells the cell which height it has.
-        cell.message.text = @"Unsere Sprechblasen bzw. die Zellenhöhe im Chat verändert sich abhängig von der Textlänge. Damit das Bild auch vollständig angezeigt wird, setzen wir diese Nachricht ''unsichtbar'' dahinter.";
+        cell.message.text = InvisibleTextBehindImage;
         
         // Make the text invisible.
         [cell.message setTextColor: [UIColor colorWithWhite: 1.0f
@@ -195,16 +195,16 @@
         cell.imageUploadView.layer.borderWidth = 1;
         
         // Now set a default image if the image can't be loaded.
-        cell.imageUploadView.image = [UIImage imageWithData: [NSData dataWithContentsOfURL: [NSURL URLWithString: @"https://appjoy.org/wp-content/uploads/2016/06/firebase-storage-logo.png"]]];;
+        cell.imageUploadView.image = [UIImage imageWithData: [NSData dataWithContentsOfURL: [NSURL URLWithString: FireBaseStorageErrorImage]]];;
         
         // We load the image only if it has the prefix gs://. This means it is from firebase storage.
-        if ([imageURL hasPrefix: @"gs://"]) {
+        if ([imageURL hasPrefix: StoragePrefix]) {
             // Load the image from firebase storage. Because we do not now how big the image ist we said that it the biggest possible.
             [[[FIRStorage storage] referenceForURL: imageURL] dataWithMaxSize: INT64_MAX
                                                                    completion: ^(NSData *data, NSError *error) {
                                                                       // Check if an error occurs while downloading.
                                                                       if (error) {
-                                                                          NSLog(@"Error downloading: %@", error);
+                                                                          NSLog(@"%@%@", ErrorInfoDownloading, error);
                                                                           
                                                                           return;
                                                                       }
@@ -234,7 +234,7 @@
     cell.sentAt.text = time;
     
     // Show the sender avatar.
-    cell.avatar.image = [UIImage imageNamed: @"member-button.png"];
+    cell.avatar.image = [UIImage imageNamed: GroupDefaultImage];
     
     // Check if the sender has a photo url.
     if (photoURL) {
@@ -354,16 +354,16 @@
     if (error) {
         // If the error is that we can't upload anymore than save not a reference of the image in storage but a photo url from web, with a picture of this problem. At the moment it is the only way to see that a problem occurs while uploading. Remark that the correct image will not be sent again. So at this point the information about the image is lost. In our case we want to see, that it is possible to sent an image and this is our alternative.
         if (error.code == -13013) {
-            [DatabaseSingelton sendMessage: @{MessageFieldsimageURL: @"https://appjoy.org/wp-content/uploads/2016/06/firebase-storage-logo.png"}];
+            [DatabaseSingelton sendMessage: @{MessageFieldsImageURL: FireBaseStorageErrorImage}];
         }
         
-        NSLog(@"Error uploading: %@", error);
+        NSLog(@"%@%@", ErrorInfoUploading, error);
         
         return;
     }
     
     // If uploading was succesfull send a message with a referenece url to firebase storage.
-    [DatabaseSingelton sendMessage: @{MessageFieldsimageURL: [self.database.storageRef child: metadata.path].description}];
+    [DatabaseSingelton sendMessage: @{MessageFieldsImageURL: [self.database.storageRef child: metadata.path].description}];
 }
 
 // If no image is choosen and instead the cancel button is pressed, just dismiss the image picker view.
@@ -407,7 +407,7 @@
     // Check if there is content in the text field.
     if ([textField.text length] > 0) {
         // Send a message to firebase with the text of the text field to firebase.
-        [DatabaseSingelton sendMessage: @{MessageFieldstext: textField.text}];
+        [DatabaseSingelton sendMessage: @{MessageFieldsText: textField.text}];
         
         // Clear the text field.
         textField.text = @"";

@@ -36,11 +36,10 @@
 - (void) addNotificationObserver {
     // Set self to listen for the message "ContactsTableViewControllerDismissed"
     // and run a method when this message is detected.
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(didDismissContactsTableViewController)
-     name:@"ContactsTableViewControllerDismissed"
-     object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver: self
+                                             selector: @selector(didDismissContactsTableViewController)
+                                                 name: EventContactsTableViewControllerDismissed
+                                               object: nil];
 }
 
 - (void) dealloc {
@@ -58,7 +57,8 @@
 
 - (void) didDismissContactsTableViewController {
     // Dismiss this view controller.
-    [self dismissViewControllerAnimated:NO completion:nil];
+    [self dismissViewControllerAnimated: NO
+                             completion: nil];
 }
 
 

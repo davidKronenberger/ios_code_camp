@@ -13,7 +13,7 @@
     self.messages = [[NSMutableArray alloc] init];
     
     for (FIRDataSnapshot * message in messages.children) {
-        [self.messages addObject:message];
+        [self.messages addObject: message];
     }
 }
 
@@ -22,7 +22,7 @@
     FIRDataSnapshot * messageSnapshot = [self.messages lastObject];
     NSDictionary<NSString *, NSString *> * message = messageSnapshot.value;
     
-    return message[MessageFieldstext];
+    return message[MessageFieldsText];
 }
 
 @end
