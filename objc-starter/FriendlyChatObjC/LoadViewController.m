@@ -44,7 +44,7 @@
 
 - (void) dealloc {
     // Simply unsubscribe from *all* notifications upon being deallocated.
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver: self];
 }
 
 #pragma mark - Delegates
@@ -53,11 +53,14 @@
     // Change to view controller contacts.
     [self performSegueWithIdentifier: SeguesLoadToContacts
                               sender: nil];
+    
+    // Stop listening on delegate.
+    self.database.delegate = nil;
 }
 
 - (void) didDismissContactsTableViewController {
     // Dismiss this view controller.
-    [self dismissViewControllerAnimated: NO
+    [self dismissViewControllerAnimated: YES
                              completion: nil];
 }
 
