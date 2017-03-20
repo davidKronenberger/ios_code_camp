@@ -223,7 +223,7 @@
         cell.imageUploadView.layer.borderWidth = 0;
         
         // The image height shall not influent the cell. So set it to a big value.
-        cell.imageHeight.constant = INT64_MAX;
+        cell.imageHeight.constant = 99999;
         
         // Instead of the image we set the message text to the ui view.
         cell.message.text = text;

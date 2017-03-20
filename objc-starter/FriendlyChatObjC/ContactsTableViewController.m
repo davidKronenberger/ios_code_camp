@@ -116,14 +116,14 @@ void(^didDeselectRowAtIndexpathCotacts)(NSIndexPath *) = ^(NSIndexPath * indexPa
     }
     
     // Dismiss this view controller.
-    [weakSelf dismissViewControllerAnimated: NO
-                                 completion: nil];
-    
-    // This sends a message through the NSNotificationCenter
-    // to any listeners for "ContactsTableViewControllerDismissed"
-    [[NSNotificationCenter defaultCenter] postNotificationName: EventContactsTableViewControllerDismissed
-                                                        object: nil
-                                                      userInfo: nil];
+    [weakSelf dismissViewControllerAnimated: YES
+                                 completion: ^{
+                                     // This sends a message through the NSNotificationCenter
+                                     // to any listeners for "ContactsTableViewControllerDismissed"
+                                     [[NSNotificationCenter defaultCenter] postNotificationName: EventContactsTableViewControllerDismissed
+                                                                                         object: nil
+                                                                                       userInfo: nil];
+                                 }];
 }
 
 - (IBAction) newGroupButtonPressed: (id) sender {
