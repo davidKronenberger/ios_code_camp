@@ -87,8 +87,122 @@ Neben dem austauschen von Textnachrichten ist es möglich, Bilder an andere Chat
 \end{figure}
 \newpage
 
-\subsection{Backend}
+\subsection{Firebase}
 
+Firebase ist eine Platform um iOS, Android und Web-Applikationen zu bauen. Diese bietet eine automatische Datensynchronisation, einen Service für die Authentifizierung(z.B. Facebook oder Google-Account), Nachrichtenaustausch, Datensicherung, Analysen und mehr.
+Die Entscheidung fiel auf Firebase aufgrund von folgenden Aspekten: 
+
+\begin{itemize} 
+\item Firebase bietet dem Entwickler einen schnellen Einstieg, da die Datenbank-Schnittstellen leicht nachvollziehbar und einfach gehalten sind. Dies führte zu einer verkürzten Entwicklungszeit, weil man sich über die Serverkommunikation und Sichern von Daten wenig Gedanken machen musste.
+\item Ein weiterer wesentlicher Aspekt und Vorteil von Firebase ist die Nutzung von Daten in Echtzeit die durch eine NoSQL-Datenbank gewährleistet wird.
+\item Firebase-Projekte biete eine hohe Datenskalierbarkeit der dazugehörigen Applikationen anhand der gekoppelten Google Cloud Platform.
+\end{itemize}
+
+Welche Features Firebase insgesamt abdecken kann, wird in der folgenden Abbildung näher erläutert:
+
+\begin{figure}[ht]
+  \centering
+    \includegraphics[width=0.3\textwidth]{images/firebase_overview}
+    \caption{Featureübersicht von Firebase}
+	 \label{fig:firebase_overview}
+\end{figure}
+
+Die in Abbildung \ref{fig:firebase_overview} aufgeführten Features bieten dem Entwickler eine Vielfalt von Möglichkeiten bei der Gestaltung seiner Applikation. Für die Rahmenbedingungen in dieser Veranstaltung hat sich die Gruppe auf die Features Realtime Database, Authentication und Storage reduziert.  
+
+\subsubsection{Datenbank-Struktur}
+Bevor näher auf die Kommunikation mit Firebase zusammen mit den entsprechenden Lese- und Schreiboperationen eingegangen wird, muss sich zuerst ein Überblick über die Struktur der Datenbank gemacht werden.
+In folgender Abbildung \ref{fig:firebase_datastructure} ist eine Übersicht der Datenbankstruktur anhand von Beispieldaten zu sehen.
+
+\begin{figure}[ht]
+  \centering
+    \includegraphics[width=0.3\textwidth]{images/firebase_datastructure}
+    \caption{Datenbankstruktur von Firebase}
+	 \label{fig:firebase_datastructure}
+\end{figure}
+
+Bei der erstmaligen Anmeldung wird ein Nutzer in Datenbank hinzugefügt. Die Applikation versendet dabei an Firebase einen Befehl zum Erstellen des Nutzers unter dem Pfad "users" mit seiner entsprechenden Nutzer-UID. Der erstellte Nutzer enthält username, email und photoURL, welche aus seinem Google-Konto entnommen werden.
+Die Verwaltung der Chatverläufe werden je nach Anzahl der Teilnehmer eines Chats in 2 verschiedene Gruppen unterteilt. Beim Anlegen einer Gruppe wird von Firebase eine eindeutige ID generiert. Eine Gruppe beinhaltet unter dem Pfad "users" alle Nutzer-UIDs der einzelnen Teilnehmer, ein Erstellungsdatum "created" sowie auch ein Chatverlauf, welcher unter "messages" zu finden ist.  Wie bereits schon einmal erwähnt werden die Kontakte aus der Kontaktliste des Mobilgerätes mit den Benutzern aus der Firebase-Datenbank verglichen. Bei einer Übereinstimmung anhand der Email-Adresse wird automatisch von der Applikation ein Privat-Chat erstellt, welcher mit "isPrivate : true" gekennzeichnet ist. Alle von einem Nutzer selbst erstellten Gruppen haben eine unbegrenzte Anzahl an Teilnehmern welche hinzugefügt werden können und besitzen im Gegensatz zu einem privaten Chat einen Namen und werden mit "isPrivate : false" gekennzeichnet.
+
+\subsubsection{Kommunikation}
+
+Der grundlegende Aufbau der Kommunikation ist in der Abbildung \ref{fig:firebase_sync} veranschaulicht.
+
+\begin{figure}[ht]
+  \centering
+    \includegraphics[width=0.3\textwidth]{images/firebase_sync}
+    \caption{Datenynchronisation mit Firebase}
+	 \label{fig:firebase_sync}
+\end{figure}
+
+Die Mobilgeräte stellen zunächst eine Verbindung zur Firebase her indem sie sich mit ihrem Google-Konto in der Applikation anmelden. Beim Senden einer Nachricht wird die Firebase-Datenbank aktualisiert und alle betroffenen Nutzer erhalten durch die bestehende Synchronisation ein Update. 
+Das Google-Konto wird nach dem Anmelden in der Firebase mit der dazugehörigen Nutzer-UID hinterlegt, wie in Abbildung \ref{fig:firebase_auth} zu sehen ist.
+
+\begin{figure}[ht]
+  \centering
+    \includegraphics[width=0.3\textwidth]{images/firebase_auth}
+    \caption{Übersicht der Firebase Authentication}
+	 \label{fig:firebase_auth}
+\end{figure}
+
+Um solch eine Authentifizierung mit dem Google-Konto zu ermöglichen wird zunächst eine Referenz zur dazugehörigen Datenbank benötigt:
+
+\begin{lstlisting}
+@property (strong, nonatomic) FIRDatabaseReference *ref;
+
+self.ref = [[FIRDatabase database] reference];
+\end{lstlisting}
+
+Damit die Referenz auf die richtige Datenbank zugreifen kann, muss eine Konfigurationsdatei GoogleService-Info.plist von Firebase generiert und daraufhin dem Projekt hinzugefügt werden. Diese beinhaltet die entsprechende PROJECT_ID, welche auf das in Firebase liegende Projekt verweist.
+Mit Hilfe dieser Referenz ist es nun möglich Daten in die Datenbank sowohl lesen als auch schreiben zu können. Die Schreiboperation wird durch den Befehl \textit{setValue} realisiert, wodurch alle Daten welche unter dem angegebenen Pfad existieren, ersetzt werden. 
+
+\begin{lstlisting}
+[[[_ref child:@"users"] child:user.uid] setValue:@{@"username": username}];
+\end{lstlisting}
+
+Im oberen Beispiel wird der Username eines Users geändert. Dieser kann anhand seiner UID eindeutig identifiziert werden, wodurch er unter dem Pfad user/user.uid gefunden werden kann.
+Diese Variante des Setzen eines Wertes überschreibt jedoch alle sich dort befindenden Daten. Ist es erwünscht nur einen bestimmten Wert zu aktualisieren ohne dabei das komplette Objekt neu zu schreiben, so kann folgende Variante genutzt werden:
+
+\begin{lstlisting}
+[[[[_ref child:@"users"] child:user.uid] child:@"username"] setValue:username];
+\end{lstlisting}
+
+Der Aufbau ist hier der gleiche wie im vorherigen Beispiel, jedoch mit der Ausnahme dass nur der Username aktualisiert werden soll, ohne dabei alle anderen sich darunter befindenden Daten zu verwerfen.
+
+Beim Setzen eines Wertes werden folgende Typen unterstützt:
+
+\begin{itemize} 
+\item NSString 
+\item NSNumber
+\item NSDictionary
+\item NSArray
+\end{itemize}
+
+Ein Beispiel für das Schreiben eines Wertes in dieser Applikation wäre das Senden einer neuen Nachricht innerhalb einer Gruppe, bzw. eines privaten Chats.
+
+Das Lesen von Daten aus der Firebase-Datenbank wird anhand eines asynchronen Listeners realisiert, welcher an die Datenbank-Referenz gehangen wird. Dadurch wird immer ein Event geworfen, sobald im angegebenen Pfad des Listeners sich ein Wert geändert hat. Dieser Event Callback beinhaltet einen Snapshot dieses Pfades zusammen mit seinen Unterpfaden. Wichtig ist hierbei zu beachtet, dass der Listener sowohl bei einer Änderung eines Wertes ausgelöst wird, als auch wenn dieser angelegt wird. 
+
+\begin{lstlisting}
+[[[[_ref child:@"groups"] 
+			child: groupId] 
+				child: @"messages"] observeEventType: FIRDataEventTypeChildAdded
+                	withBlock: ^(FIRDataSnapshot * message) {
+            	    	//do stuff with messages...
+                	}
+];
+\end{lstlisting}
+
+Im obigen Beispiel wird ein Listener auf die Nachrichten einer Gruppe angemeldet.
+
+Eine weitere nützliche Funktion von Firebase ist das einmalige Lesen der Daten, indem der entsprechende Callback mit Hilfe von \textit{observeSingleEventOfType} anstatt \textit{observeEventType} nur einmal aufgerufen und danach direkt gelöscht wird.
+
+\begin{lstlisting}
+[[_ref child: @"groups"] observeSingleEventOfType: FIRDataEventTypeValue
+	withBlock: ^(FIRDataSnapshot * groups) {
+		//do stuff with groups...
+	}];
+\end{lstlisting}
+
+Solch eine Funktion kann in dieser Applikation beispielsweise genutzt werden, um herauszufinden ob eine übergebene Gruppe bereits in der Firebase-Datenbank existiert.
 
 
 % \begin{figure}
