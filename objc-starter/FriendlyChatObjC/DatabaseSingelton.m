@@ -581,4 +581,27 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
     }
 }
 
+#pragma mark Message Sending
+
+// Sends the data as message with the current user as sender, the time when it will be sent and the avatar of the current user to firebase.
++ (void) sendMessage: (NSDictionary *) data {
+    NSMutableDictionary * mdata = [data mutableCopy];
+    
+    // Set the current user as sender of this message.
+    mdata[@"user"] = [FIRAuth auth].currentUser.displayName;
+    
+    // Set the photo url to the message if it exists.
+    NSURL *photoURL = [FIRAuth auth].currentUser.photoURL;
+    if (photoURL) {
+        mdata[MessageFieldsphotoURL] = [photoURL absoluteString];
+    }
+    
+    // Save also the time of the sent message.
+    mdata[@"time"] = [sharedDatabase getCurrentTime];
+    
+    // Add this message to the messages in the current selected group.
+    [[[[[sharedDatabase.ref child: @"groups"] child: sharedDatabase.selectedContact.groupId] child: @"messages"] childByAutoId] setValue: mdata];
+}
+
+
 @end

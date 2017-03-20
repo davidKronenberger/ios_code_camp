@@ -38,6 +38,7 @@
 		96FE99FD1E7C12D0008F9C80 /* LoadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FE99FC1E7C12D0008F9C80 /* LoadViewController.m */; };
 		D0187FD51E7EEA20003C42AF /* ContactTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0187FD31E7EEA20003C42AF /* ContactTableViewCell.m */; };
 		D0187FD61E7EEA20003C42AF /* MessageCellTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D0187FD41E7EEA20003C42AF /* MessageCellTableViewCell.m */; };
+		D0187FD91E7FD98A003C42AF /* AvatarImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D0187FD81E7FD98A003C42AF /* AvatarImageView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -88,6 +89,8 @@
 		9ED8D1017B9927C5A7CCA356 /* Pods-FriendlyChatObjC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FriendlyChatObjC.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FriendlyChatObjC/Pods-FriendlyChatObjC.debug.xcconfig"; sourceTree = "<group>"; };
 		D0187FD31E7EEA20003C42AF /* ContactTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactTableViewCell.m; sourceTree = "<group>"; };
 		D0187FD41E7EEA20003C42AF /* MessageCellTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageCellTableViewCell.m; sourceTree = "<group>"; };
+		D0187FD71E7FD98A003C42AF /* AvatarImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvatarImageView.h; sourceTree = "<group>"; };
+		D0187FD81E7FD98A003C42AF /* AvatarImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AvatarImageView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +149,8 @@
 				962075831E7B20BE007080F8 /* ContactTableViewCell.h */,
 				96FE99EC1E7BD6F7008F9C80 /* ContactTableView.h */,
 				96FE99ED1E7BD6F7008F9C80 /* ContactTableView.m */,
+				D0187FD71E7FD98A003C42AF /* AvatarImageView.h */,
+				D0187FD81E7FD98A003C42AF /* AvatarImageView.m */,
 				96F610751E6036C9007ED0E1 /* CreateGroupTableViewController.h */,
 				96F610761E6036EB007ED0E1 /* CreateGroupTableViewController.m */,
 				96F610781E604265007ED0E1 /* DatabaseSingelton.m */,
@@ -353,6 +358,7 @@
 				1079608B1C6130EF003DB6CC /* ChatViewController.m in Sources */,
 				96F610791E604265007ED0E1 /* DatabaseSingelton.m in Sources */,
 				107960881C6130EF003DB6CC /* AppDelegate.m in Sources */,
+				D0187FD91E7FD98A003C42AF /* AvatarImageView.m in Sources */,
 				96FE99EE1E7BD6F7008F9C80 /* ContactTableView.m in Sources */,
 				D0187FD51E7EEA20003C42AF /* ContactTableViewCell.m in Sources */,
 				107960B61C613263003DB6CC /* SignInViewController.m in Sources */,

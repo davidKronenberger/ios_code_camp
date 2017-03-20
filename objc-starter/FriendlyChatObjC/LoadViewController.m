@@ -21,21 +21,16 @@
 
 @implementation LoadViewController
 
-// Create weak self instance. It is for accessing in whole view controller;
-__weak LoadViewController * weakSelfLoad;
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    weakSelfLoad = self;
-    weakSelfLoad.database = [DatabaseSingelton sharedDatabase];
-    
-    weakSelfLoad.database.delegate = self;
+    self.database = [DatabaseSingelton sharedDatabase];
+    self.database.delegate = self;
     
     // After this view is visible we start loading the data.
     [DatabaseSingelton startLoading];
     
-    [weakSelfLoad addNotificationObserver];
+    [self addNotificationObserver];
 }
 
 - (void) addNotificationObserver {

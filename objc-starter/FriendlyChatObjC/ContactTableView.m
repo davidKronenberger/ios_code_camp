@@ -50,12 +50,6 @@
     cell.lastMessage.text = [contact getLastMessageText];
     cell.avatar.image = (UIImage *)contact.image;
     
-    // Turn the image view into a circle with the help of invisible corners.
-    cell.avatar.layer.cornerRadius = cell.avatar.frame.size.height / 2;
-    cell.avatar.layer.masksToBounds = YES;
-    cell.avatar.layer.borderWidth = 0;
-    cell.avatar.layer.borderColor = [[UIColor blackColor] CGColor];
-    
     // Toggle background color dependent on row index.
     if (indexPath.row % 2 == 1) {
         cell.backgroundColor = [UIColor colorWithRed: 0.85
