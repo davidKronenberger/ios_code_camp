@@ -25,17 +25,21 @@
 @property (weak, nonatomic) IBOutlet GIDSignInButton * signInButton;
 @property (strong, nonatomic) FIRAuthStateDidChangeListenerHandle handle;
 
+// Singleton instance of database.
+@property (strong, nonatomic) DatabaseSingelton * database;
+
 @end
 
-@implementation SignInViewController {
-    BOOL loggedIn;
-}
+@implementation SignInViewController
 
 - (void) viewDidLoad {
     [super viewDidLoad];
     
+    // Init sharedDatabase.
+    self.database = [DatabaseSingelton sharedDatabase];
+    
     // Set up flag -> user is not logged in yet.
-    loggedIn = false;
+    self.database.loggedIn = NO;
     
     // Connect the controller with the GIDSignIn object, listening on UI events.
     [GIDSignIn sharedInstance].uiDelegate = self;
@@ -43,9 +47,9 @@
     // Add and save authentification state change listener.
     self.handle = [[FIRAuth auth] addAuthStateDidChangeListener: ^(FIRAuth *_Nonnull auth, FIRUser *_Nullable user) {
                        if (user) {
-                           if (!loggedIn) {
+                           if (!self.database.loggedIn) {
                                // Set up flag, user is succesfully logged in.
-                               loggedIn = true;
+                               self.database.loggedIn = YES;
                                
                                // Get current user.
                                FIRUser *user = [FIRAuth auth].currentUser;
@@ -61,7 +65,7 @@
                                                          sender: nil];
                            }
                        } else {
-                           loggedIn = false;
+                           self.database.loggedIn = NO;
                        }
                    }];
 }

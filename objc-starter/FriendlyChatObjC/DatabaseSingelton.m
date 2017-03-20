@@ -16,8 +16,11 @@
 // The singleton object.
 static DatabaseSingelton * sharedDatabase = nil;
 
-// Synthesise LoadDelegate delegate
+// Synthesize LoadDelegate delegate
 @synthesize delegate;
+
+// Synthesize logged in flag.
+@synthesize loggedIn;
 
 #pragma mark Configuration and Initialisation
 
@@ -39,18 +42,20 @@ static DatabaseSingelton * sharedDatabase = nil;
 - (void) clearCache {
     sharedDatabase.contactsAddressBook         = [[NSMutableArray alloc] init];
     sharedDatabase.contactsAddressBookUsingApp = [[NSMutableArray alloc] init];
-    sharedDatabase.groups                      = [[NSMutableArray alloc] init];
 }
 
-// Initialise the referendces to firebase database and the storage.
+// Initialize the referendces to firebase database and the storage.
 - (void) configureReferences {
-    // Initialise the list of alle reference handlers.
+    // Initialize the list of alle reference handlers.
     sharedDatabase.refHandlers = [[NSMutableArray alloc] init];
     
-    // Initialise database reference.
+    // Initialize database reference.
     sharedDatabase.ref = [[FIRDatabase database] reference];
     
-    // Initialise storage reference.
+    // Initialize list of groups.
+    sharedDatabase.groups = [[NSMutableArray alloc] init];
+    
+    // Initialize storage reference.
     NSString * storageUrl = [FIRApp defaultApp].options.storageBucket;
     // Append to storage url the prefix gs://
     sharedDatabase.storageRef = [[FIRStorage storage] referenceForURL: [NSString stringWithFormat: @"%@%@", StoragePrefix, storageUrl]];
@@ -61,8 +66,6 @@ static DatabaseSingelton * sharedDatabase = nil;
     [sharedDatabase clearCache];
  
     [sharedDatabase.ref removeAllObservers];
-    
-    sharedDatabase = nil;
 }
 
 #pragma mark - User Helper

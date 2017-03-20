@@ -34,6 +34,9 @@
 // If we select a contact in the groups overview we save it here. It will be used for the chat.
 @property (strong, nonatomic) Contact * selectedContact;
 
+// Saves the logged in state of the current user.
+@property (nonatomic, assign) BOOL loggedIn;
+
 // The firebase reference to get data.
 @property (strong, nonatomic) FIRDatabaseReference * ref;
 // The firebase storage reference for get images.

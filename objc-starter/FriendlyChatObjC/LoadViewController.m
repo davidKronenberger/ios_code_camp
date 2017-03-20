@@ -33,6 +33,13 @@
     [self addNotificationObserver];
 }
 
+- (void) viewDidAppear:(BOOL)animated {
+    // Check if the database is already filled with data.
+    if (self.database.groups.count > 0 && self.database.loggedIn) {
+        [self getNewGroup];
+    }
+}
+
 - (void) addNotificationObserver {
     // Set self to listen for the message "ContactsTableViewControllerDismissed"
     // and run a method when this message is detected.
