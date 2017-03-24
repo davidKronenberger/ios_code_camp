@@ -23,11 +23,11 @@
 @import Firebase;
 
 @interface ChatViewController () <UITableViewDataSource,
-                                  UITableViewDelegate,
-                                  UITextFieldDelegate,
-                                  UIImagePickerControllerDelegate,
-                                  UINavigationControllerDelegate,
-                                  DatabaseDelegate>
+UITableViewDelegate,
+UITextFieldDelegate,
+UIImagePickerControllerDelegate,
+UINavigationControllerDelegate,
+DatabaseDelegate>
 
 // Storyboard views
 @property (nonatomic, weak) IBOutlet UILabel *     headerLabel;
@@ -43,6 +43,9 @@
 
 // A property to save the keyboard height. It is that we do not get the keyboard height every time. It's constant for whole lifecycle of app.
 @property (nonatomic) int keyboardHeight;
+
+// A property to chekc if the keyboard is was still shown.
+@property (nonatomic) BOOL keyboardWasShown;
 
 @end
 
@@ -202,15 +205,15 @@
             // Load the image from firebase storage. Because we do not now how big the image ist we said that it the biggest possible.
             [[[FIRStorage storage] referenceForURL: imageURL] dataWithMaxSize: INT64_MAX
                                                                    completion: ^(NSData *data, NSError *error) {
-                                                                      // Check if an error occurs while downloading.
-                                                                      if (error) {
-                                                                          NSLog(@"%@%@", ErrorInfoDownloading, error);
-                                                                          
-                                                                          return;
-                                                                      }
-                                                                      
-                                                                      cell.imageUploadView.image = [UIImage imageWithData:data];
-                                                                  }];
+                                                                       // Check if an error occurs while downloading.
+                                                                       if (error) {
+                                                                           NSLog(@"%@%@", ErrorInfoDownloading, error);
+                                                                           
+                                                                           return;
+                                                                       }
+                                                                       
+                                                                       cell.imageUploadView.image = [UIImage imageWithData:data];
+                                                                   }];
         } else {
             // If the prefix is not from firebase storage, load it from web.
             cell.imageUploadView.image = [UIImage imageWithData: [NSData dataWithContentsOfURL: [NSURL URLWithString: imageURL]]];
@@ -425,34 +428,40 @@
 #pragma mark - Keyboard Handling
 
 - (void) keyboardWasShown: (NSNotification *) aNotification {
-    // Gets the keyboard height.
-    [self initKeyboardHeight: aNotification];
-    
-    // When the keyboard is being displayed the rest of the view has to adjust that the input text field is not
-    // hidden behind the keyboard.
-    self.bottomViewOffset.constant = self.bottomViewOffset.constant + self.keyboardHeight;
-    
-    // Layout the table view.
-    [self.clientTable layoutIfNeeded];
-    
-    // If there are messages scroll to the last cell in table view.
-    if ([self.database.selectedContact.messages count] > 0) {
-        // Get indexpath of last cell in table view....
-        NSIndexPath * indexPathOfLastCell = [NSIndexPath indexPathForRow: [self.database.selectedContact.messages count] - 1
-                                                               inSection: 0];
-        // ... and scroll to it.
-        [self.clientTable scrollToRowAtIndexPath: indexPathOfLastCell
-                                atScrollPosition: UITableViewScrollPositionTop
-                                        animated: YES];
+    if (!self.keyboardWasShown) {
+        // Gets the keyboard height.
+        [self initKeyboardHeight: aNotification];
+        
+        // When the keyboard is being displayed the rest of the view has to adjust that the input text field is not
+        // hidden behind the keyboard.
+        self.bottomViewOffset.constant = self.bottomViewOffset.constant + self.keyboardHeight;
+        
+        // Layout the table view.
+        [self.clientTable layoutIfNeeded];
+        
+        // If there are messages scroll to the last cell in table view.
+        if ([self.database.selectedContact.messages count] > 0) {
+            // Get indexpath of last cell in table view....
+            NSIndexPath * indexPathOfLastCell = [NSIndexPath indexPathForRow: [self.database.selectedContact.messages count] - 1
+                                                                   inSection: 0];
+            // ... and scroll to it.
+            [self.clientTable scrollToRowAtIndexPath: indexPathOfLastCell
+                                    atScrollPosition: UITableViewScrollPositionTop
+                                            animated: YES];
+        }
+        self.keyboardWasShown = YES;
     }
 }
 
 - (void) keyboardWillBeHidden: (NSNotification *) aNotification {
-    // When the keyboard is being hided the rest of the view has to adjust that the bottom is reached.
-    self.bottomViewOffset.constant = self.bottomViewOffset.constant - self.keyboardHeight;
-    
-    // Layout the table view.
-    [self.clientTable layoutIfNeeded];
+    if (self.keyboardWasShown) {
+        // When the keyboard is being hided the rest of the view has to adjust that the bottom is reached.
+        self.bottomViewOffset.constant = self.bottomViewOffset.constant - self.keyboardHeight;
+        
+        // Layout the table view.
+        [self.clientTable layoutIfNeeded];
+        self.keyboardWasShown = NO;
+    }
 }
 
 // The keyboard height will be set if it is not allready done.

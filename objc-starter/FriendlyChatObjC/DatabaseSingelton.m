@@ -28,9 +28,9 @@ static DatabaseSingelton * sharedDatabase = nil;
 + (id) sharedDatabase {
     if (sharedDatabase == nil) {
         sharedDatabase = [[self alloc] init];
-            
+        
         [sharedDatabase clearCache];
-            
+        
         [sharedDatabase configureReferences];
     }
     
@@ -64,7 +64,7 @@ static DatabaseSingelton * sharedDatabase = nil;
 // Resets the singleton and removes all observers.
 + (void) resetDatabase {
     [sharedDatabase clearCache];
- 
+    
     [sharedDatabase.ref removeAllObservers];
 }
 
@@ -134,88 +134,88 @@ static DatabaseSingelton * sharedDatabase = nil;
         // Register listener for groups of current user
         [[sharedDatabase.ref child: DatabaseFieldsGroups] observeEventType: FIRDataEventTypeChildAdded
                                                                  withBlock: ^(FIRDataSnapshot *group) {
-            NSString * groupId   = group.key;
-            NSString * groupName = @"";
-            BOOL groupIsPrivate  = false;
-            
-            FIRDataSnapshot * messages = [[FIRDataSnapshot alloc] init];
-            FIRDataSnapshot * users    = [[FIRDataSnapshot alloc] init];
-            
-            // Iterate through the keys and proper values of the group.
-            for (FIRDataSnapshot * child in group.children) {
-                if ([child.key isEqualToString: GroupFieldsName]) {
-                    groupName = child.value;
-                } else if ([child.key isEqualToString: GroupFieldsUsers]) {
-                    users = child;
-                } else if ([child.key isEqualToString: GroupFieldsIsPrivate]) {
-                    groupIsPrivate = [child.value boolValue];
-                } else if ([child.key isEqualToString: GroupFieldsMessages]) {
-                    messages = child;
-                }
-            }
-            
-            BOOL userIsInGroup = false;
-            
-            // Check if user participate group.
-            for (FIRDataSnapshot * user in users.children) {
-                if ([user.key isEqualToString: appUser.uid]){
-                    userIsInGroup = true;
-                    
-                    break;
-                }
-            }
-            
-            // If current user is in this group
-            if (userIsInGroup) {
-                // If the chat is a private chat (2 persons only chat) set the uid
-                if (groupIsPrivate) {
-                    NSString * otherUserId = @"";
-                    
-                    // Get the other user in this private chat.
-                    for(FIRDataSnapshot * user in users.children) {
-                        if(![user.key containsString:appUser.uid]) {
-                            otherUserId = user.key;
-                            
-                            break;
-                        }
-                    }
-                    
-                    // Copy the contact in this private chat to our groups.
-                    for (Contact * contact in sharedDatabase.contactsAddressBookUsingApp) {
-                        if ([contact.userId isEqualToString: otherUserId]){
-                            contact.groupId = groupId;
-                            contact.isPrivate = true;
-                            [contact setMessagesWithDataSnapShot: messages];
-                            [sharedDatabase.groups addObject: contact];
-                            
-                            break;
-                        }
-                    }
-                } else {
-                    // If the chat is not private it must be a groupchat.
-                    // Create a contact of this group.
-                    Contact * contact = [[Contact alloc] init];
-                    
-                    contact.image     = [UIImage imageNamed: GroupDefaultImage];
-                    contact.name      = groupName;
-                    contact.email     = @"";
-                    contact.groupId   = groupId;
-                    contact.isPrivate = false;
-                    [contact setMessagesWithDataSnapShot: messages];
-                    
-                    // Push the contact to our groups.
-                    [sharedDatabase.groups addObject: contact];
-                }
-                
-                // Add message delegate for the created group.
-                [sharedDatabase addMessageDelegateForGroupWitGroupId: groupId];
-                
-                // Tell all delegates which responds to selector that a new new group was found.
-                if (sharedDatabase.delegate && [sharedDatabase.delegate respondsToSelector:@selector(getNewGroup)]) {
-                    [sharedDatabase.delegate getNewGroup];
-                }
-            }
-        }];
+                                                                     NSString * groupId   = group.key;
+                                                                     NSString * groupName = @"";
+                                                                     BOOL groupIsPrivate  = false;
+                                                                     
+                                                                     FIRDataSnapshot * messages = [[FIRDataSnapshot alloc] init];
+                                                                     FIRDataSnapshot * users    = [[FIRDataSnapshot alloc] init];
+                                                                     
+                                                                     // Iterate through the keys and proper values of the group.
+                                                                     for (FIRDataSnapshot * child in group.children) {
+                                                                         if ([child.key isEqualToString: GroupFieldsName]) {
+                                                                             groupName = child.value;
+                                                                         } else if ([child.key isEqualToString: GroupFieldsUsers]) {
+                                                                             users = child;
+                                                                         } else if ([child.key isEqualToString: GroupFieldsIsPrivate]) {
+                                                                             groupIsPrivate = [child.value boolValue];
+                                                                         } else if ([child.key isEqualToString: GroupFieldsMessages]) {
+                                                                             messages = child;
+                                                                         }
+                                                                     }
+                                                                     
+                                                                     BOOL userIsInGroup = false;
+                                                                     
+                                                                     // Check if user participate group.
+                                                                     for (FIRDataSnapshot * user in users.children) {
+                                                                         if ([user.key isEqualToString: appUser.uid]){
+                                                                             userIsInGroup = true;
+                                                                             
+                                                                             break;
+                                                                         }
+                                                                     }
+                                                                     
+                                                                     // If current user is in this group
+                                                                     if (userIsInGroup) {
+                                                                         // If the chat is a private chat (2 persons only chat) set the uid
+                                                                         if (groupIsPrivate) {
+                                                                             NSString * otherUserId = @"";
+                                                                             
+                                                                             // Get the other user in this private chat.
+                                                                             for(FIRDataSnapshot * user in users.children) {
+                                                                                 if(![user.key containsString:appUser.uid]) {
+                                                                                     otherUserId = user.key;
+                                                                                     
+                                                                                     break;
+                                                                                 }
+                                                                             }
+                                                                             
+                                                                             // Copy the contact in this private chat to our groups.
+                                                                             for (Contact * contact in sharedDatabase.contactsAddressBookUsingApp) {
+                                                                                 if ([contact.userId isEqualToString: otherUserId]){
+                                                                                     contact.groupId = groupId;
+                                                                                     contact.isPrivate = true;
+                                                                                     [contact setMessagesWithDataSnapShot: messages];
+                                                                                     [sharedDatabase.groups addObject: contact];
+                                                                                     
+                                                                                     break;
+                                                                                 }
+                                                                             }
+                                                                         } else {
+                                                                             // If the chat is not private it must be a groupchat.
+                                                                             // Create a contact of this group.
+                                                                             Contact * contact = [[Contact alloc] init];
+                                                                             
+                                                                             contact.image     = [UIImage imageNamed: GroupDefaultImage];
+                                                                             contact.name      = groupName;
+                                                                             contact.email     = @"";
+                                                                             contact.groupId   = groupId;
+                                                                             contact.isPrivate = false;
+                                                                             [contact setMessagesWithDataSnapShot: messages];
+                                                                             
+                                                                             // Push the contact to our groups.
+                                                                             [sharedDatabase.groups addObject: contact];
+                                                                         }
+                                                                         
+                                                                         // Add message delegate for the created group.
+                                                                         [sharedDatabase addMessageDelegateForGroupWitGroupId: groupId];
+                                                                         
+                                                                         // Tell all delegates which responds to selector that a new new group was found.
+                                                                         if (sharedDatabase.delegate && [sharedDatabase.delegate respondsToSelector:@selector(getNewGroup)]) {
+                                                                             [sharedDatabase.delegate getNewGroup];
+                                                                         }
+                                                                     }
+                                                                 }];
     }
 }
 
@@ -255,32 +255,32 @@ static DatabaseSingelton * sharedDatabase = nil;
     // Before we create this private group we check firstly that it does not exist. So get all groups.
     [[sharedDatabase.ref child: DatabaseFieldsGroups] observeSingleEventOfType: FIRDataEventTypeValue
                                                                      withBlock: ^(FIRDataSnapshot * groups) {
-        // Get the current user of this application
-        FIRUser *appUser = [FIRAuth auth].currentUser;
-        
-        // Check if the group exist.
-        if (![sharedDatabase checkIfPrivateGroupExists: appUser.uid
-                                        withConcurrent: otherUserId
-                                              inGroups: groups]) {
-            // The private group does not exist so add it in firebase.
-            
-            // Get a new group id.
-            NSString *newGroupID = [[sharedDatabase.ref child: DatabaseFieldsGroups] childByAutoId].key;
-            
-            // Add any selected user to the dict and push them to the new group.
-            NSMutableDictionary *users = [[NSMutableDictionary alloc] init];
-            [users setObject: [NSNumber numberWithBool: false]
-                      forKey: otherUserId];
-            [users setObject: [NSNumber numberWithBool: false]
-                      forKey: appUser.uid];
-            
-            // Create the group.
-            [[[sharedDatabase.ref child: DatabaseFieldsGroups] child: newGroupID] setValue: @{GroupFieldsCreated   : [sharedDatabase getCurrentTime],
-                                                                                              GroupFieldsIsPrivate : [NSNumber numberWithBool: true],
-                                                                                              GroupFieldsUsers     : users}];
-            
-        }
-    }];
+                                                                         // Get the current user of this application
+                                                                         FIRUser *appUser = [FIRAuth auth].currentUser;
+                                                                         
+                                                                         // Check if the group exist.
+                                                                         if (![sharedDatabase checkIfPrivateGroupExists: appUser.uid
+                                                                                                         withConcurrent: otherUserId
+                                                                                                               inGroups: groups]) {
+                                                                             // The private group does not exist so add it in firebase.
+                                                                             
+                                                                             // Get a new group id.
+                                                                             NSString *newGroupID = [[sharedDatabase.ref child: DatabaseFieldsGroups] childByAutoId].key;
+                                                                             
+                                                                             // Add any selected user to the dict and push them to the new group.
+                                                                             NSMutableDictionary *users = [[NSMutableDictionary alloc] init];
+                                                                             [users setObject: [NSNumber numberWithBool: false]
+                                                                                       forKey: otherUserId];
+                                                                             [users setObject: [NSNumber numberWithBool: false]
+                                                                                       forKey: appUser.uid];
+                                                                             
+                                                                             // Create the group.
+                                                                             [[[sharedDatabase.ref child: DatabaseFieldsGroups] child: newGroupID] setValue: @{GroupFieldsCreated   : [sharedDatabase getCurrentTime],
+                                                                                                                                                               GroupFieldsIsPrivate : [NSNumber numberWithBool: true],
+                                                                                                                                                               GroupFieldsUsers     : users}];
+                                                                             
+                                                                         }
+                                                                     }];
 }
 
 // Checks if in the firebase snaphot a private group exists which has the two inputed members as participants.
@@ -369,11 +369,11 @@ static DatabaseSingelton * sharedDatabase = nil;
             // ask for reading the addressbook
             [contactStore requestAccessForEntityType: entityType
                                    completionHandler: ^(BOOL granted, NSError * _Nullable error) {
-                // If the user allows reading then start reading.
-                if (granted) {
-                    [self getAllContact:requestAllContactsDone];
-                }
-            }];
+                                       // If the user allows reading then start reading.
+                                       if (granted) {
+                                           [self getAllContact:requestAllContactsDone];
+                                       }
+                                   }];
             // If the user allows reading the addressbook then start reading.
         } else if ([CNContactStore authorizationStatusForEntityType: entityType] == CNAuthorizationStatusAuthorized) {
             [self getAllContact:requestAllContactsDone];
@@ -400,9 +400,9 @@ static DatabaseSingelton * sharedDatabase = nil;
     block([addressBook enumerateContactsWithFetchRequest: request
                                                    error: &contactError
                                               usingBlock: ^(CNContact * __nonnull contact, BOOL * __nonnull stop) {
-        // We get one contact in the addressbook. Now check it and parse it to our contactslist.
-        [self parseContactWithContact: contact];
-    }]);
+                                                  // We get one contact in the addressbook. Now check it and parse it to our contactslist.
+                                                  [self parseContactWithContact: contact];
+                                              }]);
 }
 
 #pragma mark Loading - Addressbook - Parse Helper
@@ -411,35 +411,53 @@ static DatabaseSingelton * sharedDatabase = nil;
 - (void) addContactToContactsAddressBookUsingApp: (NSString *) uid
                                         withMail: (NSString *) email
                                     withPhotoURL: (NSString *) photoURL {
-    // Search the user with right email address.
-    for (Contact * contact in sharedDatabase.contactsAddressBook) {
-        // Check if current contact has the right email address.
-        if ([contact.email isEqualToString: email]) {
-            // Add some properties to this contact.
-            contact.userId = uid;
-            
-            // The default avatar icon of a contact.
-            contact.image = [UIImage imageNamed: MemberDefaultImage];
-            
-            // Check if the contact have already an image.
-            if (![photoURL isEqualToString: @""]) {
-                NSURL * URL = [NSURL URLWithString: photoURL];
+    // Check first if the contact exists in groups list and add it from there to our contacts in address book using app list.
+    if (![sharedDatabase checkIfContactExistsInGroups: uid]) {
+        // Search the user with right email address.
+        for (Contact * contact in sharedDatabase.contactsAddressBook) {
+            // Check if current contact has the right email address.
+            if ([contact.email isEqualToString: email]) {
+                // Add some properties to this contact.
+                contact.userId = uid;
                 
-                if (URL) {
-                    NSData * data = [NSData dataWithContentsOfURL: URL];
+                // The default avatar icon of a contact.
+                contact.image = [UIImage imageNamed: MemberDefaultImage];
+                
+                // Check if the contact have already an image.
+                if (![photoURL isEqualToString: @""]) {
+                    NSURL * URL = [NSURL URLWithString: photoURL];
                     
-                    if (data) {
-                        contact.image = [UIImage imageWithData: data];
+                    if (URL) {
+                        NSData * data = [NSData dataWithContentsOfURL: URL];
+                        
+                        if (data) {
+                            contact.image = [UIImage imageWithData: data];
+                        }
                     }
                 }
+                
+                // Add the contact to the list of all contacts which using the app and are in the addressbook of the current user.
+                [sharedDatabase.contactsAddressBookUsingApp addObject: contact];
+                
+                break;
             }
-            
-            // Add the contact to the list of all contacts which using the app and are in the addressbook of the current user.
-            [sharedDatabase.contactsAddressBookUsingApp addObject: contact];
-           
-            break;
         }
     }
+}
+
+// Adds the contact from the list groups to the list contacts in addressbook using app.
+- (BOOL) checkIfContactExistsInGroups: (NSString *) uid {
+    // Check i contact exists.
+    for (Contact * contact in sharedDatabase.groups) {
+        if ([contact.userId isEqualToString: uid]) {
+            // Contact already exists. So add it to the other list.
+            [sharedDatabase.contactsAddressBookUsingApp addObject: contact];
+            
+            return YES;
+        }
+    }
+    
+    return NO;
 }
 
 #pragma mark Loading - Addressbook - Parse
@@ -498,40 +516,40 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
             
             // Check if the user is in db.
             [[[[sharedDatabase.ref child: DatabaseFieldsUsers] queryOrderedByChild: UserFieldsEmail] queryEqualToValue: contact.email] observeSingleEventOfType: FIRDataEventTypeValue
-                                                                                                                                   withBlock: ^(FIRDataSnapshot *users) {
-                // If we have found this email in the database, it means that the user with this email uses although this app.
-                if (users.exists) {
-                    NSString * userID   = @"";
-                    NSString * email    = @"";
-                    NSString * photoURL = @"";
-                    
-                    // Because the user is an element child of this snapshot, we have to iterate first through all children in this snapshot.
-                    for (FIRDataSnapshot * user in users.children) {
-                        userID = user.key;
-                        // At this point we came only once. We check now if the user has values for the asked keys.
-                        for (FIRDataSnapshot * child in user.children) {
-                            if ([child.key isEqualToString: UserFieldsEmail]) {
-                                email = child.value;
-                            } else if ([child.key isEqualToString: UserFieldsPhotoURL]) {
-                                photoURL = child.value;
-                            }
-                        }
-                    }
-                    
-                    [sharedDatabase addContactToContactsAddressBookUsingApp: userID
-                                                                   withMail: email
-                                                               withPhotoURL: photoURL];
-                    [sharedDatabase createPrivateGroup: userID];
-                }
-                
-                // Check if all contacts, if there are in the database, are proven.
-                counterForContactsInAddressbook--;
-                                                                                                                                       
-                if (counterForContactsInAddressbook == 0) {
-                    // After getting all contacts we check the groups of the current user.
-                    [sharedDatabase getGroups];
-                }
-            }];
+                                                                                                                                                      withBlock: ^(FIRDataSnapshot *users) {
+                                                                                                                                                          // If we have found this email in the database, it means that the user with this email uses although this app.
+                                                                                                                                                          if (users.exists) {
+                                                                                                                                                              NSString * userID   = @"";
+                                                                                                                                                              NSString * email    = @"";
+                                                                                                                                                              NSString * photoURL = @"";
+                                                                                                                                                              
+                                                                                                                                                              // Because the user is an element child of this snapshot, we have to iterate first through all children in this snapshot.
+                                                                                                                                                              for (FIRDataSnapshot * user in users.children) {
+                                                                                                                                                                  userID = user.key;
+                                                                                                                                                                  // At this point we came only once. We check now if the user has values for the asked keys.
+                                                                                                                                                                  for (FIRDataSnapshot * child in user.children) {
+                                                                                                                                                                      if ([child.key isEqualToString: UserFieldsEmail]) {
+                                                                                                                                                                          email = child.value;
+                                                                                                                                                                      } else if ([child.key isEqualToString: UserFieldsPhotoURL]) {
+                                                                                                                                                                          photoURL = child.value;
+                                                                                                                                                                      }
+                                                                                                                                                                  }
+                                                                                                                                                              }
+                                                                                                                                                              
+                                                                                                                                                              [sharedDatabase addContactToContactsAddressBookUsingApp: userID
+                                                                                                                                                                                                             withMail: email
+                                                                                                                                                                                                         withPhotoURL: photoURL];
+                                                                                                                                                              [sharedDatabase createPrivateGroup: userID];
+                                                                                                                                                          }
+                                                                                                                                                          
+                                                                                                                                                          // Check if all contacts, if there are in the database, are proven.
+                                                                                                                                                          counterForContactsInAddressbook--;
+                                                                                                                                                          
+                                                                                                                                                          if (counterForContactsInAddressbook == 0) {
+                                                                                                                                                              // After getting all contacts we check the groups of the current user.
+                                                                                                                                                              [sharedDatabase getGroups];
+                                                                                                                                                          }
+                                                                                                                                                      }];
         }
     }
 };
@@ -571,17 +589,17 @@ void(^requestAllContactsDone)(BOOL) = ^(BOOL contactsFound) {
         [sharedDatabase addRefHandler: groupId];
         // -------------Listener for messages in current group-------------
         [[[[_ref child: DatabaseFieldsGroups] child: groupId] child: GroupFieldsMessages] observeEventType: FIRDataEventTypeChildAdded
-                                                                             withBlock: ^(FIRDataSnapshot * message) {
-                                                                                 if ([sharedDatabase addMessage: message
-                                                                                             toGroupWithGroupId: groupId]) {
-                                                                                     // Tell all delegates which responds to selector that a new message were come in.
-                                                                                     if (sharedDatabase.delegate && [sharedDatabase.delegate respondsToSelector:@selector(getNewMessage: forGroupId:)]) {
-                                                                                         [sharedDatabase.delegate getNewMessage: message
-                                                                                                                    forGroupId: groupId];
-                                                                                     }
-                                                                                 }
-                                                                                 
-                                                                             }];
+                                                                                                 withBlock: ^(FIRDataSnapshot * message) {
+                                                                                                     if ([sharedDatabase addMessage: message
+                                                                                                                 toGroupWithGroupId: groupId]) {
+                                                                                                         // Tell all delegates which responds to selector that a new message were come in.
+                                                                                                         if (sharedDatabase.delegate && [sharedDatabase.delegate respondsToSelector:@selector(getNewMessage: forGroupId:)]) {
+                                                                                                             [sharedDatabase.delegate getNewMessage: message
+                                                                                                                                         forGroupId: groupId];
+                                                                                                         }
+                                                                                                     }
+                                                                                                     
+                                                                                                 }];
     }
 }
 
