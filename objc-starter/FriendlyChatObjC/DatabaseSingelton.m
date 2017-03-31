@@ -296,7 +296,7 @@ static DatabaseSingelton * sharedDatabase = nil;
             // Check if current group is private.
             for (FIRDataSnapshot * element in group.children) {
                 if ([element.key isEqualToString: GroupFieldsIsPrivate]) {
-                    isPrivate = element.value;
+                    isPrivate = [element.value boolValue];;
                     
                     break;
                 }
@@ -310,6 +310,7 @@ static DatabaseSingelton * sharedDatabase = nil;
                 for (FIRDataSnapshot * element in group.children) {
                     if ([element.key isEqualToString: GroupFieldsUsers]) {
                         users = element;
+                        
                         break;
                     }
                 }
@@ -323,6 +324,7 @@ static DatabaseSingelton * sharedDatabase = nil;
                     if ([user.key isEqualToString: memberOneId]) {
                         foundFirstId = true;
                     }
+                    
                     // Check if second member participate group.
                     if ([user.key isEqualToString: memberTwoId]) {
                         foundSecondId = true;
